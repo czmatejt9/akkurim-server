@@ -1,7 +1,6 @@
 from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette.middleware.cors import CORSMiddleware
 from supertokens_python import get_all_cors_headers
