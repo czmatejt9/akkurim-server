@@ -1,0 +1,27 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Extract branch name
+      id: branch
+      run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+
+    - name: Deploy to Server
+      id: deploy
+      run: |
+          cd ~/akkurim-${{ env.BRANCH_NAME }}/akkurim-server
+          git pull origin ${{ steps.branch.outputs.BRANCH_NAME }}
+          docker-compose --project-name akkurim-server-${{ env.BRANCH_NAME }} -f docker-compose.yml build
+          docker-compose --project-name akkurim-server-${{ env.BRANCH_NAME }} -f docker-compose.yml up -d

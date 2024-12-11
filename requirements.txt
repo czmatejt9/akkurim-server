@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+supertokens-python
+asyncpg 
+pydantic
+pydantic-settings
+pydantic[email]
+pytest
