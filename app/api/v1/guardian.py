@@ -14,9 +14,9 @@ router = APIRouter(
         "401": {"description": "Unauthorized"},
         "400": {"description": "Bad Request"},
     },
-    dependencies=[Depends(get_db)],  # TODO: add permission check
+    dependencies=[],  # TODO: add permission check
 )
-DBSession = Annotated[Connection, Depends(get_db)]
+DBConnection = Annotated[Connection, Depends(get_db)]
 
 
 @router.get(
@@ -26,7 +26,7 @@ DBSession = Annotated[Connection, Depends(get_db)]
 )
 async def read_guardian(
     guardian_id: UUID1,
-    db: DBSession,
+    db: DBConnection,
 ):
     guardian = await db.fetchrow(
         """SELECT * FROM guardian WHERE id = $1""", guardian_id
@@ -44,7 +44,7 @@ async def read_guardian(
 async def update_guardian(
     guardian_id: UUID1,
     guardian_data: Guardian,
-    db: DBSession,
+    db: DBConnection,
 ):
     return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
@@ -58,7 +58,7 @@ async def update_guardian(
 async def create_guardian(
     guardian_id: UUID1,
     guardian_data: GuardianCreate,
-    db: DBSession,
+    db: DBConnection,
 ):
     return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
@@ -70,7 +70,7 @@ async def create_guardian(
 )
 async def delete_guardian(
     guardian_id: UUID1,
-    db: DBSession,
+    db: DBConnection,
 ):
     return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
@@ -89,7 +89,7 @@ async def read_guardians(
             ge=0,
         ),
     ],
-    db: DBSession,
+    db: DBConnection,
 ):
     return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)
 
@@ -101,7 +101,7 @@ async def read_guardians(
 )
 async def search_guardians(
     query: str,
-    db: DBSession,
+    db: DBConnection,
 ):
     # TODO: implement full text search
     return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)

@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi import Depends, FastAPI
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -10,12 +12,13 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 from app.api.v1 import admin, guardian
 from app.auth.supertokens_config import supertokens_init
 from app.config import settings
-from app.db.database import get_db
+from app.db.database import lifespan
 
 supertokens_init()
 app = FastAPI(
     title=settings.APP_NAME,
     version=settings.APP_VERSION,
+    lifespan=lifespan,
 )
 app.add_middleware(get_middleware())
 app.add_middleware(

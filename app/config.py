@@ -8,7 +8,7 @@ class Settings(BaseSettings):
         "https://devapi.czmatejt.me"  # TODO change to "https://apidev.akkurim.cz"
     )
     APP_NAME: str = "akkurim_server_dev"
-    APP_VERSION: str = "1.0.0"
+    APP_VERSION: str = "0.1.0"
     API_PREFIX: str = "/v1"
 
     SUPERTOKENS_CONNECTION_URI: str = "http://supertokens:3567"
