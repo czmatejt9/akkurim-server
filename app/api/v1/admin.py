@@ -9,7 +9,7 @@ from supertokens_python.recipe.userroles.asyncio import (
 )
 
 router = APIRouter(
-    prefix="v1/admin",
+    prefix="/v1/admin",
     tags=["admin"],
     responses={
         "401": {"description": "Unauthorized"},

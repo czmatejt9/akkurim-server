@@ -8,7 +8,7 @@ from app.db.database import get_db
 from app.schemas.guardian import Guardian, GuardianCreate
 
 router = APIRouter(
-    prefix="v1/guardian",
+    prefix="/v1/guardian",
     tags=["guardian"],
     responses={
         "401": {"description": "Unauthorized"},
