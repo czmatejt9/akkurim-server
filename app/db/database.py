@@ -39,6 +39,6 @@ async def lifespan(app: FastAPI):
         await db.disconnect()
 
 
+@asynccontextmanager
 async def get_db():
-    async with db.get_connection() as connection:
-        yield connection
+    yield db.pool
