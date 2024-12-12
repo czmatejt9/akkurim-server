@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Annotated
 
 from asyncpg import Connection
@@ -14,8 +15,9 @@ router = APIRouter(
     prefix="/v1/guardian",
     tags=["guardian"],
     responses={
-        "401": {"description": "Unauthorized"},
         "400": {"description": "Bad Request"},
+        "401": {"description": "Unauthorized"},
+        "403": {"description": "Forbidden"},
     },
     dependencies=[
         Depends(get_db),
@@ -63,7 +65,21 @@ async def update_guardian(
     guardian_data: Guardian,
     db: DBConnection,
 ):
-    return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)
+    if guardian_id != guardian_data.id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+    if not await db.fetchrow("""SELECT * FROM guardian WHERE id = $1""", guardian_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+
+    await db.execute(
+        """UPDATE guardian SET first_name = $2, last_name = $3, email = $4, phone = $5 updated_at = $6 WHERE id = $1""",
+        guardian_data.id,
+        guardian_data.first_name,
+        guardian_data.last_name,
+        guardian_data.email,
+        guardian_data.phone,
+        guardian_data.updated_at,
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 
 @router.post(
@@ -107,36 +123,8 @@ async def delete_guardian(
     guardian_id: UUID1,
     db: DBConnection,
 ):
-    return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)
+    if not await db.fetchrow("""SELECT * FROM guardian WHERE id = $1""", guardian_id):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
-
-@router.get(
-    "/page/{page_number}",
-    response_model=list[Guardian],
-)
-async def read_guardians(
-    page_number: Annotated[
-        int,
-        Path(
-            ...,
-            title="Page number",
-            description="0 for all, 1 for 1-10, 2 for 11-20 etc.",
-            ge=0,
-        ),
-    ],
-    db: DBConnection,
-):
-    return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)
-
-
-@router.get(
-    "/search/",
-    response_model=list[Guardian],
-    status_code=501,
-)
-async def search_guardians(
-    query: str,
-    db: DBConnection,
-):
-    # TODO: implement full text search
-    return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)
+    await db.execute("""DELETE FROM guardian WHERE id = $1""", guardian_id)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

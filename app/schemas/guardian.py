@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import UUID1, AwareDatetime, BaseModel, EmailStr, Field
 
 
@@ -12,7 +14,7 @@ class GuardianBase(BaseModel):
 
 
 class Guardian(GuardianBase):
-    created_at: AwareDatetime = Field(
+    created_at: Optional[AwareDatetime] = Field(
         ..., json_schema_extra={"example": "2022-01-01 00:00:00+01:00"}
     )
     updated_at: AwareDatetime = Field(
