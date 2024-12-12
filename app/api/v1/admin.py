@@ -18,3 +18,18 @@ router = APIRouter(
     dependencies=[Depends(verify_session())],
 )
 SessionType = Annotated[SessionContainer, Depends(verify_session())]
+
+
+@router.post(
+    "/add-role",
+    status_code=204,
+    responses={409: {"description": "Conflict"}},
+)
+async def add_role(
+    session: SessionType,
+    role: str,
+):
+    if "admin" not in session.get_user_info().roles:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+    await add_role_to_user(session, role)
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
