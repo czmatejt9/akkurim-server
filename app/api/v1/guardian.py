@@ -93,6 +93,7 @@ async def create_guardian(
     guardian = await db.fetchrow(
         """select * from guardian where id = $1""", guardian_id
     )
+    guardian = Guardian(**dict(guardian))
     return Response(guardian, status_code=status.HTTP_201_CREATED)
 
 
