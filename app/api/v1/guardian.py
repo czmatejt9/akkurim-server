@@ -95,7 +95,7 @@ async def create_guardian(
         """select * from guardian where id = $1""", guardian_id
     )
     guardian = Guardian(**dict(guardian))
-    return Response(guardian, status_code=status.HTTP_201_CREATED)
+    return Response(status_code=status.HTTP_201_CREATED)
 
 
 @router.delete(
