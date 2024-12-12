@@ -49,6 +49,7 @@ async def read_guardian(
     )
     if not guardian:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
+    guardian = Guardian(**dict(guardian))
     return guardian
 
 
