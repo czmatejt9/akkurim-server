@@ -17,7 +17,10 @@ router = APIRouter(
         "401": {"description": "Unauthorized"},
         "400": {"description": "Bad Request"},
     },
-    dependencies=[get_db, verify_session],  # TODO: add permission check
+    dependencies=[
+        Depends(get_db),
+        Depends(verify_session()),
+    ],  # TODO: add permission check
 )
 DBConnection = Annotated[Connection, Depends(get_db)]
 SessionType = Annotated[
