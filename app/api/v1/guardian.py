@@ -79,7 +79,7 @@ async def create_guardian(
 ):
     if guardian_id != guardian_data.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
-    if await db.execute("""SELECT * FROM guardian WHERE id = $1""", guardian_id):
+    if await db.fetchrow("""SELECT * FROM guardian WHERE id = $1""", guardian_id):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT)
 
     await db.execute(
@@ -90,7 +90,9 @@ async def create_guardian(
         guardian_data.email,
         guardian_data.phone,
     )
-    guardian = await db.execute("""select * from guardian where id = $1""", guardian_id)
+    guardian = await db.fetchrow(
+        """select * from guardian where id = $1""", guardian_id
+    )
     return Response(guardian, status_code=status.HTTP_201_CREATED)
 
 
