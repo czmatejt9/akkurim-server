@@ -42,7 +42,7 @@ SessionType = Annotated[
 async def read_guardian(
     guardian_id: UUID1,
     db: DBConnection,
-    session: SessionType,
+    # session: SessionType,
 ):
     guardian = await db.fetchrow(
         """SELECT * FROM guardian WHERE id = $1""", guardian_id
@@ -79,8 +79,8 @@ async def create_guardian(
 ):
     if guardian_id != guardian_data.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
-    # if await db.execute("""SELECT * FROM guardian WHERE id = $1""", guardian_id):
-    # raise HTTPException(status_code=status.HTTP_409_CONFLICT)
+    if await db.execute("""SELECT * FROM guardian WHERE id = $1""", guardian_id):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT)
 
     await db.execute(
         """INSERT INTO guardian (id, first_name, last_name, email, phone) VALUES ($1, $2, $3, $4, $5)""",
