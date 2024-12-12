@@ -19,7 +19,7 @@ router = APIRouter(
     },
     dependencies=[
         Depends(get_db),
-        Depends(verify_session()),
+        # Depends(verify_session()),
     ],  # TODO: add permission check
 )
 DBConnection = Annotated[Connection, Depends(get_db)]
