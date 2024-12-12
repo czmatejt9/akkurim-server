@@ -82,7 +82,7 @@ async def create_guardian(
     if await db.fetchrow("""SELECT * FROM guardian WHERE id = $1""", guardian_id):
         raise HTTPException(status_code=status.HTTP_409_CONFLICT)
 
-    db.execute(
+    await db.execute(
         """INSERT INTO guardian (id, first_name, last_name, email, phone) VALUES ($1, $2, $3, $4, $5)""",
         guardian_id,
         guardian_data.first_name,
@@ -90,10 +90,7 @@ async def create_guardian(
         guardian_data.email,
         guardian_data.phone,
     )
-    guardian = await db.fetchrow(
-        """SELECT * FROM guardian WHERE id = $1""", guardian_id
-    )
-
+    guardian = await db.execute("""select * from guardian where id = $1""", guardian_id)
     return Response(guardian, status_code=status.HTTP_201_CREATED)
 
 
