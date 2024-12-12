@@ -3,6 +3,9 @@ from typing import Annotated
 from asyncpg import Connection
 from fastapi import APIRouter, Depends, HTTPException, Path, Response, status
 from pydantic import UUID1
+from supertokens_python.recipe.session import SessionContainer
+from supertokens_python.recipe.session.framework.fastapi import verify_session
+from supertokens_python.recipe.userroles import UserRoleClaim
 
 from app.db.database import get_db
 from app.schemas.guardian import Guardian, GuardianCreate
@@ -14,9 +17,18 @@ router = APIRouter(
         "401": {"description": "Unauthorized"},
         "400": {"description": "Bad Request"},
     },
-    dependencies=[],  # TODO: add permission check
+    dependencies=[get_db, verify_session],  # TODO: add permission check
 )
 DBConnection = Annotated[Connection, Depends(get_db)]
+SessionType = Annotated[
+    SessionContainer,
+    Depends(
+        verify_session(
+            override_global_claim_validators=lambda global_validators, session, user_context: global_validators
+            + [UserRoleClaim.validators.includes("trainer")]
+        )
+    ),
+]
 
 
 @router.get(
@@ -27,6 +39,7 @@ DBConnection = Annotated[Connection, Depends(get_db)]
 async def read_guardian(
     guardian_id: UUID1,
     db: DBConnection,
+    session: SessionType,
 ):
     guardian = await db.fetchrow(
         """SELECT * FROM guardian WHERE id = $1""", guardian_id
@@ -59,8 +72,26 @@ async def create_guardian(
     guardian_id: UUID1,
     guardian_data: GuardianCreate,
     db: DBConnection,
+    # session: SessionType,
 ):
-    return Response(status_code=status.HTTP_501_NOT_IMPLEMENTED)
+    if guardian_id != guardian_data.id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
+    if await db.fetchrow("""SELECT * FROM guardian WHERE id = $1""", guardian_id):
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT)
+
+    db.execute(
+        """INSERT INTO guardian (id, first_name, last_name, email, phone) VALUES ($1, $2, $3, $4, $5)""",
+        guardian_id,
+        guardian_data.first_name,
+        guardian_data.last_name,
+        guardian_data.email,
+        guardian_data.phone,
+    )
+    guardian = await db.fetchrow(
+        """SELECT * FROM guardian WHERE id = $1""", guardian_id
+    )
+
+    return Response(guardian, status_code=status.HTTP_201_CREATED)
 
 
 @router.delete(
