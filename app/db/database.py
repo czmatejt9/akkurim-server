@@ -20,11 +20,6 @@ class Database:
     async def disconnect(self):
         await self.pool.close()
 
-    async def get_connection(self):
-        async with self.pool.acquire() as connection:
-            yield connection
-            await connection.close()
-
 
 db = Database()
 
@@ -33,13 +28,11 @@ db = Database()
 async def lifespan(app: FastAPI):
     try:
         await db.connect()
-        app.state.db = db
         yield
     finally:
         await db.disconnect()
 
 
-@asynccontextmanager
 async def get_db():
-    async with db.get_connection() as connection:
+    async with db.pool.acquire() as connection:
         yield connection
