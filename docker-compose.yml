@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: akkurim_server_dev
-    container_name: akkurim_server_dev
+    image: akkurim-server-dev
+    container_name: akkurim-server-dev
     restart: always
     ports:
       - "8002:8000"
