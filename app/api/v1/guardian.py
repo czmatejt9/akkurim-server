@@ -71,7 +71,8 @@ async def update_guardian(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
 
     await db.execute(
-        """UPDATE guardian SET first_name = $2, last_name = $3, email = $4, phone = $5 updated_at = $6 WHERE id = $1""",
+        """UPDATE guardian SET first_name = $2, last_name = $3, 
+        email = $4, phone = $5 updated_at = $6 WHERE id = $1""",
         guardian_data.id,
         guardian_data.first_name,
         guardian_data.last_name,
