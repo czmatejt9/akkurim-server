@@ -35,6 +35,8 @@ services:
       - ./Caddyfile:/etc/caddy/Caddyfile
       - ./caddy_data:/data
       - ./caddy_config:/config
+      - ./certs/cert.pem:/etc/caddy/cert.pem
+      - ./certs/key.pem:/etc/caddy/key.pem
     depends_on:
       - app
     environment:
