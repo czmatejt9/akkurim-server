@@ -16,6 +16,7 @@ from app.schemas.remote_config import RemoteConfigBase
 router = APIRouter(
     prefix="/v1/admin",
     tags=["admin"],
+    include_in_schema=False,
     responses={
         "401": {"description": "Unauthorized"},
         "403": {"description": "Forbidden"},
