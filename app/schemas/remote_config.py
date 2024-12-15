@@ -6,7 +6,7 @@ from pydantic import AwareDatetime, BaseModel
 class RemoteConfigBase(BaseModel):
     id: int
     server_url: str
-    web_socket_url: str
+    websocket_url: str
     dev_prefix: str
     welcome_message: Optional[str]
     minimum_app_version: str
