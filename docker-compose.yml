@@ -38,8 +38,8 @@ services:
     depends_on:
       - app
     environment:
-      - PROXY_BACKEND: app
-      - PROXY_PORT: 8000
+      PROXY_BACKEND: app
+      PROXY_PORT: 8000
 
   db:
     image: 'postgres:latest'
