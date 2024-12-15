@@ -16,4 +16,4 @@ COPY ./app /code/app
 EXPOSE 8000
 
 # Run FastAPI
-CMD ["uvicorn", "app.main:app","--proxy-headers",  "--host", "0.0.0.0", "--port", "8000" "--workers", "3"]
+ENTRYPOINT ["uvicorn", "app.main:app", "--proxy-headers",  "--host", "0.0.0.0", "--port", "8000" "--workers", "3"]
