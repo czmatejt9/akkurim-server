@@ -14,7 +14,7 @@ services:
       - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - API_KEY=${API_KEY}
     healthcheck:
-        test: [ "CMD", "curl", "http://localhost:8002/"]
+        test: [ "CMD", "curl", "https://devapi.akkurim.cz/"]
         interval: 1m
         timeout: 5s
         retries: 3
