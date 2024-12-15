@@ -2,18 +2,18 @@
 FROM python:3.12.7-bookworm
 
 # Set the working directory in the container
-WORKDIR /code
+WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY ./requirements.txt ./code/requirements.txt
+COPY requirements.txt /app
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir --upgrade -r ./code/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r requirements.txt
 
-COPY ./app /code/app
+COPY . .
 
 # Make port 8000 available to the world outside this container
 EXPOSE 8000
 
 # Run FastAPI
-ENTRYPOINT ["cd", "./code", "uvicorn", "app.main:app",  "--host", "0.0.0.0", "--port", "8000" "--workers", "3", "--proxy-headers"]
+ENTRYPOINT ["uvicorn", "app.main:app",  "--host", "0.0.0.0", "--port", "8000" "--workers", "3", "--proxy-headers"]
