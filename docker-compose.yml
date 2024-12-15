@@ -38,7 +38,7 @@ services:
     depends_on:
       - app
     environment:
-      - PROXY_BACKEND:
+      - PROXY_BACKEND: app
       - PROXY_PORT: 8000
 
   db:
@@ -107,5 +107,5 @@ volumes:
   postgres_auth_dev:
   caddy_data:
   caddy_config:
-  
+
 
