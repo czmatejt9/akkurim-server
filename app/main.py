@@ -37,29 +37,4 @@ app.include_router(remote_config.router)
 
 @app.get("/")
 def read_root():
-    return {"Hello": "Dev1"}
-
-
-""" @app.get(
-    "/test",
-    response_model=test_schema.TestBase,
-)
-async def read_test(
-    db: AsyncSession = Depends(get_db),
-):
-    res = await db.execute(select(Test))
-    return res.scalars().first()
-
-
-@app.get(
-    "/protected-test",
-    response_model=test_schema.TestBase,
-    responses={401: {"description": "Unauthorized"}},
-)
-async def read_test(
-    session: SessionContainer = Depends(verify_session()),
-    db: AsyncSession = Depends(get_db),
-):
-    res = await db.execute(select(Test))
-    return res.scalars().first()
-"""
+    return {"Status": "Working", "App": settings.APP_NAME}

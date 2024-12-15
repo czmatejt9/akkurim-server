@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from asyncpg import Connection
-from fastapi import APIRouter, Depends, HTTPException, Response, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.db.database import get_db
 from app.schemas.remote_config import RemoteConfig
@@ -9,17 +9,17 @@ from app.schemas.remote_config import RemoteConfig
 router = APIRouter(
     prefix="/v1/remote-config",
     tags=["remote-config"],
-    responses={
-        "401": {"description": "Unauthorized"},
-        "403": {"description": "Forbidden"},
-    },
-    dependencies=[Depends(get_db())],
+    responses={},
+    dependencies=[
+        Depends(get_db),
+    ],
 )
 DBConection = Annotated[Connection, Depends(get_db)]
 
 
 @router.get(
     "/{remote_config_id}",
+    status_code=status.HTTP_200_OK,
     response_model=RemoteConfig,
     responses={404: {"description": "Not found"}},
 )
