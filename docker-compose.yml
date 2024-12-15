@@ -6,8 +6,8 @@ services:
     image: akkurim-server-dev
     container_name: akkurim-server-dev
     restart: always
-    ports:
-      - "8002:8000"
+    #ports:
+    #  - "8002:8000"
     networks:
       - akkurim_network_dev
     environment:
@@ -21,6 +21,25 @@ services:
     depends_on:
       - db
       - supertokens
+
+  caddy:
+    image: caddy:latest
+    container_name: caddy
+    restart: unless-stopped
+    ports:
+      - "8002:80"
+      - "8003:443"
+    networks:
+      - akkurim_network_dev
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+    depends_on:
+      - app
+    environment:
+      - PROXY_BACKEND:
+      - PROXY_PORT: 8000
 
   db:
     image: 'postgres:latest'
@@ -86,4 +105,7 @@ networks:
 volumes:
   postgres_data_dev:
   postgres_auth_dev:
+  caddy_data:
+  caddy_config:
+  
 
