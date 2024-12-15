@@ -5,7 +5,7 @@ FROM python:3.12.7-bookworm
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY requirements.txt /app
+COPY requirements.txt /app/requirements.txt
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
