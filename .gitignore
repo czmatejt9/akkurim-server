@@ -2,3 +2,4 @@ test_file.py
 .venv
 *.pyc
 .env
+schema.sql

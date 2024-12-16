@@ -1,16 +1,22 @@
 from typing import Annotated
 
+from asyncpg import Connection
 from fastapi import APIRouter, Depends, HTTPException, Response, status
 from supertokens_python.recipe.session import SessionContainer
 from supertokens_python.recipe.session.framework.fastapi import verify_session
+from supertokens_python.recipe.userroles import UserRoleClaim
 from supertokens_python.recipe.userroles.asyncio import (
     add_role_to_user,
     create_new_role_or_add_permissions,
 )
 
+from app.db.database import get_db
+from app.schemas.remote_config import RemoteConfigBase
+
 router = APIRouter(
-    prefix="v1/admin",
+    prefix="/v1/admin",
     tags=["admin"],
+    include_in_schema=False,
     responses={
         "401": {"description": "Unauthorized"},
         "403": {"description": "Forbidden"},
@@ -18,22 +24,31 @@ router = APIRouter(
     dependencies=[Depends(verify_session())],
 )
 SessionType = Annotated[SessionContainer, Depends(verify_session())]
+DBConection = Annotated[Connection, Depends(get_db)]
 
 
-# only a one time setup to create the admin role TODO change it to add any role
-@router.get(
-    "/create-role",
+@router.put(
+    "/remote-config/{remote_config_id}",
     status_code=204,
-    responses={201: {"description": "Created"}},
 )
-async def create_role(
+async def update_remote_config(
     session: SessionType,
+    remote_config_data: RemoteConfigBase,
+    db: DBConection,
 ):
-    try:
-        await create_new_role_or_add_permissions("admin", ["read", "write"])
-        await add_role_to_user(
-            "public", "d81fbff7-ea4e-4fc4-8df3-f9b06619f0ea", "admin"
-        )
-        return Response(status_code=status.HTTP_201_CREATED)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    roles = await session.get_claim_value(UserRoleClaim)
+    if roles is None or "admin" not in roles:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN)
+
+    await db.execute(
+        """UPDATE remote_config SET server_url = $2, websocket_url = $3, 
+        dev_prefix = $4, welcome_message = $5, minimum_app_version = $6
+        WHERE id = $1""",
+        remote_config_data.id,
+        remote_config_data.server_url,
+        remote_config_data.web_socket_url,
+        remote_config_data.dev_prefix,
+        remote_config_data.welcome_message,
+        remote_config_data.minimum_app_version,
+    )
+    return Response(status_code=status.HTTP_204_NO_CONTENT)

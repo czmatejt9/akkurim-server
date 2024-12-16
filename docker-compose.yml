@@ -3,8 +3,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: akkurim_server_dev
-    container_name: akkurim_server_dev
+    image: akkurim-server-dev
+    container_name: akkurim-server-dev
     restart: always
     ports:
       - "8002:8000"
@@ -14,7 +14,7 @@ services:
       - DATABASE_URL=postgres://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - API_KEY=${API_KEY}
     healthcheck:
-        test: [ "CMD", "curl", "https://devapi.czmatejt.me/"]
+        test: [ "CMD", "curl", "https://devapi.akkurim.cz/"]
         interval: 1m
         timeout: 5s
         retries: 3
@@ -86,4 +86,7 @@ networks:
 volumes:
   postgres_data_dev:
   postgres_auth_dev:
+  caddy_data:
+  caddy_config:
+
 
