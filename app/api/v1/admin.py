@@ -32,9 +32,9 @@ DBConection = Annotated[Connection, Depends(get_db)]
     status_code=204,
 )
 async def update_remote_config(
-    session: SessionType,
     remote_config_data: RemoteConfigBase,
     db: DBConection,
+    session: SessionType,
 ):
     roles = await session.get_claim_value(UserRoleClaim)
     if roles is None or "admin" not in roles:
@@ -46,7 +46,7 @@ async def update_remote_config(
         WHERE id = $1""",
         remote_config_data.id,
         remote_config_data.server_url,
-        remote_config_data.web_socket_url,
+        remote_config_data.websocket_url,
         remote_config_data.dev_prefix,
         remote_config_data.welcome_message,
         remote_config_data.minimum_app_version,

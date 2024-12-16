@@ -3,3 +3,4 @@ test_file.py
 *.pyc
 .env
 schema.sql
+docker-compose.yml

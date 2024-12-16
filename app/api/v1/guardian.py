@@ -21,8 +21,8 @@ router = APIRouter(
     },
     dependencies=[
         Depends(get_db),
-        # Depends(verify_session()),
-    ],  # TODO: add permission check
+        Depends(verify_session()),
+    ],
 )
 DBConnection = Annotated[Connection, Depends(get_db)]
 SessionType = Annotated[
@@ -44,7 +44,7 @@ SessionType = Annotated[
 async def read_guardian(
     guardian_id: UUID1,
     db: DBConnection,
-    # session: SessionType,
+    session: SessionType,
 ):
     guardian = await db.fetchrow(
         """SELECT * FROM guardian WHERE id = $1""", guardian_id
@@ -64,6 +64,7 @@ async def update_guardian(
     guardian_id: UUID1,
     guardian_data: Guardian,
     db: DBConnection,
+    session: SessionType,
 ):
     if guardian_id != guardian_data.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
@@ -93,7 +94,7 @@ async def create_guardian(
     guardian_id: UUID1,
     guardian_data: GuardianCreate,
     db: DBConnection,
-    # session: SessionType,
+    session: SessionType,
 ):
     if guardian_id != guardian_data.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST)
@@ -123,6 +124,7 @@ async def create_guardian(
 async def delete_guardian(
     guardian_id: UUID1,
     db: DBConnection,
+    session: SessionType,
 ):
     if not await db.fetchrow("""SELECT * FROM guardian WHERE id = $1""", guardian_id):
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
