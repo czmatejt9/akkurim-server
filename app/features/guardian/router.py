@@ -35,6 +35,7 @@ class GuardianRouter:
     @router.get(
         "/{guardian_id}",
         response_class=JSONResponse,
+        response_model=GuardianRead,
     )
     async def read_guardian(
         self, guardian_id: UUID1 = Path(..., title="The ID of the guardian to read")
