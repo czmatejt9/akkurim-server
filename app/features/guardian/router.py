@@ -23,7 +23,12 @@ router = APIRouter(
         "401": {"description": "Unauthorized"},
         "403": {"description": "Forbidden"},
     },
-    dependencies=[Depends(verify_session())],
+    dependencies=[
+        Depends(
+            verify_session(),
+            get_db(),
+        )
+    ],
 )
 
 
