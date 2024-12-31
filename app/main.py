@@ -53,12 +53,12 @@ app.add_middleware(
     allow_headers=["Content-Type"] + get_all_cors_headers(),
 )
 
-app.include_router(guardian_router)
-app.include_router(remote_config_router)
-app.include_router(sse_router)
+app.include_router(guardian_router, prefix=settings.API_V1_PREFIX)
+app.include_router(remote_config_router, prefix=settings.API_V1_PREFIX)
+app.include_router(sse_router, prefix=settings.API_V1_PREFIX)
 
 
-@app.middleware("http")
+""" @app.middleware("http")
 async def add_process_time_header(request: Request, call_next):
     if request.url.path == "/" or request.url.path == "/root-custom-response":
         return await call_next(request)
@@ -68,19 +68,13 @@ async def add_process_time_header(request: Request, call_next):
     process_time = time.perf_counter() - start_time
     response.headers["X-Process-Time"] = str(process_time)
     logger.info(f"Request: {request.url} took {process_time} seconds")
-    return response
-
-
-@app.get("/root-custom-response", response_class=JSONResponse)
-def read_root_with_custom_response():
-    content = HealthSchema(status="ok", app_name=settings.APP_NAME)
-    return JSONResponse(content=content)
+    return response """
 
 
 @app.get("/")
 def read_root():
     content = HealthSchema(status="ok", app_name=settings.APP_NAME)
-    return content
+    return JSONResponse(content, 200)
 
 
 # for testing purposes

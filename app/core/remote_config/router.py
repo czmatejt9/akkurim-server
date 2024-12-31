@@ -7,7 +7,7 @@ from app.core.database import get_db
 from app.core.remote_config.schemas import RemoteConfig
 
 router = APIRouter(
-    prefix="/v1/remote-config",
+    prefix="/remote-config",
     tags=["remote-config"],
     responses={},
     dependencies=[

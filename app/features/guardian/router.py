@@ -12,7 +12,7 @@ from app.core.database import get_db
 from app.features.guardian.schemas import Guardian, GuardianCreate
 
 router = APIRouter(
-    prefix="/v1/guardian",
+    prefix="/guardian",
     tags=["guardian"],
     responses={
         "400": {"description": "Bad Request"},

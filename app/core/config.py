@@ -4,16 +4,19 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
+    ENVIROMENT = os.getenv("ENVIROMENT", "dev")
     PUBLIC_DOMAIN: str = (
-        "https://devapi.czmatejt.me"  # TODO change to "https://devapi.akkurim.cz"
+        f"https://{'dev' if ENVIROMENT == 'dev' else ''}api.czmatejt.me"
     )
-    APP_NAME: str = "akkurim-server-dev"
+    APP_NAME: str = f"akkurim-server-{ENVIROMENT}"
     APP_VERSION: str = "0.1.0"
     API_V1_PREFIX: str = "/v1"
 
     SUPERTOKENS_CONNECTION_URI: str = "http://supertokens:3567"
-    API_DOMAIN: str = "http://localhost:8002"
-    WEBSITE_DOMAIN: str = "http://localhost:3002"
+    API_DOMAIN: str = "http://localhost:8002"  # TODO setup reverse proxy with traefik
+    WEBSITE_DOMAIN: str = (
+        "http://localhost:3002"  # TODO setup reverse proxy with traefik
+    )
     API_KEY: str = os.getenv("API_KEY", "none")
     DASHBOARD_ADMIN: str = "tajovsky.matej@gmail.com"
 

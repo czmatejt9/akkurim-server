@@ -11,7 +11,7 @@ from app.core.database import get_db
 from app.features.athlete.schemas import Athlete, AthleteCreate
 
 router = APIRouter(
-    prefix="/v1/athlete",
+    prefix="/athlete",
     tags=["athlete"],
     responses={
         "400": {"description": "Bad Request"},

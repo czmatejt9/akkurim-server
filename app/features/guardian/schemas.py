@@ -1,9 +1,11 @@
 from typing import Optional
 
-from pydantic import UUID1, AwareDatetime, BaseModel, EmailStr, Field
+from pydantic import UUID1, AwareDatetime, EmailStr, Field
+
+from app.core.base_schema import MyBase
 
 
-class GuardianBase(BaseModel):
+class GuardianBase(MyBase):
     id: UUID1 = Field(
         ..., json_schema_extra={"example": "91ed85cc-830a-11ef-b864-0242ac120002"}
     )

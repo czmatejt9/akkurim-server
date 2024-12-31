@@ -7,7 +7,7 @@ from app.core.broadcast import broadcast
 from app.core.sse.schemas import SSEEvent
 
 router = APIRouter(
-    prefix="/v1",
+    prefix="/sse",
     tags=["sse"],
     responses={404: {"description": "Not found"}},
 )
@@ -25,7 +25,7 @@ async def event_generator():
 
 
 # Simulated data stream for SSE
-@router.get("/sse")
+@router.get("/listen")
 async def sse_endpoint():
     return EventSourceResponse(event_generator())
 
