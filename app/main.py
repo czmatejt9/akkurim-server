@@ -12,7 +12,7 @@ from supertokens_python.recipe.session import SessionContainer
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 
 from app.core.auth.auth_supertokens_config import supertokens_init
-from app.core.base_schema import BaseSchema
+from app.core.base_schema import MyBase
 from app.core.broadcast import broadcast
 from app.core.config import settings
 from app.core.database import db
@@ -91,6 +91,6 @@ async def fake_sync_endpoint():
     return {"message": "Synced"}
 
 
-class HealthSchema(BaseSchema):
+class HealthSchema(MyBase):
     status: str
     app_name: str
