@@ -30,18 +30,3 @@ SessionType = Annotated[
         )
     ),
 ]
-
-
-@router.get(
-    "/{athlete_id}",
-    response_model=Athlete,
-    responses={404: {"description": "Not found"}},
-)
-async def read_athlete(
-    athlete_id: UUID1, db: Connection = Depends(get_db())
-) -> Athlete:
-    athlete = await db.fetchrow("""SELECT * FROM athlete WHERE id = $1""", athlete_id)
-    if not athlete:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    athlete = Athlete(**dict(athlete))
-    return athlete

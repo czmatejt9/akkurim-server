@@ -3,7 +3,7 @@ def generate_sql_insert(
     data: dict,
 ) -> tuple[str, tuple]:
     columns = ", ".join(data.keys())
-    placeholders = ", ".join(["%s" for _ in data.values()])
+    placeholders = ", ".join([f"${i}" for i in range(len(data))])
     return f"INSERT INTO {table} ({columns}) VALUES ({placeholders});", tuple(
         data.values()
     )
@@ -15,7 +15,9 @@ def generate_sql_read(
     conditions: dict = {},
 ) -> tuple[str, tuple]:
     columns = ", ".join(columns)
-    conditions_str = " AND ".join([f"{key} = %s" for key in conditions.keys()])
+    conditions_str = " AND ".join(
+        [f"{key} = ${i}" for i, key in enumerate(conditions.keys())]
+    )
     return f"SELECT {columns} FROM {table} WHERE {conditions_str};", tuple(
         conditions.values()
     )
