@@ -44,7 +44,7 @@ class GuardianService:
         guardian = await self._get_guardian_by_id(guardian_id, db)
         if not guardian:
             raise GuardianNotFoundException
-        return dict(guardian)
+        return GuardianRead(**guardian)
 
     async def create_guardian(self, guardian: dict, db: Connection) -> GuardianRead:
         exists = await self._get_guardian_by_id(guardian["id"], db)
@@ -58,6 +58,6 @@ class GuardianService:
                 GuardianRead.model_fields.keys(),
             )
             created = await db.fetchrow(query, *values)
-            return dict(created)
+            return GuardianRead(**dict(created))
         except UniqueViolationError:
             raise GuardianEmailAlreadyExistsException
