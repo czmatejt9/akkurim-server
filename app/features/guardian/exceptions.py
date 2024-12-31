@@ -1,6 +1,6 @@
-from app.core.exceptions import BaseException
+from app.core.exceptions import CustomHTTPException
 
 
-class GuardianNotFoundException(BaseException):
+class GuardianNotFoundException(CustomHTTPException):
     status_code = 404
     message = "Guardian not found"

@@ -2,10 +2,10 @@ from typing import Optional
 
 from pydantic import UUID1, AwareDatetime, EmailStr
 
-from app.core.base_schema import MyBase
+from app.core.base_schema import CustomBaseModel
 
 
-class AthleteBase(MyBase):
+class AthleteBase(CustomBaseModel):
     id: UUID1
     first_name: str
     last_name: str

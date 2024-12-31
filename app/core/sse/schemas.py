@@ -2,10 +2,10 @@ from typing import Any, Dict
 
 from pydantic import UUID1
 
-from app.core.base_schema import MyBase
+from app.core.base_schema import CustomBaseModel
 
 
-class SSEEvent(MyBase):
+class SSEEvent(CustomBaseModel):
     action: str
     table_name: str
     object_id: int | UUID1

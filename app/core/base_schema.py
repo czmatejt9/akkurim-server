@@ -2,5 +2,5 @@ from pydantic import BaseModel
 
 
 # used for global configuration
-class MyBase(BaseModel):
+class CustomBaseModel(BaseModel):
     pass

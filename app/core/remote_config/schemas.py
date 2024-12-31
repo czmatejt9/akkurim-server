@@ -2,10 +2,10 @@ from typing import Optional
 
 from pydantic import AwareDatetime, BaseModel
 
-from app.core.base_schema import MyBase
+from app.core.base_schema import CustomBaseModel
 
 
-class RemoteConfigBase(MyBase):
+class RemoteConfigBase(CustomBaseModel):
     id: int
     server_url: str
     websocket_url: str

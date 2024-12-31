@@ -6,7 +6,7 @@ from fastapi.background import BackgroundTasks
 from fastapi.responses import Response
 from pydantic import UUID1
 
-from app.core.base_schema import MyBase
+from app.core.base_schema import CustomBaseModel
 
 
 class JSONResponse(Response):
@@ -27,12 +27,12 @@ class JSONResponse(Response):
         self.body = self.render(content)
         self.init_headers(headers)
 
-    def render(self, content: MyBase | list[MyBase] | t.Any):
+    def render(self, content: CustomBaseModel | list[CustomBaseModel] | t.Any):
         # This is not 100% battle proof, but as our services are controlled (only return Pydantic modules) works fine
-        if isinstance(content, MyBase):
+        if isinstance(content, CustomBaseModel):
             return content.model_dump_json().encode("utf-8")
         if isinstance(content, list):
-            if isinstance(content[0], MyBase):
+            if isinstance(content[0], CustomBaseModel):
 
                 def uuid_decoder(obj):
                     if isinstance(obj, UUID1):
