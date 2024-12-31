@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    ENVIROMENT = os.getenv("ENVIROMENT", "dev")
+    ENVIROMENT: str = os.getenv("ENVIROMENT", "dev")
     PUBLIC_DOMAIN: str = (
         f"https://{'dev' if ENVIROMENT == 'dev' else ''}api.czmatejt.me"
     )
