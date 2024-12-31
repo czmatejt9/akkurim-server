@@ -15,7 +15,7 @@ def generate_sql_read(
     conditions: dict = {},
 ) -> tuple[str, tuple]:
     columns = ", ".join(columns)
-    conditions = " AND ".join([f"{key} = %s" for key in conditions.keys()])
-    return f"SELECT {columns} FROM {table} WHERE {conditions};", tuple(
+    conditions_str = " AND ".join([f"{key} = %s" for key in conditions.keys()])
+    return f"SELECT {columns} FROM {table} WHERE {conditions_str};", tuple(
         conditions.values()
     )
