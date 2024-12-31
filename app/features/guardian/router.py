@@ -54,6 +54,7 @@ class GuardianRouter:
 
 @router.get(
     "/test",
+    response_class=JSONResponse,
     response_model=GuardianRead,
 )
 async def test() -> GuardianRead:
