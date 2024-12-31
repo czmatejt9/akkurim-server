@@ -25,7 +25,7 @@ router = APIRouter(
     },
     dependencies=[
         Depends(
-            verify_session(),
+            # verify_session(),
             get_db(),
         )
     ],
