@@ -9,7 +9,7 @@ from app.features.guardian.schemas import GuardianRead
 
 
 class GuardianService:
-    def __init__(self, db: Connection = Depends(get_db)) -> None:
+    def __init__(self, db: Connection = Depends(get_db())) -> None:
         self.db = db
         self.table = "guardian"
 
