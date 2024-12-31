@@ -3,7 +3,7 @@
 BEGIN;
 
 
-CREATE TABLE IF NOT EXISTS akkurim.athlete_status
+CREATE TABLE IF NOT EXISTS athlete_status
 (
     id uuid NOT NULL,
     name text NOT NULL,
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS akkurim.athlete_status
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.guardian
+CREATE TABLE IF NOT EXISTS guardian
 (
     id uuid NOT NULL,
     first_name text NOT NULL,
@@ -23,14 +23,14 @@ CREATE TABLE IF NOT EXISTS akkurim.guardian
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.item_type
+CREATE TABLE IF NOT EXISTS item_type
 (
     id uuid NOT NULL,
     name text NOT NULL,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.item
+CREATE TABLE IF NOT EXISTS item
 (
     id uuid NOT NULL,
     name text NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS akkurim.item
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.athlete
+CREATE TABLE IF NOT EXISTS athlete
 (
     id uuid NOT NULL,
     birth_number text NOT NULL,
@@ -63,13 +63,13 @@ CREATE TABLE IF NOT EXISTS akkurim.athlete
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.athlete_guardian
+CREATE TABLE IF NOT EXISTS athlete_guardian
 (
     athlete_id uuid NOT NULL,
     guardian_id uuid NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.trainer_status
+CREATE TABLE IF NOT EXISTS trainer_status
 (
     id uuid NOT NULL,
     name text NOT NULL,
@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS akkurim.trainer_status
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.trainer
+CREATE TABLE IF NOT EXISTS trainer
 (
     id uuid NOT NULL,
     athlete_id uuid NOT NULL,
@@ -91,20 +91,20 @@ CREATE TABLE IF NOT EXISTS akkurim.trainer
     UNIQUE (athlete_id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.athlete_item
+CREATE TABLE IF NOT EXISTS athlete_item
 (
     athlete_id uuid NOT NULL,
     item_id uuid NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.school_year
+CREATE TABLE IF NOT EXISTS school_year
 (
     id uuid NOT NULL,
     name text NOT NULL,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.web_post
+CREATE TABLE IF NOT EXISTS web_post
 (
     id uuid NOT NULL,
     title text NOT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS akkurim.web_post
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim."group"
+CREATE TABLE IF NOT EXISTS "group"
 (
     id uuid NOT NULL,
     name text NOT NULL,
@@ -127,19 +127,19 @@ CREATE TABLE IF NOT EXISTS akkurim."group"
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.group_athlete
+CREATE TABLE IF NOT EXISTS group_athlete
 (
     group_id uuid NOT NULL,
     athlete_id uuid NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.group_trainer
+CREATE TABLE IF NOT EXISTS group_trainer
 (
     group_id uuid NOT NULL,
     trainer_id uuid NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.training
+CREATE TABLE IF NOT EXISTS training
 (
     id uuid NOT NULL,
     datetime_ timestamp with time zone NOT NULL,
@@ -151,7 +151,7 @@ CREATE TABLE IF NOT EXISTS akkurim.training
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.training_time
+CREATE TABLE IF NOT EXISTS training_time
 (
     id uuid NOT NULL,
     day text NOT NULL,
@@ -160,21 +160,21 @@ CREATE TABLE IF NOT EXISTS akkurim.training_time
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.training_athlete
+CREATE TABLE IF NOT EXISTS training_athlete
 (
     training_id uuid NOT NULL,
     athlete_id uuid NOT NULL,
     presence text NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.training_trainer
+CREATE TABLE IF NOT EXISTS training_trainer
 (
     training_id uuid NOT NULL,
     trainer_id uuid NOT NULL,
     presence text
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.sign_up_form
+CREATE TABLE IF NOT EXISTS sign_up_form
 (
     id uuid NOT NULL,
     birth_number text NOT NULL,
@@ -201,7 +201,7 @@ CREATE TABLE IF NOT EXISTS akkurim.sign_up_form
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.sign_up_form_status
+CREATE TABLE IF NOT EXISTS sign_up_form_status
 (
     id uuid NOT NULL,
     name text NOT NULL,
@@ -209,7 +209,7 @@ CREATE TABLE IF NOT EXISTS akkurim.sign_up_form_status
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.discipline
+CREATE TABLE IF NOT EXISTS discipline
 (
     id smallint NOT NULL,
     discipline_type_id smallint NOT NULL,
@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS akkurim.discipline
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.discipline_type
+CREATE TABLE IF NOT EXISTS discipline_type
 (
     id smallint NOT NULL,
     name text NOT NULL,
@@ -228,12 +228,12 @@ CREATE TABLE IF NOT EXISTS akkurim.discipline_type
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.meet
+CREATE TABLE IF NOT EXISTS meet
 (
     id text NOT NULL,
     name text NOT NULL,
-    start timestamp with time zone NOT NULL,
-    "end" timestamp with time zone NOT NULL,
+    start_at timestamp with time zone NOT NULL,
+    end_at timestamp with time zone NOT NULL,
     location text,
     organizer text,
     created_at timestamp with time zone NOT NULL,
@@ -241,21 +241,21 @@ CREATE TABLE IF NOT EXISTS akkurim.meet
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.meet_event
+CREATE TABLE IF NOT EXISTS meet_event
 (
     id uuid NOT NULL,
     meet_id text NOT NULL,
     meet_type text NOT NULL,
     discipline_id smallint NOT NULL,
     category_id smallint NOT NULL,
-    start timestamp with time zone NOT NULL,
+    start_at timestamp with time zone NOT NULL,
     phase text,
     created_at timestamp with time zone,
     updated_at timestamp with time zone,
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.category
+CREATE TABLE IF NOT EXISTS category
 (
     id smallint NOT NULL,
     sex smallint NOT NULL,
@@ -266,7 +266,7 @@ CREATE TABLE IF NOT EXISTS akkurim.category
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.athlete_meet_event
+CREATE TABLE IF NOT EXISTS athlete_meet_event
 (
     athlete_id uuid NOT NULL,
     meet_event_id uuid NOT NULL,
@@ -275,255 +275,255 @@ CREATE TABLE IF NOT EXISTS akkurim.athlete_meet_event
     updated_at timestamp with time zone NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS akkurim.athlete_sign_up_form
+CREATE TABLE IF NOT EXISTS athlete_sign_up_form
 (
     athlete_id uuid NOT NULL,
     sign_up_form_id uuid NOT NULL
 );
 
-ALTER TABLE IF EXISTS akkurim.item
+ALTER TABLE IF EXISTS item
     ADD FOREIGN KEY (item_type_id)
-    REFERENCES akkurim.item_type (id) MATCH SIMPLE
+    REFERENCES item_type (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.athlete
+ALTER TABLE IF EXISTS athlete
     ADD FOREIGN KEY (athlete_status_id)
-    REFERENCES akkurim.athlete_status (id) MATCH SIMPLE
+    REFERENCES athlete_status (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.athlete_guardian
+ALTER TABLE IF EXISTS athlete_guardian
     ADD FOREIGN KEY (athlete_id)
-    REFERENCES akkurim.athlete (id) MATCH SIMPLE
+    REFERENCES athlete (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.athlete_guardian
+ALTER TABLE IF EXISTS athlete_guardian
     ADD FOREIGN KEY (guardian_id)
-    REFERENCES akkurim.guardian (id) MATCH SIMPLE
+    REFERENCES guardian (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.trainer
+ALTER TABLE IF EXISTS trainer
     ADD FOREIGN KEY (athlete_id)
-    REFERENCES akkurim.athlete (id) MATCH SIMPLE
+    REFERENCES athlete (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.trainer
+ALTER TABLE IF EXISTS trainer
     ADD FOREIGN KEY (trainer_status_id)
-    REFERENCES akkurim.trainer_status (id) MATCH SIMPLE
+    REFERENCES trainer_status (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.athlete_item
+ALTER TABLE IF EXISTS athlete_item
     ADD FOREIGN KEY (athlete_id)
-    REFERENCES akkurim.athlete (id) MATCH SIMPLE
+    REFERENCES athlete (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.athlete_item
+ALTER TABLE IF EXISTS athlete_item
     ADD FOREIGN KEY (item_id)
-    REFERENCES akkurim.item (id) MATCH SIMPLE
+    REFERENCES item (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.web_post
+ALTER TABLE IF EXISTS web_post
     ADD FOREIGN KEY (trainer_id)
-    REFERENCES akkurim.trainer (id) MATCH SIMPLE
+    REFERENCES trainer (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim."group"
+ALTER TABLE IF EXISTS "group"
     ADD FOREIGN KEY (school_year_id)
-    REFERENCES akkurim.school_year (id) MATCH SIMPLE
+    REFERENCES school_year (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim."group"
+ALTER TABLE IF EXISTS "group"
     ADD FOREIGN KEY (training_time_id)
-    REFERENCES akkurim.training_time (id) MATCH SIMPLE
+    REFERENCES training_time (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.group_athlete
+ALTER TABLE IF EXISTS group_athlete
     ADD FOREIGN KEY (group_id)
-    REFERENCES akkurim."group" (id) MATCH SIMPLE
+    REFERENCES "group" (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.group_athlete
+ALTER TABLE IF EXISTS group_athlete
     ADD FOREIGN KEY (athlete_id)
-    REFERENCES akkurim.athlete (id) MATCH SIMPLE
+    REFERENCES athlete (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.group_trainer
+ALTER TABLE IF EXISTS group_trainer
     ADD FOREIGN KEY (group_id)
-    REFERENCES akkurim."group" (id) MATCH SIMPLE
+    REFERENCES "group" (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.group_trainer
+ALTER TABLE IF EXISTS group_trainer
     ADD FOREIGN KEY (trainer_id)
-    REFERENCES akkurim.trainer (id) MATCH SIMPLE
+    REFERENCES trainer (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.training
+ALTER TABLE IF EXISTS training
     ADD FOREIGN KEY (group_id)
-    REFERENCES akkurim."group" (id) MATCH SIMPLE
+    REFERENCES "group" (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.training_athlete
+ALTER TABLE IF EXISTS training_athlete
     ADD FOREIGN KEY (training_id)
-    REFERENCES akkurim.training (id) MATCH SIMPLE
+    REFERENCES training (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.training_athlete
+ALTER TABLE IF EXISTS training_athlete
     ADD FOREIGN KEY (athlete_id)
-    REFERENCES akkurim.athlete (id) MATCH SIMPLE
+    REFERENCES athlete (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.training_trainer
+ALTER TABLE IF EXISTS training_trainer
     ADD FOREIGN KEY (training_id)
-    REFERENCES akkurim.training (id) MATCH SIMPLE
+    REFERENCES training (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.training_trainer
+ALTER TABLE IF EXISTS training_trainer
     ADD FOREIGN KEY (trainer_id)
-    REFERENCES akkurim.trainer (id) MATCH SIMPLE
+    REFERENCES trainer (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.sign_up_form
+ALTER TABLE IF EXISTS sign_up_form
     ADD FOREIGN KEY (sign_up_form_status_id)
-    REFERENCES akkurim.sign_up_form_status (id) MATCH SIMPLE
+    REFERENCES sign_up_form_status (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.sign_up_form
+ALTER TABLE IF EXISTS sign_up_form
     ADD FOREIGN KEY (school_year_id)
-    REFERENCES akkurim.school_year (id) MATCH SIMPLE
+    REFERENCES school_year (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.discipline
+ALTER TABLE IF EXISTS discipline
     ADD FOREIGN KEY (discipline_type_id)
-    REFERENCES akkurim.discipline_type (id) MATCH SIMPLE
+    REFERENCES discipline_type (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.meet_event
+ALTER TABLE IF EXISTS meet_event
     ADD FOREIGN KEY (category_id)
-    REFERENCES akkurim.category (id) MATCH SIMPLE
+    REFERENCES category (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.meet_event
+ALTER TABLE IF EXISTS meet_event
     ADD FOREIGN KEY (discipline_id)
-    REFERENCES akkurim.discipline (id) MATCH SIMPLE
+    REFERENCES discipline (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.meet_event
+ALTER TABLE IF EXISTS meet_event
     ADD FOREIGN KEY (meet_id)
-    REFERENCES akkurim.meet (id) MATCH SIMPLE
+    REFERENCES meet (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.meet_event
+ALTER TABLE IF EXISTS meet_event
     ADD FOREIGN KEY (meet_type)
-    REFERENCES akkurim.meet (id) MATCH SIMPLE
+    REFERENCES meet (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.athlete_meet_event
+ALTER TABLE IF EXISTS athlete_meet_event
     ADD FOREIGN KEY (athlete_id)
-    REFERENCES akkurim.athlete (id) MATCH SIMPLE
+    REFERENCES athlete (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.athlete_meet_event
+ALTER TABLE IF EXISTS athlete_meet_event
     ADD FOREIGN KEY (meet_event_id)
-    REFERENCES akkurim.meet_event (id) MATCH SIMPLE
+    REFERENCES meet_event (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.athlete_sign_up_form
+ALTER TABLE IF EXISTS athlete_sign_up_form
     ADD FOREIGN KEY (athlete_id)
-    REFERENCES akkurim.athlete (id) MATCH SIMPLE
+    REFERENCES athlete (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
 
 
-ALTER TABLE IF EXISTS akkurim.athlete_sign_up_form
+ALTER TABLE IF EXISTS athlete_sign_up_form
     ADD FOREIGN KEY (sign_up_form_id)
-    REFERENCES akkurim.sign_up_form (id) MATCH SIMPLE
+    REFERENCES sign_up_form (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
