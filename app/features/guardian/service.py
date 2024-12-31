@@ -9,18 +9,17 @@ from app.features.guardian.schemas import GuardianRead
 
 
 class GuardianService:
-    def __init__(self) -> None:
+    def __init__(self, db: Connection = Depends(get_db())) -> None:
         self.table = "guardian"
+        self.db: Connection = db
 
-    async def get_guardian_by_id(
-        self, guardian_id: UUID1, db: Connection = Depends(get_db())
-    ) -> GuardianRead:
+    async def get_guardian_by_id(self, guardian_id: UUID1) -> GuardianRead:
         query, values = generate_sql_read(
             self.table,
             ["*"],
             {"id": guardian_id},
         )
-        guardian = await db.fetchrow(query, *values)
+        guardian = await self.db.fetchrow(query, *values)
         if not guardian:
             raise GuardianNotFoundException
         return GuardianRead(**dict(guardian))

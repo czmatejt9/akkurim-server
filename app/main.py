@@ -20,6 +20,7 @@ from app.core.json_response import JSONResponse
 from app.core.logging import logger
 from app.core.remote_config.router import router as remote_config_router
 from app.core.sse.router import router as sse_router
+from app.features.athlete.router import router as athlete_router
 from app.features.guardian.router import router as guardian_router
 
 
@@ -53,6 +54,7 @@ app.add_middleware(
     allow_headers=["Content-Type"] + get_all_cors_headers(),
 )
 
+app.include_router(athlete_router, prefix=settings.API_V1_PREFIX)
 app.include_router(guardian_router, prefix=settings.API_V1_PREFIX)
 app.include_router(remote_config_router, prefix=settings.API_V1_PREFIX)
 app.include_router(sse_router, prefix=settings.API_V1_PREFIX)
