@@ -24,4 +24,4 @@ ENV PATH="/app/.venv/bin:$PATH"
 ENTRYPOINT []
 
 EXPOSE 8000
-CMD ["/app/app/scripts/pre_start.sh", "&&", "/app/app/scripts/run.sh"]
+CMD ["/app/app/scripts/run.sh"]
