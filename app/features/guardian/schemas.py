@@ -12,6 +12,20 @@ class GuardianBase(CustomBaseModel):
     email: EmailStr
     phone: str
 
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "id": "268f74bc-c7c4-11ef-9cd2-0242ac120002",
+                    "first_name": "Pepa",
+                    "last_name": "Novák",
+                    "email": "pepicek@email.cz",
+                    "phone": "00420123456789",
+                }
+            ]
+        }
+    }
+
 
 class GuardianCreate(GuardianBase):
     pass
