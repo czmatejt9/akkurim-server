@@ -17,9 +17,9 @@ class GuardianCreate(GuardianBase):
     pass
 
 
-class GuardinaUpdate(GuardianBase):
+class GuardianUpdate(GuardianBase):
     updated_at: AwareDatetime
 
 
-class GuardianRead(GuardinaUpdate):
+class GuardianRead(GuardianUpdate):
     created_at: Optional[AwareDatetime]
