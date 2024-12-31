@@ -23,6 +23,7 @@ router = APIRouter(
         "401": {"description": "Unauthorized"},
         "403": {"description": "Forbidden"},
     },
+    dependencies=[Depends(verify_session())],
 )
 
 
@@ -31,7 +32,7 @@ class GuardianRouter:
     # commented for testing
     # session = Depends(verify_trainer())
     service = GuardianService()
-    db = Depends(get_db)
+    db: Connection = Depends(get_db)
 
     @router.get(
         "/{guardian_id}",
