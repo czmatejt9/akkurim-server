@@ -7,6 +7,7 @@ from pydantic import UUID1
 
 from app.core.database import get_db
 from app.core.utils import (
+    convert_uuid_to_str,
     generate_sql_insert,
     generate_sql_insert_with_returning,
     generate_sql_read,
@@ -45,8 +46,7 @@ class GuardianService:
         if not guardian:
             raise GuardianNotFoundException
 
-        guardian["id"] = str(guardian["id"])
-        return guardian
+        return convert_uuid_to_str(guardian)
 
     async def create_guardian(self, guardian: dict, db: Connection) -> GuardianRead:
         exists = await self._get_guardian_by_id(guardian["id"], db)
@@ -60,9 +60,7 @@ class GuardianService:
                 GuardianRead.model_fields.keys(),
             )
             created = await db.fetchrow(query, *values)
-            guardian = dict(created)
-            guardian["id"] = str(guardian["id"])
-            return guardian
+            return convert_uuid_to_str(dict(created))
 
         except UniqueViolationError:
             raise GuardianEmailAlreadyExistsException

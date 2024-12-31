@@ -1,3 +1,6 @@
+import uuid
+
+
 def generate_sql_insert(
     table: str,
     data: dict,
@@ -37,3 +40,10 @@ def generate_sql_read(
     return f"SELECT {columns} FROM {table} WHERE {conditions_str};", tuple(
         conditions.values()
     )
+
+
+def convert_uuid_to_str(data: dict) -> dict:
+    for key, value in data.items():
+        if isinstance(value, uuid.UUID):
+            data[key] = str(value)
+    return data
