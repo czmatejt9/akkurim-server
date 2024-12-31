@@ -23,9 +23,11 @@ class GuardianService:
     def __init__(self) -> None:
         self.table = "guardian"
 
-    async def get_guardian_by_id(
-        self, guardian_id: UUID1, db: Connection
-    ) -> GuardianRead:
+    async def _get_guardian_by_id(
+        self,
+        guardian_id: UUID1,
+        db: Connection,
+    ) -> dict | None:
         query, values = generate_sql_read(
             self.table,
             ["*"],
@@ -33,11 +35,19 @@ class GuardianService:
         )
         guardian = await db.fetchrow(query, *values)
         if not guardian:
+            return None
+        return dict(guardian)
+
+    async def get_guardian_by_id(
+        self, guardian_id: UUID1, db: Connection
+    ) -> GuardianRead:
+        guardian = await self._get_guardian_by_id(guardian_id, db)
+        if not guardian:
             raise GuardianNotFoundException
         return dict(guardian)
 
     async def create_guardian(self, guardian: dict, db: Connection) -> GuardianRead:
-        exists = await self.get_guardian_by_id(guardian["id"], db)
+        exists = await self._get_guardian_by_id(guardian["id"], db)
         if exists:
             raise GuardianAlreadyExistsException
 
