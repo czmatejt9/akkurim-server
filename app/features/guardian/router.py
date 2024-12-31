@@ -29,7 +29,7 @@ router = APIRouter(
 @cbv(router)
 class GuardianRouter:
     # commented for testing
-    # session: SessionContainer = Depends(verify_trainer())
+    # session = Depends(verify_trainer())
     service = GuardianService()
 
     @router.get(
@@ -39,5 +39,5 @@ class GuardianRouter:
     )
     async def read_guardian(
         self, guardian_id: UUID1 = Path(..., title="The ID of the guardian to read")
-    ):
+    ) -> GuardianRead:
         return await self.service.get_guardian_by_id(guardian_id)
