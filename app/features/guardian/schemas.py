@@ -32,8 +32,20 @@ class GuardianCreate(GuardianBase):
 
 
 class GuardianUpdate(GuardianBase):
+    created_at: Optional[AwareDatetime]
     updated_at: AwareDatetime
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "created_at": "2022-04-01T10:00:00+02:00",
+                    "updated_at": "2022-04-01T10:00:00+02:00",
+                }
+            ]
+        }
+    }
 
 
 class GuardianRead(GuardianUpdate):
-    created_at: Optional[AwareDatetime]
+    pass
