@@ -1,6 +1,6 @@
-class GuardianException(Exception):
-    pass
+from app.core.exceptions import BaseException
 
 
-class GuardianNotFoundException(GuardianException):
-    pass
+class GuardianNotFoundException(BaseException):
+    status_code = 404
+    message = "Guardian not found"
