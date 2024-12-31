@@ -24,6 +24,5 @@ ENV PATH="/app/.venv/bin:$PATH"
 ENTRYPOINT []
 
 RUN chmod +x /app/app/scripts/*.sh
-RUN /app/app/scripts/pre_start.sh
 EXPOSE 8000
 CMD ["/app/app/scripts/run.sh"]
