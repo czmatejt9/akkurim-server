@@ -16,9 +16,9 @@ from app.core.base_schema import MyBase
 from app.core.broadcast import broadcast
 from app.core.config import settings
 from app.core.database import db
+from app.core.json_response import JSONResponse
 from app.core.logging import logger
 from app.core.remote_config.router import router as remote_config_router
-from app.core.response import JSONResponse
 from app.core.sse.router import router as sse_router
 from app.features.guardian.router import router as guardian_router
 

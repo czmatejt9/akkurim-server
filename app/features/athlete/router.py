@@ -2,6 +2,7 @@ from typing import Annotated
 
 from asyncpg import Connection
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi_utils import cbv
 from pydantic import UUID1
 from supertokens_python.recipe.session import SessionContainer
 from supertokens_python.recipe.session.framework.fastapi import verify_session
