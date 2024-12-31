@@ -31,6 +31,7 @@ class GuardianRouter:
     # commented for testing
     # session = Depends(verify_trainer())
     service = GuardianService()
+    db = Depends(get_db)
 
     @router.get(
         "/{guardian_id}",
@@ -38,6 +39,7 @@ class GuardianRouter:
         response_model=GuardianRead,
     )
     async def read_guardian(
-        self, guardian_id: UUID1 = Path(..., title="The ID of the guardian to read")
+        self,
+        guardian_id: UUID1 = Path(..., title="The ID of the guardian to read"),
     ) -> GuardianRead:
-        return await self.service.get_guardian_by_id(guardian_id)
+        return await self.service.get_guardian_by_id(guardian_id, self.db)
