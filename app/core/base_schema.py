@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from typing import Any
+
+from pydantic import UUID1, BaseModel, EmailStr
 
 
 # used for global configuration

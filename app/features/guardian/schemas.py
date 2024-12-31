@@ -12,6 +12,8 @@ class GuardianBase(CustomBaseModel):
     email: EmailStr
     phone: str
 
+
+class GuardianCreate(GuardianBase):
     model_config = {
         "json_schema_extra": {
             "examples": [
@@ -27,10 +29,6 @@ class GuardianBase(CustomBaseModel):
     }
 
 
-class GuardianCreate(GuardianBase):
-    pass
-
-
 class GuardianUpdate(GuardianBase):
     created_at: Optional[AwareDatetime]
     updated_at: AwareDatetime
@@ -39,6 +37,11 @@ class GuardianUpdate(GuardianBase):
         "json_schema_extra": {
             "examples": [
                 {
+                    "id": "268f74bc-c7c4-11ef-9cd2-0242ac120002",
+                    "first_name": "Pepa",
+                    "last_name": "Novák",
+                    "email": "pepicek@email.cz",
+                    "phone": "00420123456789",
                     "created_at": "2022-04-01T10:00:00+02:00",
                     "updated_at": "2022-04-01T10:00:00+02:00",
                 }
