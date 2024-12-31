@@ -55,7 +55,7 @@ class GuardianService:
             query, values = generate_sql_insert_with_returning(
                 self.table,
                 guardian,
-                GuardianRead.model_fields().keys(),
+                GuardianRead.model_fields.keys(),
             )
             created = await db.fetchrow(query, *values)
             return dict(created)
