@@ -19,7 +19,7 @@ router = APIRouter(
         "401": {"description": "Unauthorized"},
         "403": {"description": "Forbidden"},
     },
-    dependencies=[Depends(get_db())],
+    dependencies=[Depends(get_db)],
 )
 SessionType = Annotated[
     SessionContainer,
