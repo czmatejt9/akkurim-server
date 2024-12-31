@@ -55,7 +55,6 @@ class GuardianRouter:
 
 @router.get(
     "/test",
-    response_class=JSONResponse,
     response_model=GuardianRead,
 )
 async def test() -> GuardianRead:
@@ -68,4 +67,4 @@ async def test() -> GuardianRead:
         created_at=datetime.now(),
         updated_at=datetime.now(),
     )
-    return JSONResponse(guardian, status_code=200)
+    return ORJSONResponse(guardian, status_code=200)
