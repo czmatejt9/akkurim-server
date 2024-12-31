@@ -30,7 +30,7 @@ router = APIRouter(
 class GuardianRouter:
     # commented for testing
     # session: SessionContainer = Depends(verify_trainer())
-    service: GuardianService = GuardianService()
+    service = GuardianService()
 
     @router.get(
         "/{guardian_id}",
