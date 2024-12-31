@@ -50,3 +50,15 @@ class GuardianRouter:
     ) -> GuardianRead:
         guardian = await self.service.get_guardian_by_id(guardian_id, self.db)
         return ORJSONResponse(guardian, status_code=200)
+
+    @router.post(
+        "/",
+        response_class=ORJSONResponse,
+        response_model=GuardianRead,
+    )
+    async def create_guardian(
+        self,
+        guardian: GuardianCreate,
+    ) -> GuardianRead:
+        guardian = await self.service.create_guardian(guardian.model_dump(), self.db)
+        return ORJSONResponse(guardian, status_code=201)

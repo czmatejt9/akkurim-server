@@ -32,7 +32,7 @@ class GuardianService:
             raise GuardianNotFoundException
         return dict(guardian)
 
-    async def create_guardian(self, guardian: dict, db: Connection) -> None:
+    async def create_guardian(self, guardian: dict, db: Connection) -> GuardianRead:
         exists = await self.get_guardian_by_id(guardian["id"], db)
         if exists:
             raise GuardianAlreadyExistsException
@@ -42,3 +42,5 @@ class GuardianService:
             await db.execute(query, *values)
         except UniqueViolationError:
             raise GuardianEmailAlreadyExistsException
+
+        return await self.get_guardian_by_id(guardian["id"], db)
