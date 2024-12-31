@@ -3,6 +3,7 @@ import time
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, Request
+from fastapi.responses import ORJSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from supertokens_python import get_all_cors_headers
 from supertokens_python.framework.fastapi import (
@@ -16,7 +17,6 @@ from app.core.base_schema import CustomBaseModel
 from app.core.broadcast import broadcast
 from app.core.config import settings
 from app.core.database import db
-from app.core.json_response import JSONResponse
 from app.core.logging import logger
 from app.core.remote_config.router import router as remote_config_router
 from app.core.sse.router import router as sse_router
@@ -73,10 +73,14 @@ async def add_process_time_header(request: Request, call_next):
     return response """
 
 
-@app.get("/")
+@app.get(
+    "/",
+    response_class=ORJSONResponse,
+    response_model=dict[str, str],
+)
 def read_root():
-    content = HealthSchema(status="ok", app_name=settings.APP_NAME)
-    return JSONResponse(content, 200)
+    content = {"status": "working", "app_name": settings.APP_NAME}
+    return ORJSONResponse(content, 200)
 
 
 # for testing purposes
@@ -85,8 +89,3 @@ async def fake_sync_endpoint():
     # simulate fake data processing by sleeping for 0.5 seconds
     await asyncio.sleep(2)
     return {"message": "Synced"}
-
-
-class HealthSchema(CustomBaseModel):
-    status: str
-    app_name: str
