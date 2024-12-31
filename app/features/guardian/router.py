@@ -14,7 +14,6 @@ from app.core.database import get_db
 from app.core.json_response import JSONResponse
 from app.features.guardian.schemas import GuardianCreate, GuardianRead, GuardianUpdate
 from app.features.guardian.service import GuardianService
-from app.core.json_response import JSONResponse
 
 router = APIRouter(
     prefix="/guardian",
@@ -52,6 +51,7 @@ class GuardianRouter:
         guardian = await self.service.get_guardian_by_id(guardian_id, self.db)
         return JSONResponse(guardian, status_code=200)
 
+
 @router.get(
     "/test",
     response_model=GuardianRead,
@@ -61,7 +61,7 @@ async def test() -> GuardianRead:
         id="123e4567-e89b-12d3-a456-426614174000",
         first_name="John",
         last_name="Doe",
-        email="
+        email="something@com.com",
         phone="1234567890",
         created_at=datetime.now(),
         updated_at=datetime.now(),
