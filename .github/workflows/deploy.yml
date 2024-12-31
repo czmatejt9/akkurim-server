@@ -24,5 +24,4 @@ jobs:
           cd ~/docker/akkurim-${{ env.BRANCH_NAME }}/akkurim-server
           git pull origin ${{ env.BRANCH_NAME }}
           docker compose --project-name akkurim-server-${{ env.BRANCH_NAME }} -f docker-compose.yml build
-          /app/app/scripts/pre_start.sh
           docker compose --project-name akkurim-server-${{ env.BRANCH_NAME }} -f docker-compose.yml up -d

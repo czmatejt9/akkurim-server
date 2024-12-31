@@ -23,5 +23,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 # Make port 8000 available to the world outside this container
 ENTRYPOINT []
 
+RUN chmod +x /app/app/scripts/*.sh
+RUN /app/app/scripts/pre_start.sh
 EXPOSE 8000
 CMD ["/app/app/scripts/run.sh"]
