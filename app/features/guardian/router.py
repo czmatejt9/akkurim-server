@@ -3,6 +3,7 @@ from typing import Annotated
 
 from asyncpg import Connection
 from fastapi import APIRouter, Depends, HTTPException, Path, Response, status
+from fastapi.responses import ORJSONResponse
 from fastapi_utils.cbv import cbv
 from pydantic import UUID1
 from supertokens_python.recipe.session import SessionContainer
@@ -41,7 +42,7 @@ class GuardianRouter:
 
     @router.get(
         "/{guardian_id}",
-        response_class=JSONResponse,
+        response_class=ORJSONResponse,
         response_model=GuardianRead,
     )
     async def read_guardian(
@@ -49,7 +50,7 @@ class GuardianRouter:
         guardian_id: UUID1 = Path(..., title="The ID of the guardian to read"),
     ) -> GuardianRead:
         guardian = await self.service.get_guardian_by_id(guardian_id, self.db)
-        return JSONResponse(guardian, status_code=200)
+        return ORJSONResponse(guardian, status_code=200)
 
 
 @router.get(
