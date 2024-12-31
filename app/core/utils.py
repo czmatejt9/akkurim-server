@@ -9,6 +9,22 @@ def generate_sql_insert(
     )
 
 
+def generate_sql_insert_with_returning(
+    table: str,
+    data: dict,
+    returning: list[str],
+) -> tuple[str, tuple]:
+    columns = ", ".join(data.keys())
+    placeholders = ", ".join([f"${i + 1}" for i in range(len(data))])
+    returning_str = ", ".join(returning)
+    return (
+        f"INSERT INTO {table} ({columns}) VALUES ({placeholders}) RETURNING {returning_str};",
+        tuple(
+            data.values(),
+        ),
+    )
+
+
 def generate_sql_read(
     table: str,
     columns: list[str],

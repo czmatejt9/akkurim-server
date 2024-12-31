@@ -6,7 +6,11 @@ from fastapi import Depends
 from pydantic import UUID1
 
 from app.core.database import get_db
-from app.core.utils import generate_sql_insert, generate_sql_read
+from app.core.utils import (
+    generate_sql_insert,
+    generate_sql_insert_with_returning,
+    generate_sql_read,
+)
 from app.features.guardian.exceptions import (
     GuardianAlreadyExistsException,
     GuardianEmailAlreadyExistsException,
@@ -38,9 +42,12 @@ class GuardianService:
             raise GuardianAlreadyExistsException
 
         try:
-            query, values = generate_sql_insert(self.table, guardian)
-            await db.execute(query, *values)
+            query, values = generate_sql_insert_with_returning(
+                self.table,
+                guardian,
+                GuardianRead.model_fields().keys(),
+            )
+            created = await db.fetchrow(query, *values)
+            return dict(created)
         except UniqueViolationError:
             raise GuardianEmailAlreadyExistsException
-
-        return await self.get_guardian_by_id(guardian["id"], db)
