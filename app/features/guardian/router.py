@@ -26,7 +26,7 @@ router = APIRouter(
     dependencies=[
         Depends(
             # verify_session(),
-            get_db(),
+            get_db,
         )
     ],
 )
