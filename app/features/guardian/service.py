@@ -1,8 +1,8 @@
 from datetime import datetime
 
+import orjson
 from asyncpg import Connection
 from asyncpg.exceptions import UniqueViolationError
-from fastapi import Depends
 from pydantic import UUID1
 
 from app.core.database import get_db
@@ -40,7 +40,7 @@ class GuardianService:
         )
         await self.broadcast.publish(
             channel="update",
-            message=event.model_dump(),
+            message=orjson.dumps(event.model_dump()),
         )
 
     async def notify_delete(self, guardian_id: UUID1) -> None:
@@ -52,7 +52,7 @@ class GuardianService:
         )
         await self.broadcast.publish(
             channel="update",
-            message=event.model_dump(),
+            message=orjson.dumps(event.model_dump()),
         )
 
     async def valid_guardian_by_id(
