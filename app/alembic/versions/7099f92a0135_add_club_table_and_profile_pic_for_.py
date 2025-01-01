@@ -21,7 +21,8 @@ depends_on: Union[str, Sequence[str], None] = None
 def upgrade() -> None:
     conn = op.get_bind()
     conn.execute(
-        """
+        sa.text(
+            """
         BEGIN;
         CREATE TABLE club (
             id text NOT NULL,
@@ -38,6 +39,7 @@ def upgrade() -> None:
             
         COMMIT;
         """
+        )
     )
 
 
