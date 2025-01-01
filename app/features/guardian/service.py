@@ -39,7 +39,7 @@ class GuardianService:
             local_action=LocalActionEnum.upsert,
         )
         await self.broadcast.publish(
-            channel="updates",
+            channel="update",
             message=event.model_dump(),
         )
 
@@ -51,7 +51,7 @@ class GuardianService:
             local_action=LocalActionEnum.delete,
         )
         await self.broadcast.publish(
-            channel="updates",
+            channel="update",
             message=event.model_dump(),
         )
 

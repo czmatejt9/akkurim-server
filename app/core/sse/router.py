@@ -17,7 +17,7 @@ events = []
 
 
 async def event_generator():
-    async with broadcast.subscribe(channel="updates") as subscriber:
+    async with broadcast.subscribe(channel="update") as subscriber:
         async for event in subscriber:
             yield event
 
@@ -28,7 +28,11 @@ async def sse_endpoint():
     return EventSourceResponse(event_generator())
 
 
-@router.get("/broadcast-test")
+@router.get(
+    "/broadcast-test",
+    response_class=ORJSONResponse,
+    response_model=SSEEvent,
+)
 async def broadcast_event():
     event = SSEEvent(
         table_name="guardian",
@@ -36,5 +40,5 @@ async def broadcast_event():
         id="268f74bc-c7c4-11ef-9cd2-0242ac120002",
         local_action="upsert",
     )
-    await broadcast.publish(channel="updates", message=event.model_dump())
+    await broadcast.publish(channel="update", message=event.model_dump())
     return ORJSONResponse(event.model_dump(), status_code=200)
