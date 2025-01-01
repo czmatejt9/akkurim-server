@@ -28,8 +28,8 @@ def upgrade() -> None:
             id text NOT NULL,
             name text NOT NULL,
             description text NOT NULL,
-            created_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            created_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at timestamptz NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
         );
         
