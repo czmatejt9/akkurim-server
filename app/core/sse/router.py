@@ -1,6 +1,7 @@
 import json
 
 from fastapi import APIRouter, Request, Response
+from fastapi.responses import ORJSONResponse
 from sse_starlette.sse import EventSourceResponse
 
 from app.core.sse.broadcast import broadcast
@@ -18,13 +19,22 @@ events = []
 async def event_generator():
     async with broadcast.subscribe(channel="updates") as subscriber:
         async for event in subscriber:
-            yield {
-                "event": "update",
-                "data": json.dumps(event),
-            }
+            yield event
 
 
 # Simulated data stream for SSE
 @router.get("/listen")
 async def sse_endpoint():
     return EventSourceResponse(event_generator())
+
+
+@router.get("/broadcast-test")
+async def broadcast_event():
+    event = SSEEvent(
+        table_name="guardian",
+        endpoint="/guardian/268f74bc-c7c4-11ef-9cd2-0242ac120002",
+        id="268f74bc-c7c4-11ef-9cd2-0242ac120002",
+        local_action="upsert",
+    )
+    await broadcast.publish(channel="updates", message=event.model_dump())
+    return ORJSONResponse(event.model_dump(), status_code=200)
