@@ -15,6 +15,7 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 from app.core.auth.auth_supertokens_config import supertokens_init
 from app.core.config import settings
 from app.core.database import db
+from app.core.logging import logger
 from app.core.logging import router as log_router
 from app.core.observation_middleware import ObservationMiddleware
 from app.core.remote_config.router import router as remote_config_router
@@ -29,10 +30,12 @@ async def lifespan(app: FastAPI):
     try:
         await db.connect()
         await broadcast.connect()
+        logger.info("APP STARTED")
         yield
     finally:
         await db.disconnect()
         await broadcast.disconnect()
+        logger.info("APP STOPPED")
 
 
 supertokens_init()
