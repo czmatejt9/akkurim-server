@@ -91,7 +91,7 @@ class GuardianService:
         )
         try:
             created = await db.fetchrow(query, *values)
-            self.notify_update(guardian["id"])
+            await self.notify_update(guardian["id"])
             return convert_uuid_to_str(dict(created))
 
         except UniqueViolationError:
@@ -114,7 +114,7 @@ class GuardianService:
         )
         try:
             updated = await db.fetchrow(query, *values)
-            self.notify_update(guardian["id"])
+            await self.notify_update(guardian["id"])
             return convert_uuid_to_str(dict(updated))
         except UniqueViolationError:
             raise GuardianEmailAlreadyExistsException
@@ -131,5 +131,5 @@ class GuardianService:
         result = await db.fetchrow(query, *values)
         if not result:
             raise GuardianNotFoundException
-        self.notify_delete(guardian_id)
+        await self.notify_delete(guardian_id)
         return None
