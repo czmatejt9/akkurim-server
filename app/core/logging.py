@@ -31,6 +31,7 @@ router = APIRouter(
     tags=["logs"],
     responses={404: {"description": "Not found"}},
     default_response_class=FileResponse,
+    include_in_schema=False,
 )
 
 
