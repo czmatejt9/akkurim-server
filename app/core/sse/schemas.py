@@ -16,4 +16,4 @@ class SSEEvent(CustomBaseModel):
     endpoint: Optional[str] = None
     http_method: str = "GET"
     local_action: LocalActionEnum = LocalActionEnum.upsert
-    id = UUID1 | str | int
+    id: UUID1 | str | int
