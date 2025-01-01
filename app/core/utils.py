@@ -42,6 +42,52 @@ def generate_sql_read(
     )
 
 
+def generate_sql_update(
+    table: str,
+    data: dict,
+    conditions: dict,
+) -> tuple[str, tuple]:
+    columns = ", ".join([f"{key} = ${i + 1}" for i, key in enumerate(data.keys())])
+    conditions_str = " AND ".join(
+        [f"{key} = ${i + 1}" for i, key in enumerate(conditions.keys())]
+    )
+    return (
+        f"UPDATE {table} SET {columns} WHERE {conditions_str};",
+        tuple(
+            [*data.values(), *conditions.values()],
+        ),
+    )
+
+
+def generate_sql_update_with_returning(
+    table: str,
+    data: dict,
+    conditions: dict,
+    returning: list[str],
+) -> tuple[str, tuple]:
+    columns = ", ".join([f"{key} = ${i + 1}" for i, key in enumerate(data.keys())])
+    conditions_str = " AND ".join(
+        [f"{key} = ${i + 1}" for i, key in enumerate(conditions.keys())]
+    )
+    returning_str = ", ".join(returning)
+    return (
+        f"UPDATE {table} SET {columns} WHERE {conditions_str} RETURNING {returning_str};",
+        tuple(
+            [*data.values(), *conditions.values()],
+        ),
+    )
+
+
+def generate_sql_delete(
+    table: str,
+    conditions: dict,
+) -> tuple[str, tuple]:
+    conditions_str = " AND ".join(
+        [f"{key} = ${i + 1}" for i, key in enumerate(conditions.keys())]
+    )
+    return f"DELETE FROM {table} WHERE {conditions_str};", tuple(conditions.values())
+
+
 def convert_uuid_to_str(data: dict) -> dict:
     for key, value in data.items():
         if isinstance(value, uuid.UUID):

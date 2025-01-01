@@ -22,4 +22,5 @@ dependencies = [
     "alembic>=1.14.0",
     "psycopg[binary]>=3.2.3",
     "typing-inspect>=0.9.0",
+    "ruff>=0.8.4",
 ]

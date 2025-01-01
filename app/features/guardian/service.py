@@ -6,11 +6,14 @@ from fastapi import Depends
 from pydantic import UUID1
 
 from app.core.database import get_db
+from app.core.exceptions import UpdateError
 from app.core.utils import (
     convert_uuid_to_str,
     generate_sql_insert,
     generate_sql_insert_with_returning,
     generate_sql_read,
+    generate_sql_update,
+    generate_sql_update_with_returning,
 )
 from app.features.guardian.exceptions import (
     GuardianAlreadyExistsException,
@@ -24,7 +27,7 @@ class GuardianService:
     def __init__(self) -> None:
         self.table = "guardian"
 
-    async def _get_guardian_by_id(
+    async def valid_guardian_by_id(
         self,
         guardian_id: UUID1,
         db: Connection,
@@ -42,25 +45,46 @@ class GuardianService:
     async def get_guardian_by_id(
         self, guardian_id: UUID1, db: Connection
     ) -> GuardianRead:
-        guardian = await self._get_guardian_by_id(guardian_id, db)
+        guardian = await self.valid_guardian_by_id(guardian_id, db)
         if not guardian:
             raise GuardianNotFoundException
 
         return convert_uuid_to_str(guardian)
 
     async def create_guardian(self, guardian: dict, db: Connection) -> GuardianRead:
-        exists = await self._get_guardian_by_id(guardian["id"], db)
+        exists = await self.valid_guardian_by_id(guardian["id"], db)
         if exists:
             raise GuardianAlreadyExistsException
 
+        query, values = generate_sql_insert_with_returning(
+            self.table,
+            guardian,
+            GuardianRead.model_fields.keys(),
+        )
         try:
-            query, values = generate_sql_insert_with_returning(
-                self.table,
-                guardian,
-                GuardianRead.model_fields.keys(),
-            )
             created = await db.fetchrow(query, *values)
             return convert_uuid_to_str(dict(created))
 
+        except UniqueViolationError:
+            raise GuardianEmailAlreadyExistsException
+
+    async def update_guardian(self, guardian: dict, db: Connection) -> GuardianRead:
+        exists = await self.valid_guardian_by_id(guardian["id"], db)
+        if not exists:
+            raise GuardianNotFoundException
+
+        if exists["updated_at"] > guardian["updated_at"]:
+            raise UpdateError
+
+        guardian["updated_at"] = datetime.now()
+        query, values = generate_sql_update_with_returning(
+            self.table,
+            guardian,
+            {"id": guardian["id"]},
+            GuardianRead.model_fields.keys(),
+        )
+        try:
+            updated = await db.fetchrow(query, *values)
+            return convert_uuid_to_str(dict(updated))
         except UniqueViolationError:
             raise GuardianEmailAlreadyExistsException

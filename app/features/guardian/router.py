@@ -46,7 +46,7 @@ class GuardianRouter:
     )
     async def read_guardian(
         self,
-        guardian_id: UUID1 = Path(..., title="The ID of the guardian to read"),
+        guardian_id: UUID1,
     ) -> GuardianRead:
         guardian = await self.service.get_guardian_by_id(guardian_id, self.db)
         return ORJSONResponse(guardian, status_code=200)
@@ -62,3 +62,8 @@ class GuardianRouter:
     ) -> GuardianRead:
         guardian = await self.service.create_guardian(guardian.model_dump(), self.db)
         return ORJSONResponse(guardian, status_code=201)
+
+    async def update_guardian(
+        self, guardian_id: UUID1, guardian: GuardianUpdate
+    ) -> GuardianRead:
+        pass
