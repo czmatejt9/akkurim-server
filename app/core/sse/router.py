@@ -4,7 +4,7 @@ from fastapi.responses import ORJSONResponse
 from sse_starlette.sse import EventSourceResponse
 
 from app.core.sse.broadcast import broadcast
-from app.core.sse.schemas import SSEEvent
+from app.core.sse.schemas import LocalActionEnum, SSEEvent
 
 router = APIRouter(
     prefix="/sse",
@@ -34,10 +34,10 @@ async def sse_endpoint():
 )
 async def broadcast_event():
     event = SSEEvent(
-        table_name="guardian",
-        endpoint="/guardian/268f74bc-c7c4-11ef-9cd2-0242ac120002",
-        id="268f74bc-c7c4-11ef-9cd2-0242ac120002",
-        local_action="upsert",
+        table_name="test",
+        endpoint="test",
+        id="test",
+        local_action=LocalActionEnum.upsert,
     )
     await broadcast.publish(
         channel="update",
