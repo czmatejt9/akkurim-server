@@ -22,7 +22,7 @@ dependencies = [
     "alembic>=1.14.0",
     "psycopg[binary]>=3.2.3",
     "typing-inspect>=0.9.0",
-    
+    "python-multipart>=0.0.20",
 ]
 
 [dependency-groups]

@@ -13,10 +13,10 @@ from supertokens_python.recipe.session import SessionContainer
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 
 from app.core.auth.auth_supertokens_config import supertokens_init
-from app.core.base_schema import CustomBaseModel
 from app.core.config import settings
 from app.core.database import db
-from app.core.logging import logger
+from app.core.logging import router as log_router
+from app.core.observation_middleware import ObservationMiddleware
 from app.core.remote_config.router import router as remote_config_router
 from app.core.sse.broadcast import broadcast
 from app.core.sse.router import router as sse_router
@@ -42,6 +42,7 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.add_middleware(supertokens_middleware())
+app.add_middleware(ObservationMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -54,23 +55,11 @@ app.add_middleware(
     allow_headers=["Content-Type"] + get_all_cors_headers(),
 )
 
+app.include_router(log_router)
 app.include_router(athlete_router, prefix=settings.API_V1_PREFIX)
 app.include_router(guardian_router, prefix=settings.API_V1_PREFIX)
 app.include_router(remote_config_router, prefix=settings.API_V1_PREFIX)
 app.include_router(sse_router, prefix=settings.API_V1_PREFIX)
-
-
-""" @app.middleware("http")
-async def add_process_time_header(request: Request, call_next):
-    if request.url.path == "/" or request.url.path == "/root-custom-response":
-        return await call_next(request)
-
-    start_time = time.perf_counter()
-    response = await call_next(request)
-    process_time = time.perf_counter() - start_time
-    response.headers["X-Process-Time"] = str(process_time)
-    logger.info(f"Request: {request.url} took {process_time} seconds")
-    return response """
 
 
 @app.get(
