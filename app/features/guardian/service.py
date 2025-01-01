@@ -40,7 +40,7 @@ class GuardianService:
         )
         await self.broadcast.publish(
             channel="update",
-            message=orjson.dumps(event.model_dump()),
+            message=orjson.dumps(event.model_dump()).decode("utf-8"),
         )
 
     async def notify_delete(self, guardian_id: UUID1) -> None:
@@ -52,7 +52,7 @@ class GuardianService:
         )
         await self.broadcast.publish(
             channel="update",
-            message=orjson.dumps(event.model_dump()),
+            message=orjson.dumps(event.model_dump()).decode("utf-8"),
         )
 
     async def valid_guardian_by_id(

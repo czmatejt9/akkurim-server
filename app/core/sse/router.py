@@ -39,5 +39,10 @@ async def broadcast_event():
         id="268f74bc-c7c4-11ef-9cd2-0242ac120002",
         local_action="upsert",
     )
-    await broadcast.publish(channel="update", message=orjson.dumps(event.model_dump()))
+    await broadcast.publish(
+        channel="update",
+        message=orjson.dumps(
+            event.model_dump(),
+        ).decode("utf-8"),
+    ),
     return ORJSONResponse(event.model_dump(), status_code=200)
