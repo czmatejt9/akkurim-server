@@ -57,11 +57,14 @@ CREATE TABLE IF NOT EXISTS athlete
     phone text,
     ean text,
     note text,
+    /* club_id text
+       profile_picture text */
     athlete_status_id uuid NOT NULL,
     created_at timestamp with time zone NOT NULL,
     updated_at timestamp with time zone NOT NULL,
     PRIMARY KEY (id)
 );
+
 
 CREATE TABLE IF NOT EXISTS athlete_guardian
 (
