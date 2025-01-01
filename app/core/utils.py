@@ -67,10 +67,7 @@ def generate_sql_update_with_returning(
 ) -> tuple[str, tuple]:
     columns = ", ".join([f"{key} = ${i + 1}" for i, key in enumerate(data.keys())])
     conditions_str = " AND ".join(
-        [
-            f"{key} = ${i + 1 + len(data.keys)}"
-            for i, key in enumerate(conditions.keys())
-        ]
+        [f"{key} = ${i + 1 + len(data)}" for i, key in enumerate(conditions.keys())]
     )
     returning_str = ", ".join(returning)
     return (
