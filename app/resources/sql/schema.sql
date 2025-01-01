@@ -65,6 +65,16 @@ CREATE TABLE IF NOT EXISTS athlete
     PRIMARY KEY (id)
 );
 
+/*
+CREATE TABLE club (
+        id text NOT NULL,
+        name text NOT NULL,
+        description text NOT NULL,
+        created_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id)
+    );
+*/
 
 CREATE TABLE IF NOT EXISTS athlete_guardian
 (

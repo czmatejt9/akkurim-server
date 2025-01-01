@@ -19,22 +19,25 @@ depends_on: Union[str, Sequence[str], None] = None
 
 
 def upgrade() -> None:
-    op.execute(
+    conn = op.get_bind()
+    conn.execute(
         """
-    BEGIN;
-    CREATE TABLE club (
-        id text NOT NULL,
-        name text NOT NULL,
-        description text NOT NULL,
-        created_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (id)
-    );
-    
-    ALTER TABLE athlete
-        ADD COLUMN profile_picture text;
-        ADD COLUMN club_id text REFERENCES club(id) MATCH SIMPLE;
-    """
+        BEGIN;
+        CREATE TABLE club (
+            id text NOT NULL,
+            name text NOT NULL,
+            description text NOT NULL,
+            created_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+        );
+        
+        ALTER TABLE athlete
+            ADD COLUMN profile_picture text;
+            ADD COLUMN club_id text REFERENCES club(id) MATCH SIMPLE;
+            
+        COMMIT;
+        """
     )
 
 

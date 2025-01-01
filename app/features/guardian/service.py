@@ -133,3 +133,7 @@ class GuardianService:
             raise GuardianNotFoundException
         await self.notify_delete(guardian_id)
         return None
+
+    # create a method to get all guardians from a club based on club_id
+    # since each guardian is associated with an athlete, which is associated with a club
+    # so we need to use join to get all guardians from a club
