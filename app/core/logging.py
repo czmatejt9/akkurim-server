@@ -37,5 +37,5 @@ router = APIRouter(
 
 # use something from docs: https://fastapi.tiangolo.com/tutorial/request-files/
 @router.get("/")
-async def get_logs():
+async def get_logs() -> FileResponse:
     return FileResponse(log_file, media_type="text/plain")
