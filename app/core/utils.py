@@ -78,14 +78,16 @@ def generate_sql_update_with_returning(
     )
 
 
-def generate_sql_delete(
+def generate_sql_delete_with_returning(
     table: str,
     conditions: dict,
 ) -> tuple[str, tuple]:
     conditions_str = " AND ".join(
         [f"{key} = ${i + 1}" for i, key in enumerate(conditions.keys())]
     )
-    return f"DELETE FROM {table} WHERE {conditions_str};", tuple(conditions.values())
+    return f"DELETE FROM {table} WHERE {conditions_str} RETURNING id;", tuple(
+        conditions.values()
+    )
 
 
 def convert_uuid_to_str(data: dict) -> dict:

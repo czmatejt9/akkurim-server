@@ -7,8 +7,11 @@ from pydantic import UUID1
 
 from app.core.database import get_db
 from app.core.exceptions import UpdateError
+from app.core.sse.broadcast import broadcast
+from app.core.sse.schemas import LocalActionEnum, SSEEvent
 from app.core.utils import (
     convert_uuid_to_str,
+    generate_sql_delete_with_returning,
     generate_sql_insert,
     generate_sql_insert_with_returning,
     generate_sql_read,
@@ -26,6 +29,31 @@ from app.features.guardian.schemas import GuardianRead
 class GuardianService:
     def __init__(self) -> None:
         self.table = "guardian"
+        self.broadcast = broadcast
+
+    async def notify_update(self, guardian_id: UUID1) -> None:
+        event = SSEEvent(
+            table_name=self.table,
+            endpoint="/guardian/{id}",
+            id=guardian_id,
+            local_action=LocalActionEnum.upsert,
+        )
+        await self.broadcast.publish(
+            channel="updates",
+            message=event.model_dump(),
+        )
+
+    async def notify_delete(self, guardian_id: UUID1) -> None:
+        event = SSEEvent(
+            table_name=self.table,
+            endpoint=None,
+            id=guardian_id,
+            local_action=LocalActionEnum.delete,
+        )
+        await self.broadcast.publish(
+            channel="updates",
+            message=event.model_dump(),
+        )
 
     async def valid_guardian_by_id(
         self,
@@ -63,6 +91,7 @@ class GuardianService:
         )
         try:
             created = await db.fetchrow(query, *values)
+            self.notify_update(guardian["id"])
             return convert_uuid_to_str(dict(created))
 
         except UniqueViolationError:
@@ -85,6 +114,22 @@ class GuardianService:
         )
         try:
             updated = await db.fetchrow(query, *values)
+            self.notify_update(guardian["id"])
             return convert_uuid_to_str(dict(updated))
         except UniqueViolationError:
             raise GuardianEmailAlreadyExistsException
+
+    async def delete_guardian(self, guardian_id: UUID1, db: Connection) -> None:
+        exists = await self.valid_guardian_by_id(guardian_id, db)
+        if not exists:
+            raise GuardianNotFoundException
+
+        query, values = generate_sql_delete_with_returning(
+            self.table,
+            {"id": guardian_id},
+        )
+        result = await db.fetchrow(query, *values)
+        if not result:
+            raise GuardianNotFoundException
+        self.notify_delete(guardian_id)
+        return None

@@ -14,11 +14,11 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 
 from app.core.auth.auth_supertokens_config import supertokens_init
 from app.core.base_schema import CustomBaseModel
-from app.core.broadcast import broadcast
 from app.core.config import settings
 from app.core.database import db
 from app.core.logging import logger
 from app.core.remote_config.router import router as remote_config_router
+from app.core.sse.broadcast import broadcast
 from app.core.sse.router import router as sse_router
 from app.features.athlete.router import router as athlete_router
 from app.features.guardian.router import router as guardian_router

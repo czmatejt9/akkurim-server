@@ -106,12 +106,17 @@ dependencies = [
     { name = "pydantic", extra = ["email"] },
     { name = "pydantic-settings" },
     { name = "pytest" },
-    { name = "ruff" },
     { name = "sse-starlette" },
     { name = "supertokens-python" },
     { name = "typing-inspect" },
     { name = "uvicorn", extra = ["standard"] },
     { name = "uvloop", marker = "sys_platform != 'win32'" },
+]
+
+[package.dev-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "ruff" },
 ]
 
 [package.metadata]
@@ -128,12 +133,17 @@ requires-dist = [
     { name = "pydantic", extras = ["email"] },
     { name = "pydantic-settings" },
     { name = "pytest" },
-    { name = "ruff", specifier = ">=0.8.4" },
     { name = "sse-starlette" },
     { name = "supertokens-python" },
     { name = "typing-inspect", specifier = ">=0.9.0" },
     { name = "uvicorn", extras = ["standard"] },
     { name = "uvloop", marker = "sys_platform != 'win32'" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=8.3.4" },
+    { name = "ruff", specifier = ">=0.8.4" },
 ]
 
 [[package]]
