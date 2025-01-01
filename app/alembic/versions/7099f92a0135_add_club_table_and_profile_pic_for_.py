@@ -34,8 +34,8 @@ def upgrade() -> None:
         );
         
         ALTER TABLE athlete
-            ADD COLUMN profile_picture text;
-            ADD COLUMN club_id text REFERENCES club(id) MATCH SIMPLE;
+            ADD profile_picture text;
+            ADD club_id text REFERENCES club(id) MATCH SIMPLE;
             
         COMMIT;
         """
