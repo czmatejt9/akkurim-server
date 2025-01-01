@@ -25,7 +25,9 @@ SessionType = Annotated[
     SessionContainer,
     Depends(
         verify_session(
-            override_global_claim_validators=lambda global_validators, session, user_context: global_validators
+            override_global_claim_validators=lambda global_validators,
+            session,
+            user_context: global_validators
             + [UserRoleClaim.validators.includes("trainer")]
         )
     ),
