@@ -30,8 +30,26 @@ class GuardianCreate(GuardianBase):
 
 
 class GuardianUpdate(GuardianBase):
-    created_at: Optional[AwareDatetime]
     updated_at: AwareDatetime
+
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "id": "268f74bc-c7c4-11ef-9cd2-0242ac120002",
+                    "first_name": "Pepa",
+                    "last_name": "Novák",
+                    "email": "pepicek@email.cz",
+                    "phone": "00420123456789",
+                    "updated_at": "2022-04-01T10:00:00+02:00",
+                }
+            ]
+        }
+    }
+
+
+class GuardianRead(GuardianUpdate):
+    created_at: AwareDatetime
 
     model_config = {
         "json_schema_extra": {
@@ -48,7 +66,3 @@ class GuardianUpdate(GuardianBase):
             ]
         }
     }
-
-
-class GuardianRead(GuardianUpdate):
-    pass

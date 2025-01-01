@@ -112,7 +112,6 @@ class GuardianService:
             {"id": guardian["id"]},
             GuardianRead.model_fields.keys(),
         )
-        print(query, values)
         try:
             updated = await db.fetchrow(query, *values)
             self.notify_update(guardian["id"])
