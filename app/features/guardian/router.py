@@ -29,6 +29,7 @@ router = APIRouter(
             get_db,
         )
     ],
+    default_response_class=ORJSONResponse,
 )
 
 
@@ -41,7 +42,6 @@ class GuardianRouter:
 
     @router.get(
         "/{guardian_id}",
-        response_class=ORJSONResponse,
         response_model=GuardianRead,
     )
     async def read_guardian(
@@ -53,7 +53,6 @@ class GuardianRouter:
 
     @router.post(
         "/",
-        response_class=ORJSONResponse,
         response_model=GuardianRead,
     )
     async def create_guardian(
@@ -65,7 +64,6 @@ class GuardianRouter:
 
     @router.put(
         "/{guardian_id}",
-        response_class=ORJSONResponse,
         response_model=GuardianRead,
     )
     async def update_guardian(
@@ -81,7 +79,6 @@ class GuardianRouter:
 
     @router.delete(
         "/{guardian_id}",
-        response_class=ORJSONResponse,
         status_code=204,
     )
     async def delete_guardian(
