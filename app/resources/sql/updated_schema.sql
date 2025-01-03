@@ -2,7 +2,7 @@
 
 BEGIN;
 
-CREATE TABLE public.remote_config
+CREATE TABLE IF NOT EXISTS public.remote_config
 (
     id int NOT NULL,
     urgent_message text,
@@ -90,7 +90,7 @@ CREATE TABLE IF NOT EXISTS tenant_id.athlete
 );
 
 
-CREATE TABLE tenant_id.club (
+CREATE TABLE IF NOT EXISTS tenant_id.club (
         id text NOT NULL,
         name text NOT NULL,
         description text NOT NULL,
