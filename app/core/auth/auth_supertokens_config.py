@@ -17,7 +17,9 @@ def supertokens_init():
         ),
         framework="fastapi",
         recipe_list=[
-            session.init(),
+            session.init(
+                expose_access_token_to_frontend_in_cookie_based_auth=True,
+            ),
             emailpassword.init(),
             dashboard.init(admins=[settings.DASHBOARD_ADMIN]),
             userroles.init(),
