@@ -38,7 +38,9 @@ router = APIRouter(
 async def test(
     auth_data=Depends(is_trainer_and_tenant_info),
 ) -> dict:
-    return ORJSONResponse({"message": "authorized"}, status_code=status.HTTP_200_OK)
+    return ORJSONResponse(
+        {"message": auth_data.tenant_id}, status_code=status.HTTP_200_OK
+    )
 
 
 @cbv(router)
