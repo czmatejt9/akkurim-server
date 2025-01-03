@@ -37,9 +37,9 @@ router = APIRouter(
     response_model=AuthData,
 )
 async def test(
-    auth_data=Depends(nested_verify_session),
+    auth_data=Depends(verify_session),
 ) -> dict:
-    return ORJSONResponse({"authorized"}, status_code=status.HTTP_200_OK)
+    return ORJSONResponse({"message": "authorized"}, status_code=status.HTTP_200_OK)
 
 
 @cbv(router)
