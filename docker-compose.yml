@@ -15,11 +15,11 @@ services:
       - API_KEY=${API_KEY}
     volumes:
       - fastapi_logs:/app/logs
-    healthcheck:
-        test: [ "CMD", "curl", "https://devapi.akkurim.cz/"]
-        interval: 1m
-        timeout: 5s
-        retries: 3
+    #healthcheck:
+    #    test: [ "CMD", "curl", "https://devapi.akkurim.cz/"]
+    #    interval: 1m
+    #    timeout: 5s
+    #    retries: 3
     depends_on:
       - db
       - supertokens
