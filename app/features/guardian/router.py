@@ -73,8 +73,6 @@ class GuardianRouter:
         guardian: GuardianCreate,
         auth_data=Depends(is_trainer_and_tenant_info),
     ) -> GuardianRead:
-        print(type(self.auth_data))
-        print(dir(self.auth_data))
         guardian = await self.service.create_guardian(
             auth_data.tenant_id,
             guardian.model_dump(),
@@ -87,7 +85,10 @@ class GuardianRouter:
         response_model=GuardianRead,
     )
     async def update_guardian(
-        self, guardian_id: UUID1, guardian: GuardianUpdate
+        self,
+        guardian_id: UUID1,
+        guardian: GuardianUpdate,
+        auth_data=Depends(is_trainer_and_tenant_info),
     ) -> GuardianRead:
         if guardian_id != guardian.id:
             raise HTTPException(
@@ -95,7 +96,7 @@ class GuardianRouter:
                 detail="Guardian ID in URL and body does not match",
             )
         guardian = await self.service.update_guardian(
-            self.auth_data.tenant_id,
+            auth_data.tenant_id,
             guardian.model_dump(),
             self.db,
         )
@@ -109,9 +110,10 @@ class GuardianRouter:
     async def delete_guardian(
         self,
         guardian_id: UUID1,
+        auth_data=Depends(is_trainer_and_tenant_info),
     ) -> ORJSONResponse:
         await self.service.delete_guardian(
-            self.auth_data.tenant_id,
+            auth_data.tenant_id,
             guardian_id,
             self.db,
         )
@@ -121,9 +123,12 @@ class GuardianRouter:
         "/",
         response_model=list[GuardianRead],
     )
-    async def read_all_guardians(self) -> list[dict]:
+    async def read_all_guardians(
+        self,
+        auth_data=Depends(is_trainer_and_tenant_info),
+    ) -> list[dict]:
         guardians = await self.service.get_all_guardians(
-            self.auth_data.tenant_id,
+            auth_data.tenant_id,
             self.db,
         )
         return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)
