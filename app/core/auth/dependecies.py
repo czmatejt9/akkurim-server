@@ -44,8 +44,12 @@ async def is_admin_and_tenant_info(
     return await CheckRoleAndTenant("admin")(auth_data)
 
 
-tenant_and_roles = Depends(verify_and_get_auth_data)
+async def is_trainer_and_tenant_info(
+    auth_data: AuthData = Depends(verify_and_get_auth_data),
+) -> AuthData:
+    return await CheckRoleAndTenant("trainer")(auth_data)
 
-is_trainer_and_tenant_info = CheckRoleAndTenant("trainer")
+
+tenant_and_roles = Depends(verify_and_get_auth_data)
 is_athlete_and_tenant_info = CheckRoleAndTenant("athlete")
 is_guardian_and_tenant_info = CheckRoleAndTenant("guardian")
