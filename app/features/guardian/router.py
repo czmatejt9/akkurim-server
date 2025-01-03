@@ -45,7 +45,6 @@ async def test(
 
 @cbv(router)
 class GuardianRouter:
-    auth_data = Depends(is_trainer_and_tenant_info)
     db = Depends(get_db)
     service = GuardianService()
 
@@ -56,9 +55,10 @@ class GuardianRouter:
     async def read_guardian(
         self,
         guardian_id: UUID1,
+        auth_data=Depends(is_trainer_and_tenant_info),
     ) -> GuardianRead:
         guardian = await self.service.get_guardian_by_id(
-            self.auth_data.tenant_id,
+            auth_data.tenant_id,
             guardian_id,
             self.db,
         )
@@ -71,11 +71,12 @@ class GuardianRouter:
     async def create_guardian(
         self,
         guardian: GuardianCreate,
+        auth_data=Depends(is_trainer_and_tenant_info),
     ) -> GuardianRead:
         print(type(self.auth_data))
         print(dir(self.auth_data))
         guardian = await self.service.create_guardian(
-            self.auth_data.tenant_id,
+            auth_data.tenant_id,
             guardian.model_dump(),
             self.db,
         )
