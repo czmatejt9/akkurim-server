@@ -2,17 +2,20 @@ import uuid
 
 
 def generate_sql_insert(
+    tenant_id: str,
     table: str,
     data: dict,
 ) -> tuple[str, tuple]:
     columns = ", ".join(data.keys())
     placeholders = ", ".join([f"${i + 1}" for i in range(len(data))])
-    return f"INSERT INTO {table} ({columns}) VALUES ({placeholders});", tuple(
-        data.values()
+    return (
+        f"INSERT INTO {tenant_id}.{table} ({columns}) VALUES ({placeholders});",
+        tuple(data.values()),
     )
 
 
 def generate_sql_insert_with_returning(
+    tenant_id: str,
     table: str,
     data: dict,
     returning: list[str],
@@ -21,7 +24,7 @@ def generate_sql_insert_with_returning(
     placeholders = ", ".join([f"${i + 1}" for i in range(len(data))])
     returning_str = ", ".join(returning)
     return (
-        f"INSERT INTO {table} ({columns}) VALUES ({placeholders}) RETURNING {returning_str};",
+        f"INSERT INTO {tenant_id}.{table} ({columns}) VALUES ({placeholders}) RETURNING {returning_str};",
         tuple(
             data.values(),
         ),
@@ -29,6 +32,7 @@ def generate_sql_insert_with_returning(
 
 
 def generate_sql_read(
+    tenant_id: str,
     table: str,
     columns: list[str],
     conditions: dict = {},
@@ -37,12 +41,13 @@ def generate_sql_read(
     conditions_str = " AND ".join(
         [f"{key} = ${i + 1}" for i, key in enumerate(conditions.keys())]
     )
-    return f"SELECT {columns} FROM {table} WHERE {conditions_str};", tuple(
+    return f"SELECT {columns} FROM {tenant_id}.{table} WHERE {conditions_str};", tuple(
         conditions.values()
     )
 
 
 def generate_sql_update(
+    tenant_id: str,
     table: str,
     data: dict,
     conditions: dict,
@@ -52,7 +57,7 @@ def generate_sql_update(
         [f"{key} = ${i + 1}" for i, key in enumerate(conditions.keys())]
     )
     return (
-        f"UPDATE {table} SET {columns} WHERE {conditions_str};",
+        f"UPDATE {tenant_id}.{table} SET {columns} WHERE {conditions_str};",
         tuple(
             [*data.values(), *conditions.values()],
         ),
@@ -60,6 +65,7 @@ def generate_sql_update(
 
 
 def generate_sql_update_with_returning(
+    tenant_id: str,
     table: str,
     data: dict,
     conditions: dict,
@@ -71,7 +77,7 @@ def generate_sql_update_with_returning(
     )
     returning_str = ", ".join(returning)
     return (
-        f"UPDATE {table} SET {columns} WHERE {conditions_str} RETURNING {returning_str};",
+        f"UPDATE {tenant_id}.{table} SET {columns} WHERE {conditions_str} RETURNING {returning_str};",
         tuple(
             [*data.values(), *conditions.values()],
         ),
@@ -79,14 +85,16 @@ def generate_sql_update_with_returning(
 
 
 def generate_sql_delete_with_returning(
+    tenant_id: str,
     table: str,
     conditions: dict,
 ) -> tuple[str, tuple]:
     conditions_str = " AND ".join(
         [f"{key} = ${i + 1}" for i, key in enumerate(conditions.keys())]
     )
-    return f"DELETE FROM {table} WHERE {conditions_str} RETURNING id;", tuple(
-        conditions.values()
+    return (
+        f"DELETE FROM {tenant_id}.{table} WHERE {conditions_str} RETURNING id;",
+        tuple(conditions.values()),
     )
 
 

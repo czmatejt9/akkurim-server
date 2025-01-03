@@ -2,9 +2,12 @@ from typing import Annotated
 
 from asyncpg import Connection
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import ORJSONResponse
+from fastapi_utils.cbv import cbv
 
 from app.core.database import get_db
-from app.core.remote_config.schemas import RemoteConfig
+from app.core.remote_config.schemas import RemoteConfigRead
+from app.core.remote_config.service import RemoteConfigService
 
 router = APIRouter(
     prefix="/remote-config",
@@ -13,21 +16,21 @@ router = APIRouter(
     dependencies=[
         Depends(get_db),
     ],
+    default_response_class=ORJSONResponse,
 )
-DBConection = Annotated[Connection, Depends(get_db)]
 
 
-@router.get(
-    "/{remote_config_id}",
-    status_code=status.HTTP_200_OK,
-    response_model=RemoteConfig,
-    responses={404: {"description": "Not found"}},
-)
-async def read_remote_config(remote_config_id: int, db: DBConection):
-    remote_config = await db.fetchrow(
-        """SELECT * FROM remote_config WHERE id = $1""", remote_config_id
+@cbv(router)
+class RemoteConfigRouter:
+    db: Connection = Depends(get_db)
+    service = RemoteConfigService()
+
+    @router.get(
+        "/",
+        response_model=RemoteConfigRead,
     )
-    if not remote_config:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND)
-    remote_config = RemoteConfig(**dict(remote_config))
-    return remote_config
+    async def get_remote_config(
+        self,
+    ) -> RemoteConfigRead:
+        remote_config = await self.service.get_remote_config("public", self.db)
+        return ORJSONResponse(remote_config, status_code=200)

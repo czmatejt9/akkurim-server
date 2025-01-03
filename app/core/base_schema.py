@@ -4,5 +4,5 @@ from pydantic import UUID1, BaseModel, EmailStr
 
 
 # used for global configuration
-class CustomBaseModel(BaseModel):
+class BaseSchema(BaseModel):
     pass

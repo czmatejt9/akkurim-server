@@ -2,10 +2,10 @@ from typing import Optional
 
 from pydantic import UUID1, AwareDatetime, EmailStr
 
-from app.core.base_schema import CustomBaseModel
+from app.core.base_schema import BaseSchema
 
 
-class GuardianBase(CustomBaseModel):
+class GuardianBase(BaseSchema):
     id: UUID1
     first_name: str
     last_name: str

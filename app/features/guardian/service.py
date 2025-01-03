@@ -57,12 +57,14 @@ class GuardianService:
 
     async def valid_guardian_by_id(
         self,
+        tenant_id: str,
         guardian_id: UUID1,
         db: Connection,
     ) -> dict | None:
         query, values = generate_sql_read(
+            tenant_id,
             self.table,
-            ["*"],
+            GuardianRead.model_fields.keys(),
             {"id": guardian_id},
         )
         guardian = await db.fetchrow(query, *values)
@@ -71,20 +73,37 @@ class GuardianService:
         return dict(guardian)
 
     async def get_guardian_by_id(
-        self, guardian_id: UUID1, db: Connection
+        self,
+        tenant_id: str,
+        guardian_id: UUID1,
+        db: Connection,
     ) -> GuardianRead:
-        guardian = await self.valid_guardian_by_id(guardian_id, db)
+        guardian = await self.valid_guardian_by_id(
+            tenant_id,
+            guardian_id,
+            db,
+        )
         if not guardian:
             raise GuardianNotFoundException
 
         return convert_uuid_to_str(guardian)
 
-    async def create_guardian(self, guardian: dict, db: Connection) -> GuardianRead:
-        exists = await self.valid_guardian_by_id(guardian["id"], db)
+    async def create_guardian(
+        self,
+        tenant_id: str,
+        guardian: dict,
+        db: Connection,
+    ) -> GuardianRead:
+        exists = await self.valid_guardian_by_id(
+            tenant_id,
+            guardian["id"],
+            db,
+        )
         if exists:
             raise GuardianAlreadyExistsException
 
         query, values = generate_sql_insert_with_returning(
+            tenant_id,
             self.table,
             guardian,
             GuardianRead.model_fields.keys(),
@@ -97,8 +116,17 @@ class GuardianService:
         except UniqueViolationError:
             raise GuardianEmailAlreadyExistsException
 
-    async def update_guardian(self, guardian: dict, db: Connection) -> GuardianRead:
-        exists = await self.valid_guardian_by_id(guardian["id"], db)
+    async def update_guardian(
+        self,
+        tenant_id: str,
+        guardian: dict,
+        db: Connection,
+    ) -> GuardianRead:
+        exists = await self.valid_guardian_by_id(
+            tenant_id,
+            guardian["id"],
+            db,
+        )
         if not exists:
             raise GuardianNotFoundException
 
@@ -107,6 +135,7 @@ class GuardianService:
 
         guardian["updated_at"] = datetime.now()
         query, values = generate_sql_update_with_returning(
+            tenant_id,
             self.table,
             guardian,
             {"id": guardian["id"]},
@@ -116,15 +145,26 @@ class GuardianService:
             updated = await db.fetchrow(query, *values)
             await self.notify_update(guardian["id"])
             return convert_uuid_to_str(dict(updated))
+
         except UniqueViolationError:
             raise GuardianEmailAlreadyExistsException
 
-    async def delete_guardian(self, guardian_id: UUID1, db: Connection) -> None:
-        exists = await self.valid_guardian_by_id(guardian_id, db)
+    async def delete_guardian(
+        self,
+        tenant_id: str,
+        guardian_id: UUID1,
+        db: Connection,
+    ) -> None:
+        exists = await self.valid_guardian_by_id(
+            tenant_id,
+            guardian_id,
+            db,
+        )
         if not exists:
             raise GuardianNotFoundException
 
         query, values = generate_sql_delete_with_returning(
+            tenant_id,
             self.table,
             {"id": guardian_id},
         )
@@ -134,6 +174,12 @@ class GuardianService:
         await self.notify_delete(guardian_id)
         return None
 
-    # create a method to get all guardians from a club based on club_id
-    # since each guardian is associated with an athlete, which is associated with a club
-    # so we need to use join to get all guardians from a club
+    async def get_all_guardians(self, tenant_id: str, db: Connection) -> list[dict]:
+        query, values = generate_sql_read(
+            tenant_id,
+            self.table,
+            GuardianRead.model_fields.keys(),
+            {},
+        )
+        guardians = await db.fetch(query, *values)
+        return [dict(guardian) for guardian in guardians]

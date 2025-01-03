@@ -1,19 +1,16 @@
 from typing import Optional
 
-from pydantic import AwareDatetime, BaseModel
+from pydantic import AwareDatetime
 
-from app.core.base_schema import CustomBaseModel
+from app.core.base_schema import BaseSchema
 
 
-class RemoteConfigBase(CustomBaseModel):
+class RemoteConfigBase(BaseSchema):
     id: int
-    server_url: str
-    websocket_url: str
-    dev_prefix: str
     welcome_message: Optional[str]
     minimum_app_version: str
 
 
-class RemoteConfig(RemoteConfigBase):
-    created_at: Optional[AwareDatetime]
+class RemoteConfigRead(RemoteConfigBase):
+    created_at: AwareDatetime
     updated_at: AwareDatetime
