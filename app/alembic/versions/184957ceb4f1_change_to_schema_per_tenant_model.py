@@ -27,9 +27,6 @@ def upgrade() -> None:
         tenants = [each for each in f.read().split("\n") if each]
 
     conn = op.get_bind()
-    # drop all old tables
-    conn.execute(sa.text("DROP SCHEMA public CASCADE;"))
-    conn.execute(sa.text("CREATE SCHEMA public;"))
 
     for tenant_id in tenants:
         sql = re.sub("tenant_id", tenant_id, sql)
