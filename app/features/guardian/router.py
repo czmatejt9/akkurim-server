@@ -38,6 +38,7 @@ router = APIRouter(
 async def test(
     auth_data=Annotated[AuthData, Depends(verify_and_get_auth_data)],
 ) -> AuthData:
+    print(auth_data)
     return auth_data
 
 
