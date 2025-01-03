@@ -22,7 +22,7 @@ router = APIRouter(
 
 @cbv(router)
 class RemoteConfigRouter:
-    db: Connection = Depends(get_db)
+    db = Depends(get_db)
     service = RemoteConfigService()
 
     @router.get(

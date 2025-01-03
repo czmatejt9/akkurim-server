@@ -32,9 +32,9 @@ router = APIRouter(
 
 @cbv(router)
 class GuardianRouter:
-    auth_data: AuthData = Depends(verify_session)
+    auth_data = Depends(verify_session)
     service = GuardianService()
-    db: Connection = Depends(get_db)
+    db = Depends(get_db)
 
     @router.get(
         "/{guardian_id}",
