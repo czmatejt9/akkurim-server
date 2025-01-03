@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS tenant_id.item
     athlete_id uuid,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS tenant_id.athlete
@@ -96,7 +96,7 @@ CREATE TABLE tenant_id.club (
         description text NOT NULL,
         created_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (id),
+        PRIMARY KEY (id)
     );
 
 
@@ -161,7 +161,7 @@ CREATE TABLE IF NOT EXISTS tenant_id.web_post
     trainer_id uuid NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS tenant_id."group"
@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS tenant_id."group"
     school_year_id uuid NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS tenant_id.group_athlete
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS tenant_id.training
     duration_minutes smallint NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS tenant_id.training_time
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS tenant_id.sign_up_form
     school_year_id uuid NOT NULL,
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS tenant_id.sign_up_form_status
@@ -311,7 +311,7 @@ CREATE TABLE IF NOT EXISTS tenant_id.meet
     organizer text,
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (id),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS tenant_id.meet_event
@@ -325,7 +325,7 @@ CREATE TABLE IF NOT EXISTS tenant_id.meet_event
     phase text,
     created_at timestamp with time zone,
     updated_at timestamp with time zone,
-    PRIMARY KEY (id),
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS tenant_id.category
