@@ -9,7 +9,7 @@ from app.core.database import get_db
 from app.core.exceptions import UpdateError
 from app.core.sse.broadcast import broadcast
 from app.core.sse.schemas import LocalActionEnum, SSEEvent
-from app.core.utils import (
+from app.core.utils.utils import (
     convert_uuid_to_str,
     generate_sql_delete_with_returning,
     generate_sql_insert,

@@ -24,7 +24,6 @@ router = APIRouter(
     },
     dependencies=[
         Depends(get_db),
-        Depends(is_trainer_and_tenant_info),
     ],
     default_response_class=ORJSONResponse,
 )
