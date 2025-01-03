@@ -31,7 +31,7 @@ router = APIRouter(
 
 @cbv(router)
 class GuardianRouter:
-    auth_data: AuthData = Depends(is_trainer_and_tenant_info)
+    auth_data = Depends(is_trainer_and_tenant_info)
     db = Depends(get_db)
     service = GuardianService()
 
