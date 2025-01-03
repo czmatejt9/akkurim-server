@@ -1,5 +1,5 @@
 FROM ghcr.io/astral-sh/uv:0.5.13-python3.12-bookworm
-
+# keep that to 0.5.13 now as 0.5.14 failed
 
 WORKDIR /app
 
