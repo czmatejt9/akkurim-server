@@ -1,8 +1,8 @@
 """change to schema per tenant model
 
-Revision ID: f68da2df206b
-Revises: 7099f92a0135
-Create Date: 2025-01-03 09:54:29.096041
+Revision ID: 184957ceb4f1
+Revises: 
+Create Date: 2025-01-03 16:35:39.100109
 
 """
 
@@ -13,8 +13,8 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision: str = "f68da2df206b"
-down_revision: Union[str, None] = "7099f92a0135"
+revision: str = "184957ceb4f1"
+down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
