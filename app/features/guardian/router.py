@@ -23,10 +23,8 @@ router = APIRouter(
         "403": {"description": "Forbidden"},
     },
     dependencies=[
-        Depends(
-            is_trainer_and_tenant_info,
-            get_db,
-        )
+        Depends(get_db),
+        Depends(is_trainer_and_tenant_info),
     ],
     default_response_class=ORJSONResponse,
 )
