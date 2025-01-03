@@ -18,7 +18,7 @@ async def verify_and_get_auth_data(
         raise_invalid_claims_exception(
             "Wrong user config", [ClaimValidationError(UserRoleClaim.key, None)]
         )
-    user_role = user_roles[0]
+    user_role: str = user_roles[0]
     tenant_id, *roles = user_role.split("_")
     return AuthData(tenant_id=tenant_id, roles=roles)
 

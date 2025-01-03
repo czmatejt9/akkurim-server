@@ -7,7 +7,10 @@ from fastapi_utils.cbv import cbv
 from pydantic import UUID1
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 
-from app.core.auth.dependecies import is_trainer_and_tenant_info
+from app.core.auth.dependecies import (
+    is_trainer_and_tenant_info,
+    verify_and_get_auth_data,
+)
 from app.core.auth.schemas import AuthData
 from app.core.database import get_db
 from app.features.guardian.schemas import GuardianCreate, GuardianRead, GuardianUpdate
@@ -30,7 +33,7 @@ router = APIRouter(
 
 @cbv(router)
 class GuardianRouter:
-    auth_data = Depends(is_trainer_and_tenant_info)
+    auth_data = Depends(verify_and_get_auth_data)
     db = Annotated[Connection, Depends(get_db)]
     service = GuardianService()
 
