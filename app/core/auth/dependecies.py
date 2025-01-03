@@ -23,6 +23,12 @@ async def verify_and_get_auth_data(
     return AuthData(tenant_id=tenant_id, roles=roles)
 
 
+async def nested_verify_session(
+    session=Depends(verify_session),
+) -> SessionContainer:
+    return session
+
+
 async def is_trainer_and_tenant_info(
     auth_data=Depends(verify_and_get_auth_data),
 ) -> AuthData:
