@@ -31,16 +31,6 @@ router = APIRouter(
 )
 
 
-@router.get(
-    "test",
-    response_model=AuthData,
-)
-async def test(
-    auth_data=Depends(is_trainer_and_tenant_info),
-) -> dict:
-    return ORJSONResponse({"message": "authorized"}, status_code=status.HTTP_200_OK)
-
-
 @cbv(router)
 class GuardianRouter:
     auth_data = Depends(verify_and_get_auth_data)

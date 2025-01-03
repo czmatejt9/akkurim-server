@@ -24,7 +24,7 @@ async def verify_and_get_auth_data(
 
 
 async def is_trainer_and_tenant_info(
-    auth_data=Depends(verify_and_get_auth_data),
+    auth_data: AuthData = Depends(verify_and_get_auth_data),
 ) -> AuthData:
     if "trainer" not in auth_data.roles:
         raise_invalid_claims_exception(
