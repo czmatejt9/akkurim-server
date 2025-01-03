@@ -23,23 +23,11 @@ async def verify_and_get_auth_data(
     return AuthData(tenant_id=tenant_id, roles=roles)
 
 
-class CheckRoleAndTenant:
-    def __init__(self, role: str):
-        self.role = role
-
-    async def __call__(
-        self, auth_data: AuthData = Depends(verify_and_get_auth_data)
-    ) -> AuthData:
-        if self.role not in auth_data.roles:
-            raise_invalid_claims_exception(
-                f"User does not have the required role: {self.role}",
-                [ClaimValidationError(UserRoleClaim.key, None)],
-            )
-        return auth_data
-
-
-tenant_and_roles = Depends(verify_and_get_auth_data)
-is_admin_and_tenant_info = CheckRoleAndTenant("admin")
-is_trainer_and_tenant_info = CheckRoleAndTenant("trainer")
-is_athlete_and_tenant_info = CheckRoleAndTenant("athlete")
-is_guardian_and_tenant_info = CheckRoleAndTenant("guardian")
+async def is_trainer_and_tenant_info(
+    auth_data: AuthData = Depends(verify_and_get_auth_data),
+) -> AuthData:
+    if "trainer" not in auth_data.roles:
+        raise_invalid_claims_exception(
+            "Wrong user config", [ClaimValidationError(UserRoleClaim.key, None)]
+        )
+    return auth_data
