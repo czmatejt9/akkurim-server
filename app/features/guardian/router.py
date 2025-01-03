@@ -36,7 +36,7 @@ router = APIRouter(
     response_model=AuthData,
 )
 async def test(
-    auth_data: AuthData = Depends(verify_and_get_auth_data),
+    auth_data=Depends(verify_and_get_auth_data),
 ) -> AuthData:
     return auth_data
 
