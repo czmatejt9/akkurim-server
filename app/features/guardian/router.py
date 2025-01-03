@@ -43,7 +43,7 @@ async def test(
 
 @cbv(router)
 class GuardianRouter:
-    auth_data = Depends(verify_and_get_auth_data)
+    auth_data = Depends(is_trainer_and_tenant_info)
     db = Depends(get_db)
     service = GuardianService()
 
