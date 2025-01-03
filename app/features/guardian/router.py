@@ -9,7 +9,6 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 
 from app.core.auth.dependecies import (
     is_trainer_and_tenant_info,
-    nested_verify_session,
     verify_and_get_auth_data,
 )
 from app.core.auth.schemas import AuthData
@@ -37,7 +36,7 @@ router = APIRouter(
     response_model=AuthData,
 )
 async def test(
-    auth_data=Depends(verify_session()),
+    auth_data=Depends(is_trainer_and_tenant_info),
 ) -> dict:
     return ORJSONResponse({"message": "authorized"}, status_code=status.HTTP_200_OK)
 

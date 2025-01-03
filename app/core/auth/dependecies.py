@@ -11,7 +11,7 @@ from app.core.auth.schemas import AuthData
 
 
 async def verify_and_get_auth_data(
-    session=Depends(verify_session),
+    session: SessionContainer = Depends(verify_session()),
 ) -> AuthData:
     user_roles = await session.get_claim_value(UserRoleClaim)
     if len(user_roles) != 1:
@@ -21,12 +21,6 @@ async def verify_and_get_auth_data(
     user_role: str = user_roles[0]
     tenant_id, *roles = user_role.split("_")
     return AuthData(tenant_id=tenant_id, roles=roles)
-
-
-async def nested_verify_session(
-    session=Depends(verify_session),
-) -> SessionContainer:
-    return session
 
 
 async def is_trainer_and_tenant_info(
