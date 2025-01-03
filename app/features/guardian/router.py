@@ -31,6 +31,16 @@ router = APIRouter(
 )
 
 
+@router.get(
+    "test",
+    response_model=AuthData,
+)
+async def test(
+    auth_data: AuthData = Depends(verify_and_get_auth_data),
+) -> AuthData:
+    return auth_data
+
+
 @cbv(router)
 class GuardianRouter:
     auth_data = Depends(verify_and_get_auth_data)
