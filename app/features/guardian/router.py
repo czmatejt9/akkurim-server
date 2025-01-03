@@ -37,7 +37,7 @@ router = APIRouter(
     response_model=AuthData,
 )
 async def test(
-    auth_data=Depends(verify_session),
+    auth_data=Depends(verify_session()),
 ) -> dict:
     return ORJSONResponse({"message": "authorized"}, status_code=status.HTTP_200_OK)
 
