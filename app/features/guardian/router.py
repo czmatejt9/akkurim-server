@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Annotated
 
 from asyncpg import Connection
@@ -31,8 +30,8 @@ router = APIRouter(
 
 @cbv(router)
 class GuardianRouter:
-    auth_data = Depends(is_trainer_and_tenant_info)
-    db = Depends(get_db)
+    auth_data = Annotated[AuthData, Depends(is_trainer_and_tenant_info)]
+    db = Annotated[Connection, Depends(get_db)]
     service = GuardianService()
 
     @router.get(
