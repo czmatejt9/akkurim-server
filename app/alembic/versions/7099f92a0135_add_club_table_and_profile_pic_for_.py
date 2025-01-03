@@ -24,7 +24,7 @@ def upgrade() -> None:
         sa.text(
             """
         BEGIN;
-        CREATE TABLE club (
+        CREATE TABLE IF NOT EXISTS club (
             id text NOT NULL,
             name text NOT NULL,
             description text NOT NULL,
