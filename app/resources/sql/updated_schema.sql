@@ -94,8 +94,8 @@ CREATE TABLE tenant_id.club (
         id text NOT NULL,
         name text NOT NULL,
         description text NOT NULL,
-        created_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at timestamp with timezone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
         PRIMARY KEY (id)
     );
 
