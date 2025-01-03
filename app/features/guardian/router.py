@@ -31,9 +31,9 @@ router = APIRouter(
 
 @cbv(router)
 class GuardianRouter:
-    auth_data = Depends(verify_session)
+    auth_data: AuthData = Depends(is_trainer_and_tenant_info)
+    db: Connection = Depends(get_db)
     service = GuardianService()
-    db = Depends(get_db)
 
     @router.get(
         "/{guardian_id}",
@@ -48,7 +48,7 @@ class GuardianRouter:
             guardian_id,
             self.db,
         )
-        return ORJSONResponse(guardian, status_code=200)
+        return ORJSONResponse(guardian, status_code=status.HTTP_200_OK)
 
     @router.post(
         "/",
@@ -63,7 +63,7 @@ class GuardianRouter:
             guardian.model_dump(),
             self.db,
         )
-        return ORJSONResponse(guardian, status_code=201)
+        return ORJSONResponse(guardian, status_code=status.HTTP_201_CREATED)
 
     @router.put(
         "/{guardian_id}",
@@ -82,7 +82,7 @@ class GuardianRouter:
             guardian.model_dump(),
             self.db,
         )
-        return ORJSONResponse(guardian, status_code=200)
+        return ORJSONResponse(guardian, status_code=status.HTTP_200_OK)
 
     @router.delete(
         "/{guardian_id}",
@@ -98,7 +98,7 @@ class GuardianRouter:
             guardian_id,
             self.db,
         )
-        return ORJSONResponse(status_code=204)
+        return ORJSONResponse(status_code=status.HTTP_204_NO_CONTENT)
 
     @router.get(
         "/",
@@ -109,4 +109,4 @@ class GuardianRouter:
             self.auth_data.tenant_id,
             self.db,
         )
-        return ORJSONResponse(guardians, status_code=200)
+        return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)

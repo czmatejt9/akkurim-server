@@ -6,9 +6,26 @@ class CustomHTTPException(HTTPException):
         super().__init__(status_code=status_code, detail=detail)
 
 
-class UpdateError(CustomHTTPException):
+class AlreadyUpdatedError(CustomHTTPException):
     def __init__(
         self,
+        table: str,
+        id: str,
         detail: str = "The resource was already updated by someone else before your synchronization.",
     ) -> None:
+        super().__init__(status_code=409, detail=f"{table} with ID {id}. {detail}")
+
+
+class NotFoundError(CustomHTTPException):
+    def __init__(self, detail: str = "Resource not found.") -> None:
+        super().__init__(status_code=404, detail=detail)
+
+
+class AlreadyExistsError(CustomHTTPException):
+    def __init__(self, detail: str = "Resource already exists.") -> None:
+        super().__init__(status_code=409, detail=detail)
+
+
+class UniqueViolationErrorHTTP(CustomHTTPException):
+    def __init__(self, detail: str = "Unique violation error.") -> None:
         super().__init__(status_code=409, detail=detail)

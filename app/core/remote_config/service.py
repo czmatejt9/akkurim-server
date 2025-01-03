@@ -1,7 +1,7 @@
 from asyncpg import Connection
 
 from app.core.remote_config.exceptions import RemoteConfigNotFoundError
-from app.core.utils.utils import convert_uuid_to_str, generate_sql_read
+from app.core.utils.sql_utils import convert_uuid_to_str, generate_sql_read
 
 
 class RemoteConfigService:
