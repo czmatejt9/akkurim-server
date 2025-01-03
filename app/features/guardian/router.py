@@ -57,6 +57,8 @@ class GuardianRouter:
         self,
         guardian: GuardianCreate,
     ) -> GuardianRead:
+        print(type(self.auth_data))
+        print(dir(self.auth_data))
         guardian = await self.service.create_guardian(
             self.auth_data.tenant_id,
             guardian.model_dump(),
