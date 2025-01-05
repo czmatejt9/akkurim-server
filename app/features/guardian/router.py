@@ -46,9 +46,19 @@ async def test(
 
 @cbv(router)
 class GuardianRouter:
-    db = Depends(get_db)
+    """db = Depends(get_db)
     service = GuardianService()
-    auth_data = Depends(is_trainer_and_tenant_info)
+    auth_data = Depends(is_trainer_and_tenant_info)"""
+
+    def __init__(
+        self,
+        db: Connection = Depends(get_db),
+        auth_data: AuthData = Depends(verify_and_get_auth_data),
+        service: GuardianService = GuardianService(),
+    ):
+        self.db = db
+        self.service = service
+        self.auth_data = auth_data
 
     @router.get(
         "/{guardian_id}",
