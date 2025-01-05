@@ -1,4 +1,5 @@
 import asyncpg
+from asyncpg import Connection
 
 from app.core.config import settings
 
@@ -26,4 +27,5 @@ async def get_db():
         try:
             yield connection
         finally:
-            await connection.release()
+            connection: Connection
+            await connection.close()
