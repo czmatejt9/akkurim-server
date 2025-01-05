@@ -54,7 +54,7 @@ class GuardianRouter:
         self,
         db: Connection = Depends(get_db),
         auth_data: AuthData = Depends(verify_and_get_auth_data),
-        service: GuardianService = GuardianService(),
+        service=GuardianService(),
     ):
         self.db = db
         self.service = service
