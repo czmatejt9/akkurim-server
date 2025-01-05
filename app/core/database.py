@@ -23,4 +23,7 @@ db = Database()
 
 async def get_db():
     async with db.pool.acquire() as connection:
-        yield connection
+        try:
+            yield connection
+        finally:
+            await connection.release()
