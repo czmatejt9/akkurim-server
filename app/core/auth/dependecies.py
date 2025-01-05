@@ -25,7 +25,7 @@ async def verify_and_get_auth_data(
 
 
 def fake_auth_data():
-    user_role = "akkruim_trainer"
+    user_role = "akkurim_trainer"
     tenant_id, *roles = user_role.split("_")
     return AuthData(tenant_id=tenant_id, roles=roles)
 
