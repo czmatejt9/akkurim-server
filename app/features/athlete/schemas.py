@@ -20,7 +20,7 @@ class AthleteBase(BaseSchema):
     athlete_status_id: UUID1
 
 
-class Athlete(AthleteBase):
+class AthleteUpdate(AthleteBase):
     created_at: Optional[AwareDatetime]
     updated_at: AwareDatetime
 
