@@ -28,5 +28,3 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
-print(settings.ENVIROMENT)
-print(settings.DEBUG)

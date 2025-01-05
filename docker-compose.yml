@@ -13,6 +13,7 @@ services:
     environment:
       - DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       - API_KEY=${API_KEY}
+      - ENVIROMENT=${ENVIROMENT}
     volumes:
       - fastapi_logs:/app/logs
     #healthcheck:
