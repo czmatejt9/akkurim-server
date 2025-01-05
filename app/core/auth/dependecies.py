@@ -32,7 +32,9 @@ def fake_auth_data():
 
 async def is_trainer_and_tenant_info(
     auth_data: AuthData = (
-        Depends(verify_and_get_auth_data) if not settings.DEBUG else fake_auth_data
+        Depends(verify_and_get_auth_data)
+        if not settings.DEBUG
+        else Depends(fake_auth_data)
     ),
 ) -> AuthData:
     if "trainer" not in auth_data.roles:
