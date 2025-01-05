@@ -31,7 +31,7 @@ router = APIRouter(
     default_response_class=ORJSONResponse,
 )
 
-trainer_dep = Annotated[AuthData, Depends(verify_and_get_auth_data)]
+trainer_dep = Annotated[AuthData, Depends(is_trainer_and_tenant_info)]
 db_dep = Annotated[Connection, Depends(get_db)]
 service_dep = Annotated[GuardianService, Depends(GuardianService)]
 
