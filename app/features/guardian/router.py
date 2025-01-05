@@ -72,12 +72,13 @@ class GuardianRouter:
     async def create_guardian(
         self,
         guardian: GuardianCreate,
+        db: Connection = Depends(get_db),
         auth_data=Depends(is_trainer_and_tenant_info),
     ) -> GuardianRead:
         guardian = await self.service.create_guardian(
             auth_data.tenant_id,
             guardian.model_dump(),
-            self.db,
+            db,
         )
         return ORJSONResponse(guardian, status_code=status.HTTP_201_CREATED)
 
