@@ -35,14 +35,17 @@ def generate_sql_read(
     tenant_id: str,
     table: str,
     columns: list[str],
-    conditions: dict = {},
+    conditions: dict[str, dict] = {},
 ) -> tuple[str, tuple]:
     columns = ", ".join(columns)
     conditions_str = " AND ".join(
-        [f"{key} = ${i + 1}" for i, key in enumerate(conditions.keys())]
+        [
+            f"{key} {conditions[key].get('operator', '=')} ${i + 1}"
+            for i, key in enumerate(conditions.keys())
+        ]
     )
     return f"SELECT {columns} FROM {tenant_id}.{table} WHERE {conditions_str};", tuple(
-        conditions.values()
+        val.get("value") for val in conditions.values()
     )
 
 

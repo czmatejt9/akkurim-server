@@ -10,15 +10,6 @@ from app.core.exceptions import AlreadyUpdatedError
 from app.core.sse.broadcast import broadcast
 from app.core.sse.schemas import LocalActionEnum, SSEEvent
 from app.core.utils.default_service import DefaultService
-from app.core.utils.sql_utils import (
-    convert_uuid_to_str,
-    generate_sql_delete_with_returning,
-    generate_sql_insert,
-    generate_sql_insert_with_returning,
-    generate_sql_read,
-    generate_sql_update,
-    generate_sql_update_with_returning,
-)
 from app.features.guardian.schemas import GuardianRead
 
 
@@ -81,3 +72,15 @@ class GuardianService:
 
     async def get_all_guardians(self, tenant_id: str, db: Connection) -> list[dict]:
         return await self.default_service.get_all_objects(tenant_id, db)
+
+    async def get_all_guardians_updated_after(
+        self,
+        tenant_id: str,
+        last_updated: datetime,
+        db: Connection,
+    ) -> list[dict]:
+        return await self.default_service.get_all_objects_updated_after(
+            tenant_id,
+            last_updated,
+            db,
+        )

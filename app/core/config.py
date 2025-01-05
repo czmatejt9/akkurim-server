@@ -4,10 +4,9 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    ENVIROMENT: str = os.getenv("ENVIROMENT", "dev")
-    PUBLIC_DOMAIN: str = (
-        f"https://{'dev' if ENVIROMENT == 'dev' else ''}api.czmatejt.me"
-    )
+    ENVIROMENT: str = os.getenv("ENVIROMENT", "main")
+    DEBUG: bool = ENVIROMENT == "dev"
+    PUBLIC_DOMAIN: str = f"https://{'dev' if DEBUG else ''}api.czmatejt.me"
     APP_NAME: str = f"akkurim-server-{ENVIROMENT}"
     APP_VERSION: str = "0.1.0"
     API_V1_PREFIX: str = "/v1"

@@ -68,7 +68,12 @@ class DefaultService:
             tenant_id,
             self.table,
             self.read_model.model_fields.keys(),
-            {"id": id},
+            {
+                "id": {
+                    "value": id,
+                    "operator": "=",
+                }
+            },
         )
         result = await db.fetchrow(query, *values)
         if not result:
@@ -162,6 +167,23 @@ class DefaultService:
             tenant_id,
             self.table,
             self.read_model.model_fields.keys(),
+        )
+        results = await db.fetch(query, *values)
+        return [convert_uuid_to_str(dict(result)) for result in results]
+
+    async def get_all_objects_updated_after(
+        self, tenant_id: str, updated_at: datetime, db: Connection
+    ) -> list[dict]:
+        query, values = generate_sql_read(
+            tenant_id,
+            self.table,
+            self.read_model.model_fields.keys(),
+            {
+                "updated_at": {
+                    "value": updated_at.isoformat(),
+                    "operator": ">",
+                }
+            },
         )
         results = await db.fetch(query, *values)
         return [convert_uuid_to_str(dict(result)) for result in results]

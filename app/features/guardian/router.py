@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Annotated
 
 from asyncpg import Connection
@@ -129,6 +130,23 @@ class GuardianRouter:
     ) -> list[dict]:
         guardians = await self.service.get_all_guardians(
             auth_data.tenant_id,
+            self.db,
+        )
+        return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)
+
+    # todo probably move the updated_at to query params
+    @router.get(
+        "/sync/{last_updated_at}",
+        response_model=list[GuardianRead],
+    )
+    async def read_all_guardians_updated_after(
+        self,
+        last_updated_at: Annotated[datetime, Path(...)],
+        auth_data=Depends(is_trainer_and_tenant_info),
+    ) -> list[dict]:
+        guardians = await self.service.get_all_guardians_updated_after(
+            auth_data.tenant_id,
+            last_updated_at,
             self.db,
         )
         return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)
