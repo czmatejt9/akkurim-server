@@ -18,7 +18,6 @@ dependencies = [
     "orjson",
     "uvloop; sys_platform != 'win32'",
     "httptools",
-    "fastapi-utils>=0.8.0",
     "alembic>=1.14.0",
     "psycopg[binary]>=3.2.3",
     "typing-inspect>=0.9.0",

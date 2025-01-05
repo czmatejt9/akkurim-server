@@ -13,7 +13,6 @@ from app.core.auth.dependecies import (
 )
 from app.core.auth.schemas import AuthData
 from app.core.database import get_db
-from app.core.utils.fastapi_cbv import cbv
 from app.features.guardian.schemas import GuardianCreate, GuardianRead, GuardianUpdate
 from app.features.guardian.service import GuardianService
 
@@ -27,126 +26,125 @@ router = APIRouter(
     },
     dependencies=[
         Depends(get_db),
+        Depends(GuardianService),
     ],
     default_response_class=ORJSONResponse,
 )
 
+trainer_dep = Annotated[AuthData, Depends(verify_and_get_auth_data)]
+db_dep = Annotated[Connection, Depends(get_db)]
+service_dep = Annotated[GuardianService, Depends(GuardianService)]
+
 
 @router.get(
-    "test",
-    response_model=AuthData,
+    "/{guardian_id}",
+    response_model=GuardianRead,
 )
-async def test(
-    auth_data=Depends(is_trainer_and_tenant_info),
-) -> dict:
-    return ORJSONResponse(
-        {"message": auth_data.tenant_id}, status_code=status.HTTP_200_OK
+async def read_guardian(
+    guardian_id: UUID1,
+    auth_data: AuthData = trainer_dep,
+    db: Connection = db_dep,
+    service: GuardianService = service_dep,
+) -> GuardianRead:
+    guardian = await service.get_guardian_by_id(
+        auth_data.tenant_id,
+        guardian_id,
+        db,
     )
+    return ORJSONResponse(guardian, status_code=status.HTTP_200_OK)
 
 
-@cbv(router)
-class GuardianRouter:
-    db = Depends(get_db)
-    service = GuardianService()
-    auth_data = Depends(verify_and_get_auth_data)
-
-    @router.get(
-        "/{guardian_id}",
-        response_model=GuardianRead,
+@router.post(
+    "/",
+    response_model=GuardianRead,
+)
+async def create_guardian(
+    guardian: GuardianCreate,
+    auth_data: AuthData = trainer_dep,
+    db: Connection = db_dep,
+    service: GuardianService = service_dep,
+) -> GuardianRead:
+    guardian = await service.create_guardian(
+        auth_data.tenant_id,
+        guardian.model_dump(),
+        db,
     )
-    async def read_guardian(
-        self,
-        guardian_id: UUID1,
-        auth_data=Depends(is_trainer_and_tenant_info),
-    ) -> GuardianRead:
-        guardian = await self.service.get_guardian_by_id(
-            auth_data.tenant_id,
-            guardian_id,
-            self.db,
+    return ORJSONResponse(guardian, status_code=status.HTTP_201_CREATED)
+
+
+@router.put(
+    "/{guardian_id}",
+    response_model=GuardianRead,
+)
+async def update_guardian(
+    guardian_id: UUID1,
+    guardian: GuardianUpdate,
+    auth_data: AuthData = trainer_dep,
+    db: Connection = db_dep,
+    service: GuardianService = service_dep,
+) -> GuardianRead:
+    if guardian_id != guardian.id:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Guardian ID in URL and body does not match",
         )
-        return ORJSONResponse(guardian, status_code=status.HTTP_200_OK)
-
-    @router.post(
-        "/",
-        response_model=GuardianRead,
+    guardian = await service.update_guardian(
+        auth_data.tenant_id,
+        guardian.model_dump(),
+        db,
     )
-    async def create_guardian(
-        self,
-        guardian: GuardianCreate,
-    ) -> GuardianRead:
-        guardian = await self.service.create_guardian(
-            self.auth_data.tenant_id,
-            guardian.model_dump(),
-            self.db,
-        )
-        return ORJSONResponse(guardian, status_code=status.HTTP_201_CREATED)
+    return ORJSONResponse(guardian, status_code=status.HTTP_200_OK)
 
-    @router.put(
-        "/{guardian_id}",
-        response_model=GuardianRead,
-    )
-    async def update_guardian(
-        self,
-        guardian_id: UUID1,
-        guardian: GuardianUpdate,
-        auth_data=Depends(is_trainer_and_tenant_info),
-    ) -> GuardianRead:
-        if guardian_id != guardian.id:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Guardian ID in URL and body does not match",
-            )
-        guardian = await self.service.update_guardian(
-            auth_data.tenant_id,
-            guardian.model_dump(),
-            self.db,
-        )
-        return ORJSONResponse(guardian, status_code=status.HTTP_200_OK)
 
-    @router.delete(
-        "/{guardian_id}",
-        status_code=204,
-        response_model=None,
+@router.delete(
+    "/{guardian_id}",
+    status_code=204,
+    response_model=None,
+)
+async def delete_guardian(
+    guardian_id: UUID1,
+    auth_data: AuthData = trainer_dep,
+    db: Connection = db_dep,
+    service: GuardianService = service_dep,
+) -> ORJSONResponse:
+    await service.delete_guardian(
+        auth_data.tenant_id,
+        guardian_id,
+        db,
     )
-    async def delete_guardian(
-        self,
-        guardian_id: UUID1,
-        auth_data=Depends(is_trainer_and_tenant_info),
-    ) -> ORJSONResponse:
-        await self.service.delete_guardian(
-            auth_data.tenant_id,
-            guardian_id,
-            self.db,
-        )
-        return ORJSONResponse(status_code=status.HTTP_204_NO_CONTENT)
+    return ORJSONResponse(status_code=status.HTTP_204_NO_CONTENT)
 
-    @router.get(
-        "/",
-        response_model=list[GuardianRead],
-    )
-    async def read_all_guardians(
-        self,
-        auth_data=Depends(is_trainer_and_tenant_info),
-    ) -> list[dict]:
-        guardians = await self.service.get_all_guardians(
-            auth_data.tenant_id,
-            self.db,
-        )
-        return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)
 
-    # todo probably move the updated_at to query params
-    @router.get(
-        "/sync/{last_updated_at}",
-        response_model=list[GuardianRead],
+@router.get(
+    "/",
+    response_model=list[GuardianRead],
+)
+async def read_all_guardians(
+    auth_data: AuthData = trainer_dep,
+    db: Connection = db_dep,
+    service: GuardianService = service_dep,
+) -> list[dict]:
+    guardians = await service.get_all_guardians(
+        auth_data.tenant_id,
+        db,
     )
-    async def read_all_guardians_updated_after(
-        self,
-        last_updated_at: Annotated[datetime, Path(...)],
-        auth_data=Depends(is_trainer_and_tenant_info),
-    ) -> list[dict]:
-        guardians = await self.service.get_all_guardians_updated_after(
-            auth_data.tenant_id,
-            last_updated_at,
-            self.db,
-        )
-        return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)
+    return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)
+
+
+# todo probably move the updated_at to query params
+@router.get(
+    "/sync/{last_updated_at}",
+    response_model=list[GuardianRead],
+)
+async def read_all_guardians_updated_after(
+    last_updated_at: Annotated[datetime, Path(...)],
+    auth_data: AuthData = trainer_dep,
+    db: Connection = db_dep,
+    service: GuardianService = service_dep,
+) -> list[dict]:
+    guardians = await service.get_all_guardians_updated_after(
+        auth_data.tenant_id,
+        last_updated_at,
+        db,
+    )
+    return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)

@@ -3,7 +3,6 @@ from typing import Annotated
 from asyncpg import Connection
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import ORJSONResponse
-from fastapi_utils.cbv import cbv
 
 from app.core.database import get_db
 from app.core.remote_config.schemas import RemoteConfigRead
@@ -19,18 +18,17 @@ router = APIRouter(
     default_response_class=ORJSONResponse,
 )
 
+db_dep = Annotated[Connection, Depends(get_db)]
+service_dep = Annotated[RemoteConfigService, Depends(RemoteConfigService)]
 
-@cbv(router)
-class RemoteConfigRouter:
-    db = Depends(get_db)
-    service = RemoteConfigService()
 
-    @router.get(
-        "/",
-        response_model=RemoteConfigRead,
-    )
-    async def get_remote_config(
-        self,
-    ) -> RemoteConfigRead:
-        remote_config = await self.service.get_remote_config("public", self.db)
-        return ORJSONResponse(remote_config, status_code=200)
+@router.get(
+    "/",
+    response_model=RemoteConfigRead,
+)
+async def get_remote_config(
+    db: Connection = db_dep,
+    service: RemoteConfigService = service_dep,
+) -> RemoteConfigRead:
+    remote_config = await service.get_remote_config("public", db)
+    return ORJSONResponse(remote_config, status_code=200)
