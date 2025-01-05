@@ -20,10 +20,13 @@ class AthleteBase(BaseSchema):
     athlete_status_id: UUID1
 
 
+class AthleteCreate(AthleteBase):
+    pass
+
+
 class AthleteUpdate(AthleteBase):
-    created_at: Optional[AwareDatetime]
     updated_at: AwareDatetime
 
 
-class AthleteCreate(AthleteBase):
-    pass
+class AthleteRead(AthleteUpdate):
+    created_at: AwareDatetime

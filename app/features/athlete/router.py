@@ -8,7 +8,7 @@ from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.userroles import UserRoleClaim
 
 from app.core.database import get_db
-from app.features.athlete.schemas import Athlete, AthleteCreate
+from app.features.athlete.schemas import AthleteCreate, AthleteRead, AthleteUpdate
 
 router = APIRouter(
     prefix="/athlete",
