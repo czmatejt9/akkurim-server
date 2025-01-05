@@ -26,9 +26,6 @@ service_dep = Annotated[RemoteConfigService, Depends(RemoteConfigService)]
     "/",
     response_model=RemoteConfigRead,
 )
-async def get_remote_config(
-    db: Connection = db_dep,
-    service: RemoteConfigService = service_dep,
-) -> RemoteConfigRead:
+async def get_remote_config(db: db_dep, service: service_dep) -> RemoteConfigRead:
     remote_config = await service.get_remote_config("public", db)
     return ORJSONResponse(remote_config, status_code=200)

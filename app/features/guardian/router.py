@@ -42,9 +42,9 @@ service_dep = Annotated[GuardianService, Depends(GuardianService)]
 )
 async def read_guardian(
     guardian_id: UUID1,
-    auth_data: AuthData = trainer_dep,
-    db: Connection = db_dep,
-    service: GuardianService = service_dep,
+    auth_data: trainer_dep,
+    db: db_dep,
+    service: service_dep,
 ) -> GuardianRead:
     guardian = await service.get_guardian_by_id(
         auth_data.tenant_id,
@@ -60,9 +60,9 @@ async def read_guardian(
 )
 async def create_guardian(
     guardian: GuardianCreate,
-    auth_data: AuthData = trainer_dep,
-    db: Connection = db_dep,
-    service: GuardianService = service_dep,
+    auth_data: trainer_dep,
+    db: db_dep,
+    service: service_dep,
 ) -> GuardianRead:
     guardian = await service.create_guardian(
         auth_data.tenant_id,
@@ -79,9 +79,9 @@ async def create_guardian(
 async def update_guardian(
     guardian_id: UUID1,
     guardian: GuardianUpdate,
-    auth_data: AuthData = trainer_dep,
-    db: Connection = db_dep,
-    service: GuardianService = service_dep,
+    auth_data: trainer_dep,
+    db: db_dep,
+    service: service_dep,
 ) -> GuardianRead:
     if guardian_id != guardian.id:
         raise HTTPException(
@@ -103,9 +103,9 @@ async def update_guardian(
 )
 async def delete_guardian(
     guardian_id: UUID1,
-    auth_data: AuthData = trainer_dep,
-    db: Connection = db_dep,
-    service: GuardianService = service_dep,
+    auth_data: trainer_dep,
+    db: db_dep,
+    service: service_dep,
 ) -> ORJSONResponse:
     await service.delete_guardian(
         auth_data.tenant_id,
@@ -120,9 +120,9 @@ async def delete_guardian(
     response_model=list[GuardianRead],
 )
 async def read_all_guardians(
-    auth_data: AuthData = trainer_dep,
-    db: Connection = db_dep,
-    service: GuardianService = service_dep,
+    auth_data: trainer_dep,
+    db: db_dep,
+    service: service_dep,
 ) -> list[dict]:
     guardians = await service.get_all_guardians(
         auth_data.tenant_id,
@@ -138,9 +138,9 @@ async def read_all_guardians(
 )
 async def read_all_guardians_updated_after(
     last_updated_at: Annotated[datetime, Path(...)],
-    auth_data: AuthData = trainer_dep,
-    db: Connection = db_dep,
-    service: GuardianService = service_dep,
+    auth_data: trainer_dep,
+    db: db_dep,
+    service: service_dep,
 ) -> list[dict]:
     guardians = await service.get_all_guardians_updated_after(
         auth_data.tenant_id,
