@@ -140,8 +140,9 @@ class DefaultService:
             result = await db.fetchrow(query, *values)
             await self.notify_update(data["id"])
             return convert_uuid_to_str(dict(result))
+        # TODO return the information about the unique violation
         except UniqueViolationError:
-            raise UniqueViolationErrorHTTP(self.table, data["id"])
+            raise UniqueViolationErrorHTTP(self.table, "email", data["email"])
 
     async def delete_object(
         self,
