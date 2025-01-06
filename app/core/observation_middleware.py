@@ -40,6 +40,8 @@ class ObservationMiddleware:
             logger.exception(e)
             raise
         finally:
+            if scope["path"] == "/":
+                return
             process_time = time.perf_counter() - start_time
             logger.info(
                 f"Request {scope['path']}, code {status_code}, processed in {process_time:.6f}s"
