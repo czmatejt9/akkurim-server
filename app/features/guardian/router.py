@@ -20,9 +20,12 @@ router = APIRouter(
     prefix="/guardian",
     tags=["guardian"],
     responses={
+        "200": {"description": "Success"},
         "400": {"description": "Bad Request"},
         "401": {"description": "Unauthorized"},
         "403": {"description": "Forbidden"},
+        "404": {"description": "Not Found"},
+        "409": {"description": "Conflict"},
     },
     dependencies=[
         Depends(get_db),
@@ -57,6 +60,7 @@ async def read_guardian(
 @router.post(
     "/",
     response_model=GuardianRead,
+    responses={status.HTTP_201_CREATED: {"description": "Created"}},
 )
 async def create_guardian(
     guardian: GuardianCreate,
@@ -75,6 +79,7 @@ async def create_guardian(
 @router.put(
     "/{guardian_id}",
     response_model=GuardianRead,
+    responses={status.HTTP_400_BAD_REQUEST: {"description": "Bad Request"}},
 )
 async def update_guardian(
     guardian_id: UUID1,
@@ -100,6 +105,7 @@ async def update_guardian(
     "/{guardian_id}",
     status_code=204,
     response_model=None,
+    responses={status.HTTP_204_NO_CONTENT: {"description": "Deleted"}},
 )
 async def delete_guardian(
     guardian_id: UUID1,
@@ -147,4 +153,4 @@ async def read_all_guardians_updated_after(
         last_updated_at,
         db,
     )
-    return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)
+    return ORJSONResponse(guardians, content={}, status_code=status.HTTP_200_OK)

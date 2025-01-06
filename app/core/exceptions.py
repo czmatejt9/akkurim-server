@@ -2,8 +2,15 @@ from fastapi import HTTPException, status
 
 
 class CustomHTTPException(HTTPException):
-    def __init__(self, status_code: int, detail: str) -> None:
-        super().__init__(status_code=status_code, detail=detail)
+    def __init__(self, status_code: int, message: str, table: str, id: str) -> None:
+        super().__init__(
+            status_code=status_code,
+            detail={
+                "table": table,
+                "id": id,
+                "message": message,
+            },
+        )
 
 
 class AlreadyUpdatedError(CustomHTTPException):
@@ -13,7 +20,7 @@ class AlreadyUpdatedError(CustomHTTPException):
         id: str,
         detail: str = "The resource was already updated by someone else before your synchronization.",
     ) -> None:
-        super().__init__(status_code=409, detail=f"{table} with ID {id}. {detail}")
+        super().__init__(status_code=409, message=detail, table=table, id=id)
 
 
 class NotFoundError(CustomHTTPException):
@@ -23,7 +30,7 @@ class NotFoundError(CustomHTTPException):
         id: str,
         detail: str = "Resource not found.",
     ) -> None:
-        super().__init__(status_code=404, detail=f"{table} with ID {id}. {detail}")
+        super().__init__(status_code=404, message=detail, table=table, id=id)
 
 
 class AlreadyExistsError(CustomHTTPException):
@@ -33,7 +40,7 @@ class AlreadyExistsError(CustomHTTPException):
         id: str,
         detail: str = "Resource already exists.",
     ) -> None:
-        super().__init__(status_code=409, detail=f"{table} with ID {id}. {detail}")
+        super().__init__(status_code=409, message=detail, table=table, id=id)
 
 
 class UniqueViolationErrorHTTP(CustomHTTPException):
@@ -45,5 +52,5 @@ class UniqueViolationErrorHTTP(CustomHTTPException):
         detail: str = "Unique violation error.",
     ) -> None:
         super().__init__(
-            status_code=409, detail=f"{table} with {column} {value}. {detail}"
+            status_code=409, message=detail, table=table, id=f"{column}={value}"
         )
