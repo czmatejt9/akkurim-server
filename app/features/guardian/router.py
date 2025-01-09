@@ -12,7 +12,11 @@ from app.core.auth.dependecies import (
 )
 from app.core.auth.schemas import AuthData
 from app.core.database import get_db
-from app.features.guardian.schemas import GuardianCreate, GuardianRead, GuardianUpdate
+from app.features.guardian.schemas import (
+    GuardianCreatePublic,
+    GuardianReadPublic,
+    GuardianUpdatePublic,
+)
 from app.features.guardian.service import GuardianService
 
 router = APIRouter(
@@ -40,14 +44,14 @@ service_dep = Annotated[GuardianService, Depends(GuardianService)]
 
 @router.get(
     "/{guardian_id}",
-    response_model=GuardianRead,
+    response_model=GuardianReadPublic,
 )
 async def read_guardian(
     guardian_id: UUID1,
     auth_data: trainer_dep,
     db: db_dep,
     service: service_dep,
-) -> GuardianRead:
+) -> GuardianReadPublic:
     guardian = await service.get_guardian_by_id(
         auth_data.tenant_id,
         guardian_id,
@@ -58,15 +62,15 @@ async def read_guardian(
 
 @router.post(
     "/",
-    response_model=GuardianRead,
+    response_model=GuardianReadPublic,
     responses={status.HTTP_201_CREATED: {"description": "Created"}},
 )
 async def create_guardian(
-    guardian: GuardianCreate,
+    guardian: GuardianCreatePublic,
     auth_data: trainer_dep,
     db: db_dep,
     service: service_dep,
-) -> GuardianRead:
+) -> GuardianReadPublic:
     guardian = await service.create_guardian(
         auth_data.tenant_id,
         guardian.model_dump(),
@@ -77,16 +81,16 @@ async def create_guardian(
 
 @router.put(
     "/{guardian_id}",
-    response_model=GuardianRead,
+    response_model=GuardianReadPublic,
     responses={status.HTTP_400_BAD_REQUEST: {"description": "Bad Request"}},
 )
 async def update_guardian(
     guardian_id: UUID1,
-    guardian: GuardianUpdate,
+    guardian: GuardianUpdatePublic,
     auth_data: trainer_dep,
     db: db_dep,
     service: service_dep,
-) -> GuardianRead:
+) -> GuardianReadPublic:
     if guardian_id != guardian.id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -122,13 +126,13 @@ async def delete_guardian(
 
 @router.get(
     "/",
-    response_model=list[GuardianRead],
+    response_model=list[GuardianReadPublic],
 )
 async def read_all_guardians(
     auth_data: trainer_dep,
     db: db_dep,
     service: service_dep,
-) -> list[dict]:
+) -> list[GuardianReadPublic]:
     guardians = await service.get_all_guardians(
         auth_data.tenant_id,
         db,
@@ -139,14 +143,14 @@ async def read_all_guardians(
 # todo probably move the updated_at to query params
 @router.get(
     "/sync/{last_updated_at}",
-    response_model=list[GuardianRead],
+    response_model=list[GuardianReadPublic],
 )
 async def read_all_guardians_updated_after(
     last_updated_at: Annotated[datetime, Path(...)],
     auth_data: trainer_dep,
     db: db_dep,
     service: service_dep,
-) -> list[dict]:
+) -> list[GuardianReadPublic]:
     guardians = await service.get_all_guardians_updated_after(
         auth_data.tenant_id,
         last_updated_at,

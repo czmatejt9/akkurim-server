@@ -14,10 +14,14 @@ class GuardianBase(BaseSchema):
 
 
 class GuardianCreate(GuardianBase):
+    pass
+
+
+class GuardianCreatePublic(GuardianCreate):
     model_config = {
         "json_schema_extra": {
             "examples": [
-                generate_example_values(GuardianBase),
+                generate_example_values(GuardianCreate),
             ],
         }
     }
@@ -26,37 +30,27 @@ class GuardianCreate(GuardianBase):
 class GuardianUpdate(GuardianBase):
     updated_at: AwareDatetime
 
+
+class GuardianUpdatePublic(GuardianUpdate):
     model_config = {
         "json_schema_extra": {
             "examples": [
-                {
-                    "id": "268f74bc-c7c4-11ef-9cd2-0242ac120002",
-                    "first_name": "Pepa",
-                    "last_name": "Novák",
-                    "email": "pepicek@email.cz",
-                    "phone": "00420123456789",
-                    "updated_at": "2022-04-01T10:00:00+02:00",
-                }
-            ]
+                generate_example_values(GuardianUpdate),
+            ],
         }
     }
 
 
-class GuardianRead(GuardianUpdate):
+class GuardianRead(GuardianBase):
+    updated_at: AwareDatetime
     created_at: AwareDatetime
 
+
+class GuardianReadPublic(GuardianRead):
     model_config = {
         "json_schema_extra": {
             "examples": [
-                {
-                    "id": "268f74bc-c7c4-11ef-9cd2-0242ac120002",
-                    "first_name": "Pepa",
-                    "last_name": "Novák",
-                    "email": "pepicek@email.cz",
-                    "phone": "00420123456789",
-                    "created_at": "2022-04-01T10:00:00+02:00",
-                    "updated_at": "2022-04-01T10:00:00+02:00",
-                }
-            ]
+                generate_example_values(GuardianRead),
+            ],
         }
     }

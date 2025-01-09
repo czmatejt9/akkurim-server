@@ -4,7 +4,7 @@ from asyncpg import Connection
 from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
-from app.features.guardian.schemas import GuardianRead
+from app.features.guardian.schemas import GuardianCreate, GuardianRead, GuardianUpdate
 
 
 class GuardianService(DefaultService):
@@ -30,7 +30,7 @@ class GuardianService(DefaultService):
     async def create_guardian(
         self,
         tenant_id: str,
-        guardian: dict,
+        guardian: GuardianCreate,
         db: Connection,
     ) -> GuardianRead:
         return await super().create_object(
@@ -42,7 +42,7 @@ class GuardianService(DefaultService):
     async def update_guardian(
         self,
         tenant_id: str,
-        guardian: dict,
+        guardian: GuardianUpdate,
         db: Connection,
     ) -> GuardianRead:
         return await super().update_object(
@@ -63,7 +63,9 @@ class GuardianService(DefaultService):
             db,
         )
 
-    async def get_all_guardians(self, tenant_id: str, db: Connection) -> list[dict]:
+    async def get_all_guardians(
+        self, tenant_id: str, db: Connection
+    ) -> list[GuardianRead]:
         return await super().get_all_objects(tenant_id, db)
 
     async def get_all_guardians_updated_after(
@@ -71,7 +73,7 @@ class GuardianService(DefaultService):
         tenant_id: str,
         last_updated: datetime,
         db: Connection,
-    ) -> list[dict]:
+    ) -> list[GuardianRead]:
         return await super().get_all_objects_updated_after(
             tenant_id,
             last_updated,
