@@ -10,7 +10,11 @@ from supertokens_python.recipe.userroles import UserRoleClaim
 from app.core.auth.dependecies import is_trainer_and_tenant_info
 from app.core.auth.schemas import AuthData
 from app.core.database import get_db
-from app.features.athlete.schemas import AthleteCreate, AthleteRead, AthleteUpdate
+from app.features.athlete.schemas import (
+    AthleteCreatePublic,
+    AthleteReadPublic,
+    AthleteUpdatePublic,
+)
 from app.features.athlete.service import AthleteService
 
 router = APIRouter(
@@ -38,14 +42,14 @@ service_dep = Annotated[AthleteService, Depends(AthleteService)]
 
 @router.get(
     "/{athlete_id}",
-    response_model=AthleteRead,
+    response_model=AthleteReadPublic,
 )
 async def read_athlete(
     athlete_id: UUID1,
     auth_data: trainer_dep,
     db: db_dep,
     service: service_dep,
-) -> AthleteRead:
+) -> AthleteReadPublic:
     athlete = await service.get_athlete_by_id(
         auth_data.tenant_id,
         athlete_id,

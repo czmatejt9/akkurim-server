@@ -1,8 +1,8 @@
 from typing import Annotated, Optional
 
-from pydantic import UUID1, AfterValidator, AwareDatetime, EmailStr, Field
+from pydantic import UUID1, AfterValidator, AwareDatetime, EmailStr
 
-from app.core.base_schema import BaseSchema
+from app.core.base_schema import BaseSchema, generate_example_values
 from app.features.athlete.utils import validate_birth_number
 
 
@@ -27,9 +27,40 @@ class AthleteCreate(AthleteBase):
     pass
 
 
+class AthleteCreatePublic(AthleteCreate):
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                generate_example_values(AthleteCreate),
+            ],
+        }
+    }
+
+
 class AthleteUpdate(AthleteBase):
     updated_at: AwareDatetime
 
 
-class AthleteRead(AthleteUpdate):
+class AthleteUpdatePublic(AthleteUpdate):
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                generate_example_values(AthleteUpdate),
+            ],
+        }
+    }
+
+
+class AthleteRead(AthleteBase):
+    updated_at: AwareDatetime
     created_at: AwareDatetime
+
+
+class AthleteReadPublic(AthleteRead):
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                generate_example_values(AthleteRead),
+            ],
+        }
+    }

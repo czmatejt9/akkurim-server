@@ -4,7 +4,7 @@ from asyncpg import Connection
 from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
-from app.features.athlete.schemas import AthleteRead
+from app.features.athlete.schemas import AthleteCreate, AthleteRead, AthleteUpdate
 
 
 class AthleteService(DefaultService):
@@ -30,7 +30,7 @@ class AthleteService(DefaultService):
     async def create_athlete(
         self,
         tenant_id: str,
-        athlete: dict,
+        athlete: AthleteCreate,
         db: Connection,
     ) -> AthleteRead:
         return await super().create_object(
@@ -42,7 +42,7 @@ class AthleteService(DefaultService):
     async def update_athlete(
         self,
         tenant_id: str,
-        athlete: dict,
+        athlete: AthleteUpdate,
         db: Connection,
     ) -> AthleteRead:
         return await super().update_object(
@@ -63,7 +63,9 @@ class AthleteService(DefaultService):
             db,
         )
 
-    async def get_all_athletes(self, tenant_id: str, db: Connection) -> list[dict]:
+    async def get_all_athletes(
+        self, tenant_id: str, db: Connection
+    ) -> list[AthleteRead]:
         return await super().get_all_objects(tenant_id, db)
 
     async def get_all_athletes_updated_after(
@@ -71,7 +73,7 @@ class AthleteService(DefaultService):
         tenant_id: str,
         last_updated_at: datetime,
         db: Connection,
-    ):
+    ) -> list[AthleteRead]:
         return await super().get_all_objects_updated_after(
             tenant_id, last_updated_at, db
         )
