@@ -14,7 +14,7 @@ def generate_example_values(schema: BaseSchema) -> dict[str, Any]:
     for field_name, info in schema.model_fields.items():
         if info.annotation == UUID1:
             example_values[field_name] = "268f74bc-c7c4-11ef-9cd2-0242ac120002"
-        elif info.annotation == EmailStr:
+        elif isinstance(info.annotation, EmailStr):
             example_values[field_name] = "pepicke@email.cz"
         elif info.annotation == AwareDatetime:
             example_values[field_name] = datetime.now(tz=timezone.utc).isoformat()
