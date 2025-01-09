@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import AwareDatetime
 
-from app.core.base_schema import BaseSchema
+from app.core.base_schema import BaseSchema, generate_example_values
 
 
 class RemoteConfigBase(BaseSchema):
@@ -14,3 +14,13 @@ class RemoteConfigBase(BaseSchema):
 class RemoteConfigRead(RemoteConfigBase):
     created_at: AwareDatetime
     updated_at: AwareDatetime
+
+
+class RemoteConfigReadPublic(RemoteConfigRead):
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                generate_example_values(RemoteConfigRead),
+            ],
+        }
+    }
