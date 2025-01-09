@@ -4,76 +4,74 @@ from asyncpg import Connection
 from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
-from app.features.guardian.schemas import GuardianRead
+from app.features.athlete.schemas import AthleteRead
 
 
-class GuardianService(DefaultService):
+class AthleteService(DefaultService):
     def __init__(self):
         super().__init__(
-            "guardian",
-            "/guardian/{id}",
-            GuardianRead,
+            "athlete",
+            "/athlete/{id}",
+            AthleteRead,
         )
 
-    async def get_guardian_by_id(
+    async def get_athlete_by_id(
         self,
         tenant_id: str,
-        guardian_id: UUID1,
+        athlete_id: UUID1,
         db: Connection,
-    ) -> GuardianRead:
+    ) -> AthleteRead:
         return await super().get_object_by_id(
             tenant_id,
-            guardian_id,
+            athlete_id,
             db,
         )
 
-    async def create_guardian(
+    async def create_athlete(
         self,
         tenant_id: str,
-        guardian: dict,
+        athlete: dict,
         db: Connection,
-    ) -> GuardianRead:
+    ) -> AthleteRead:
         return await super().create_object(
             tenant_id,
-            guardian,
+            athlete,
             db,
         )
 
-    async def update_guardian(
+    async def update_athlete(
         self,
         tenant_id: str,
-        guardian: dict,
+        athlete: dict,
         db: Connection,
-    ) -> GuardianRead:
+    ) -> AthleteRead:
         return await super().update_object(
             tenant_id,
-            guardian,
+            athlete,
             db,
         )
 
-    async def delete_guardian(
+    async def delete_athlete(
         self,
         tenant_id: str,
-        guardian_id: UUID1,
+        athlete_id: UUID1,
         db: Connection,
     ) -> None:
         return await super().delete_object(
             tenant_id,
-            guardian_id,
+            athlete_id,
             db,
         )
 
-    async def get_all_guardians(self, tenant_id: str, db: Connection) -> list[dict]:
+    async def get_all_athletes(self, tenant_id: str, db: Connection) -> list[dict]:
         return await super().get_all_objects(tenant_id, db)
 
-    async def get_all_guardians_updated_after(
+    async def get_all_athletes_updated_after(
         self,
         tenant_id: str,
-        last_updated: datetime,
+        last_updated_at: datetime,
         db: Connection,
-    ) -> list[dict]:
+    ):
         return await super().get_all_objects_updated_after(
-            tenant_id,
-            last_updated,
-            db,
+            tenant_id, last_updated_at, db
         )
