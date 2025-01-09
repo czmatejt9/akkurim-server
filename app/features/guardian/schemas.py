@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import UUID1, AwareDatetime, EmailStr
 
-from app.core.base_schema import BaseSchema
+from app.core.base_schema import BaseSchema, generate_example_values
 
 
 class GuardianBase(BaseSchema):
@@ -17,14 +17,8 @@ class GuardianCreate(GuardianBase):
     model_config = {
         "json_schema_extra": {
             "examples": [
-                {
-                    "id": "268f74bc-c7c4-11ef-9cd2-0242ac120002",
-                    "first_name": "Pepa",
-                    "last_name": "Novák",
-                    "email": "pepicek@email.cz",
-                    "phone": "00420123456789",
-                }
-            ]
+                generate_example_values(GuardianBase),
+            ],
         }
     }
 

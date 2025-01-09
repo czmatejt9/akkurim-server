@@ -5,7 +5,6 @@ from asyncpg import Connection
 from fastapi import APIRouter, Depends, HTTPException, Path, Response, status
 from fastapi.responses import ORJSONResponse
 from pydantic import UUID1
-from supertokens_python.recipe.session.framework.fastapi import verify_session
 
 from app.core.auth.dependecies import (
     is_trainer_and_tenant_info,
