@@ -17,7 +17,7 @@ def generate_example_values(schema: BaseSchema) -> dict[str, Any]:
         elif info.annotation == EmailStr:
             example_values[field_name] = "pepicke@email.cz"
         elif info.annotation == AwareDatetime:
-            example_values[field_name] = datetime.now(tz=datetime.tzinfo).isoformat()
+            example_values[field_name] = datetime.utcnow().isoformat()
         else:
             if field_name == "id":
                 example_values[field_name] = "268f74bc-c7c4-11ef-9cd2-0242ac"
