@@ -19,7 +19,11 @@ def generate_example_values(schema: BaseSchema) -> dict[str, Any]:
         elif info.annotation == AwareDatetime:
             example_values[field_name] = datetime.now(tz="Europe/Prague").isoformat()
         else:
-            if "first_name" in field_name:
+            if field_name == "id":
+                example_values[field_name] = "268f74bc-c7c4-11ef-9cd2-0242ac"
+            elif field_name == "birth_number":
+                example_values[field_name] = "1234567890"
+            elif "first_name" in field_name:
                 example_values[field_name] = "Pepa"
             elif "last_name" in field_name:
                 example_values[field_name] = "Novák"
