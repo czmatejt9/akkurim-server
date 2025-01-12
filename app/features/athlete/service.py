@@ -106,7 +106,11 @@ class AthleteService(DefaultService):
             "guardian",
             GuardianRead.model_fields.keys(),
             "guardian_athlete",
-            {"guardian.id": {"direct_value": "athlete_guardian.guardian_id"}},
+            {
+                "guardian.id": {
+                    "direct_value": f"{tenant_id}.athlete_guardian.guardian_id"
+                }
+            },
             {"guardian_athlete.athlete_id": {"value": athlete_id}},
         )
         return await db.fetch(query, *values)

@@ -61,13 +61,13 @@ def generate_sql_read_with_join_table(
     columns = ", ".join(columns)
     join_conditions_str = " AND ".join(
         [
-            f"{key} {join_conditions[key].get('operator', '=')} {join_conditions[key].get('direct_value', f'${i + 1}')}"
+            f"{tenant_id}.{key} {join_conditions[key].get('operator', '=')} {join_conditions[key].get('direct_value', f'${i + 1}')}"
             for i, key in enumerate(join_conditions.keys())
         ]
     )
     conditions_str = " AND ".join(
         [
-            f"{key} {conditions[key].get('operator', '=')} ${i + 1 + len(tuple(1 for key in join_conditions.keys() if join_conditions[key].get('direct_value') is None))}"
+            f"{tenant_id}.{key} {conditions[key].get('operator', '=')} ${i + 1 + len(tuple(1 for key in join_conditions.keys() if join_conditions[key].get('direct_value') is None))}"
             for i, key in enumerate(conditions.keys())
         ]
     )
