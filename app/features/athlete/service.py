@@ -115,5 +115,5 @@ class AthleteService(DefaultService):
             },
             {"guardian_athlete.athlete_id": {"value": athlete_id}},
         )
-        res = db.fetch(query, *values)
+        res = await db.fetch(query, *values)
         return convert_uuid_to_str(dict(res))
