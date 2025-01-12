@@ -4,7 +4,7 @@ from typing import Annotated
 from asyncpg import Connection
 from fastapi import APIRouter, Depends, HTTPException, Path, Response, status
 from fastapi.responses import ORJSONResponse
-from pydantic import UUID1
+from pydantic import UUID1, AwareDatetime
 
 from app.core.auth.dependecies import (
     is_trainer_and_tenant_info,
@@ -142,11 +142,11 @@ async def read_all_guardians(
 
 # todo probably move the updated_at to query params
 @router.get(
-    "/sync/{last_updated_at}",
+    "/sync/",
     response_model=list[GuardianReadPublic],
 )
 async def read_all_guardians_updated_after(
-    last_updated_at: Annotated[datetime, Path(...)],
+    last_updated_at: AwareDatetime,
     auth_data: trainer_dep,
     db: db_dep,
     service: service_dep,

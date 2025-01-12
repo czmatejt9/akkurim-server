@@ -124,8 +124,9 @@ class DefaultService:
         if not result:
             raise NotFoundError(self.table, data["id"])
 
-        # TODO write util to convert the string to datetime
-        if result["updated_at"] > data["updated_at"]:
+        if datetime.fromisoformat(result["updated_at"]) > datetime.fromisoformat(
+            data["updated_at"]
+        ):
             raise AlreadyUpdatedError(self.table, data["id"])
         result["updated_at"] = datetime.now()
 
