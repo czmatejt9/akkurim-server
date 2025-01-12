@@ -5,6 +5,7 @@ from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
 from app.core.utils.sql_utils import (
+    convert_uuid_to_str,
     generate_sql_read,
     generate_sql_read_with_join_table,
 )
@@ -96,7 +97,8 @@ class AthleteService(DefaultService):
             "athlete_status",
             AthleteStatusRead.model_fields.keys(),
         )
-        return await db.fetch(query, *values)
+        res = db.fetch(query, *values)
+        return convert_uuid_to_str(dict(res))
 
     async def get_guardians_for_athlete(
         self, tenant_id: str, athlete_id: UUID1, db: Connection
@@ -113,4 +115,5 @@ class AthleteService(DefaultService):
             },
             {"guardian_athlete.athlete_id": {"value": athlete_id}},
         )
-        return await db.fetch(query, *values)
+        res = db.fetch(query, *values)
+        return convert_uuid_to_str(dict(res))

@@ -4,6 +4,7 @@ from asyncpg import Connection
 from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
+from app.core.utils.sql_utils import convert_uuid_to_str
 from app.features.guardian.schemas import GuardianCreate, GuardianRead, GuardianUpdate
 
 
@@ -44,7 +45,7 @@ class GuardianService(DefaultService):
             res["id"],
             athlete_id,
         )
-        return res
+        return convert_uuid_to_str(dict(res))
 
     async def update_guardian(
         self,
