@@ -114,7 +114,7 @@ async def delete_athlete(
         athlete_id,
         db,
     )
-    return ORJSONResponse(status_code=status.HTTP_204_NO_CONTENT)
+    return ORJSONResponse(status_code=status.HTTP_204_NO_CONTENT, content={})
 
 
 @router.get(
