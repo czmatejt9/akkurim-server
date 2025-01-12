@@ -12,15 +12,13 @@ class BaseSchema(BaseModel):
 def generate_example_values(schema: BaseSchema) -> dict[str, Any]:
     example_values = {}
     for field_name, info in schema.model_fields.items():
-        if info.annotation == UUID1:
-            example_values[field_name] = "268f74bc-c7c4-11ef-9cd2-0242ac120002"
-        elif isinstance(info.annotation, EmailStr):
-            example_values[field_name] = "pepicke@email.cz"
-        elif info.annotation == AwareDatetime:
+        if info.annotation == AwareDatetime:
             example_values[field_name] = datetime.now(tz=timezone.utc).isoformat()
         else:
             if field_name == "id":
-                example_values[field_name] = "268f74bc-c7c4-11ef-9cd2-0242ac"
+                example_values[field_name] = "5f0e92e2-d123-11ef-9cd2-0242ac120002"
+            elif field_name == "email":
+                example_values[field_name] = "pepicek@gmail.com"
             elif field_name == "birth_number":
                 example_values[field_name] = "1234567890"
             elif "first_name" in field_name:
