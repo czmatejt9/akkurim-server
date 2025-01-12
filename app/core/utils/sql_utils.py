@@ -44,8 +44,9 @@ def generate_sql_read(
             for i, key in enumerate(conditions.keys())
         ]
     )
-    return f"SELECT {columns} FROM {tenant_id}.{table} WHERE {conditions_str};", tuple(
-        val.get("value") for val in conditions.values()
+    return (
+        f"SELECT {columns} FROM {tenant_id}.{table} {"WHERE " if conditions_str != "" else ""}{conditions_str};",
+        tuple(val.get("value") for val in conditions.values()),
     )
 
 
