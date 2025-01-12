@@ -107,13 +107,13 @@ class AthleteService(DefaultService):
             tenant_id,
             "guardian",
             GuardianRead.model_fields.keys(),
-            "guardian_athlete",
+            "athlete_guardian",
             {
                 "guardian.id": {
                     "direct_value": f"{tenant_id}.athlete_guardian.guardian_id"
                 }
             },
-            {"guardian_athlete.athlete_id": {"value": athlete_id}},
+            {"athlete_guardian.athlete_id": {"value": athlete_id}},
         )
         res = await db.fetch(query, *values)
         return convert_uuid_to_str(dict(res))
