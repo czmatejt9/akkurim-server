@@ -63,6 +63,7 @@ async def read_athlete(
 @router.post(
     "/",
     response_model=AthleteReadPublic,
+    responses={201: {"description": "Created"}},
 )
 async def create_athlete(
     athlete: AthleteCreatePublic,

@@ -75,8 +75,8 @@ async def create_guardian(
     guardian = await service.create_guardian(
         auth_data.tenant_id,
         guardian.model_dump(),
-        db,
         athlete_id,
+        db,
     )
     return ORJSONResponse(guardian, status_code=status.HTTP_201_CREATED)
 
