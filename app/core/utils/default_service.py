@@ -113,7 +113,7 @@ class DefaultService:
             await self.notify_update(data["id"])
             return convert_uuid_to_str(dict(result))
         except UniqueViolationError:
-            raise UniqueViolationErrorHTTP(self.table, data["id"])
+            raise UniqueViolationErrorHTTP(self.table, data["id"], data["email"])
 
     async def update_object(
         self,
