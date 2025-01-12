@@ -13,6 +13,7 @@ from app.core.database import get_db
 from app.features.athlete.schemas import (
     AthleteCreatePublic,
     AthleteReadPublic,
+    AthleteStatusReadPublic,
     AthleteUpdatePublic,
 )
 from app.features.athlete.service import AthleteService
@@ -146,3 +147,16 @@ async def read_athletes_updated_after(
         db,
     )
     return ORJSONResponse(athletes, status_code=status.HTTP_200_OK)
+
+
+@router.get(
+    "/status/",
+    response_model=list[AthleteStatusReadPublic],
+)
+async def get_all_statuses(
+    tenant_id: str,
+    db: Connection,
+    service: AthleteService,
+) -> list[AthleteStatusReadPublic]:
+    statuses = await service.get_all_statuses(tenant_id, db)
+    return ORJSONResponse(statuses, status_code=status.HTTP_200_OK)

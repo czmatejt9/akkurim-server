@@ -64,3 +64,24 @@ class AthleteReadPublic(AthleteRead):
             ],
         }
     }
+
+
+class AthleteStatusBase(BaseSchema):
+    id: UUID1
+    name: str
+    description: Optional[str]
+
+
+class AthleteStatusRead(AthleteStatusBase):
+    updated_at: AwareDatetime
+    created_at: AwareDatetime
+
+
+class AthleteStatusReadPublic(AthleteStatusRead):
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                generate_example_values(AthleteStatusRead),
+            ],
+        }
+    }

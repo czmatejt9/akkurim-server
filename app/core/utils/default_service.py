@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 import orjson
 from asyncpg import Connection, UniqueViolationError
@@ -164,10 +165,14 @@ class DefaultService:
         await self.notify_delete(id)
         return None
 
-    async def get_all_objects(self, tenant_id: str, db: Connection) -> list[dict]:
+    async def get_all_objects(
+        self, tenant_id: str, db: Connection, table_name: Optional[str] = None
+    ) -> list[dict]:
+        if table_name is None:
+            table_name = self.table
         query, values = generate_sql_read(
             tenant_id,
-            self.table,
+            table_name,
             self.read_model.model_fields.keys(),
         )
         results = await db.fetch(query, *values)

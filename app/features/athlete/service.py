@@ -4,7 +4,12 @@ from asyncpg import Connection
 from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
-from app.features.athlete.schemas import AthleteCreate, AthleteRead, AthleteUpdate
+from app.features.athlete.schemas import (
+    AthleteCreate,
+    AthleteRead,
+    AthleteStatusRead,
+    AthleteUpdate,
+)
 
 
 class AthleteService(DefaultService):
@@ -77,3 +82,8 @@ class AthleteService(DefaultService):
         return await super().get_all_objects_updated_after(
             tenant_id, last_updated_at, db
         )
+
+    async def get_all_statuses(
+        self, tenant_id: str, db: Connection
+    ) -> list[AthleteStatusRead]:
+        return await super().get_all_objects(tenant_id, db, "athlete_status")
