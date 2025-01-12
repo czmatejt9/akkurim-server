@@ -166,15 +166,16 @@ class DefaultService:
         return None
 
     async def get_all_objects(
-        self, tenant_id: str, db: Connection, table_name: Optional[str] = None
+        self, tenant_id: str, db: Connection, table_name: str = ""
     ) -> list[dict]:
-        if table_name is None:
+        if table_name == "":
             table_name = self.table
         query, values = generate_sql_read(
             tenant_id,
             table_name,
             self.read_model.model_fields.keys(),
         )
+        print(query, values)
         results = await db.fetch(query, *values)
         return [convert_uuid_to_str(dict(result)) for result in results]
 
