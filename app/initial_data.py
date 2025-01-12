@@ -8,10 +8,10 @@ async def create_athlete_status(name: str):
     try:
         async with db.pool.acquire() as connection:
             db_ = connection
-        await db_.execute(
-            "INSERT INTO athlete_status (id, name) VALUES (5f0e92e2-d123-11ef-9cd2-0242ac120002, $1)",
-            name,
-        )
+            await db_.execute(
+                "INSERT INTO athlete_status (id, name) VALUES (5f0e92e2-d123-11ef-9cd2-0242ac120002, $1)",
+                name,
+            )
     except Exception as e:
         print(e)
     finally:
