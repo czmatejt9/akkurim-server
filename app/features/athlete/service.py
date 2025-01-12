@@ -4,6 +4,7 @@ from asyncpg import Connection
 from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
+from app.core.utils.sql_utils import generate_sql_read
 from app.features.athlete.schemas import (
     AthleteCreate,
     AthleteRead,
@@ -86,4 +87,9 @@ class AthleteService(DefaultService):
     async def get_all_statuses(
         self, tenant_id: str, db: Connection
     ) -> list[AthleteStatusRead]:
-        return await super().get_all_objects(tenant_id, db, "athlete_status")
+        query, values = generate_sql_read(
+            tenant_id,
+            "athlete_status",
+            AthleteStatusRead.model_fields.keys(),
+        )
+        return await db.fetch(query, *values)
