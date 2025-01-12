@@ -41,7 +41,7 @@ class GuardianService(DefaultService):
             db,
         )
         await db.execute(
-            "INSERT INTO athlete_guardian (guardian_id, athlete_id) VALUES ($1, $2)",
+            f"INSERT INTO {tenant_id}.athlete_guardian (guardian_id, athlete_id) VALUES ($1, $2)",
             res["id"],
             athlete_id,
         )
