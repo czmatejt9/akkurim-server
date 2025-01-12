@@ -50,6 +50,42 @@ def generate_sql_read(
     )
 
 
+def generate_sql_read_with_join_table(
+    tenant_id: str,
+    table: str,
+    columns: list[str],
+    join_table: str,
+    join_conditions: dict[str, dict],
+    conditions: dict[str, dict] = {},
+) -> tuple[str, tuple]:
+    columns = ", ".join(columns)
+    join_conditions_str = " AND ".join(
+        [
+            f"{key} {join_conditions[key].get('operator', '=')} {join_conditions[key].get('direct_value', f'${i + 1}')}"
+            for i, key in enumerate(join_conditions.keys())
+        ]
+    )
+    conditions_str = " AND ".join(
+        [
+            f"{key} {conditions[key].get('operator', '=')} ${i + 1 + len(tuple(1 for key in join_conditions.keys() if join_conditions[key].get('direct_value') is None))}"
+            for i, key in enumerate(conditions.keys())
+        ]
+    )
+    return (
+        f"SELECT {columns} FROM {tenant_id}.{table} JOIN {tenant_id}.{join_table} ON {join_conditions_str} WHERE {conditions_str};",
+        tuple(
+            (
+                *(
+                    val.get("value")
+                    for val in join_conditions.values()
+                    if val.get("value")
+                ),
+                *(val.get("value") for val in conditions.values() if val.get("value")),
+            )
+        ),
+    )
+
+
 def generate_sql_update(
     tenant_id: str,
     table: str,

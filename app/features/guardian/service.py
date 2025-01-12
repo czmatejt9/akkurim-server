@@ -31,13 +31,20 @@ class GuardianService(DefaultService):
         self,
         tenant_id: str,
         guardian: GuardianCreate,
+        athlete_id: UUID1,
         db: Connection,
     ) -> GuardianRead:
-        return await super().create_object(
+        res = await super().create_object(
             tenant_id,
             guardian,
             db,
         )
+        await db.execute(
+            "INSERT INTO guardian_athlete (guardian_id, athlete_id) VALUES ($1, $2)",
+            res["id"],
+            athlete_id,
+        )
+        return res
 
     async def update_guardian(
         self,

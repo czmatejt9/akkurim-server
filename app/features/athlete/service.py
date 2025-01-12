@@ -4,13 +4,17 @@ from asyncpg import Connection
 from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
-from app.core.utils.sql_utils import generate_sql_read
+from app.core.utils.sql_utils import (
+    generate_sql_read,
+    generate_sql_read_with_join_table,
+)
 from app.features.athlete.schemas import (
     AthleteCreate,
     AthleteRead,
     AthleteStatusRead,
     AthleteUpdate,
 )
+from app.features.guardian.schemas import GuardianRead
 
 
 class AthleteService(DefaultService):
@@ -91,5 +95,18 @@ class AthleteService(DefaultService):
             tenant_id,
             "athlete_status",
             AthleteStatusRead.model_fields.keys(),
+        )
+        return await db.fetch(query, *values)
+
+    async def get_guardians_for_athlete(
+        self, tenant_id: str, athlete_id: UUID1, db: Connection
+    ) -> list[dict]:
+        query, values = generate_sql_read_with_join_table(
+            tenant_id,
+            "guardian",
+            GuardianRead.model_fields.keys(),
+            "guardian_athlete",
+            {"guardian.id": {"direct_value": "athlete_guardian.guardian_id"}},
+            {"guardian_athlete.athlete_id": {"value": athlete_id}},
         )
         return await db.fetch(query, *values)

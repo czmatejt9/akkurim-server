@@ -61,11 +61,12 @@ async def read_guardian(
 
 
 @router.post(
-    "/",
+    "/{athlete_id}",
     response_model=GuardianReadPublic,
     responses={status.HTTP_201_CREATED: {"description": "Created"}},
 )
 async def create_guardian(
+    athlete_id: UUID1,
     guardian: GuardianCreatePublic,
     auth_data: trainer_dep,
     db: db_dep,
@@ -75,6 +76,7 @@ async def create_guardian(
         auth_data.tenant_id,
         guardian.model_dump(),
         db,
+        athlete_id,
     )
     return ORJSONResponse(guardian, status_code=status.HTTP_201_CREATED)
 

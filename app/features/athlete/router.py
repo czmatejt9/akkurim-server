@@ -17,6 +17,7 @@ from app.features.athlete.schemas import (
     AthleteUpdatePublic,
 )
 from app.features.athlete.service import AthleteService
+from app.features.guardian.schemas import GuardianReadPublic
 
 router = APIRouter(
     prefix="/athlete",
@@ -160,3 +161,21 @@ async def get_all_statuses(
 ) -> list[AthleteStatusReadPublic]:
     statuses = await service.get_all_statuses(auth_data.tenant_id, db)
     return ORJSONResponse(statuses, status_code=status.HTTP_200_OK)
+
+
+@router.get(
+    "/{athlete_id}/guardians/",
+    response_model=list[GuardianReadPublic],
+)
+async def get_guardians_for_athlete(
+    athlete_id: UUID1,
+    auth_data: trainer_dep,
+    db: db_dep,
+    service: service_dep,
+) -> list[GuardianReadPublic]:
+    guardians = await service.get_guardians_for_athlete(
+        auth_data.tenant_id,
+        athlete_id,
+        db,
+    )
+    return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)
