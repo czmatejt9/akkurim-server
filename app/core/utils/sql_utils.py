@@ -140,6 +140,8 @@ def generate_sql_delete_with_returning(
 
 def convert_uuid_to_str(data: dict) -> dict:
     for key, value in data.items():
+        print(key, value)
         if isinstance(value, uuid.UUID):
+            print("here")
             data[key] = str(value)
     return data
