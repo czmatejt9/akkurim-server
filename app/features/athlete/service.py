@@ -102,7 +102,7 @@ class AthleteService(DefaultService):
 
     async def get_guardians_for_athlete(
         self, tenant_id: str, athlete_id: UUID1, db: Connection
-    ) -> list[dict]:
+    ) -> list[GuardianRead]:
         query, values = generate_sql_read_with_join_table(
             tenant_id,
             "guardian",
@@ -115,5 +115,5 @@ class AthleteService(DefaultService):
             },
             {"athlete_guardian.athlete_id": {"value": athlete_id}},
         )
-        res = await db.fetch(query, *values)
-        return convert_uuid_to_str(dict(res))
+        ress = await db.fetch(query, *values)
+        return [convert_uuid_to_str(dict(res)) for res in ress]
