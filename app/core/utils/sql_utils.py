@@ -58,7 +58,7 @@ def generate_sql_read_with_join_table(
     join_conditions: dict[str, dict],
     conditions: dict[str, dict] = {},
 ) -> tuple[str, tuple]:
-    columns = ", ".join(columns)
+    columns = ", ".join((f"{tenant_id}.{table}.{column}" for column in columns))
     join_conditions_str = " AND ".join(
         [
             f"{tenant_id}.{key} {join_conditions[key].get('operator', '=')} {join_conditions[key].get('direct_value', f'${i + 1}')}"
