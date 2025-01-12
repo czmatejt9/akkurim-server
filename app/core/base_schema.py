@@ -20,7 +20,7 @@ def generate_example_values(schema: BaseSchema) -> dict[str, Any]:
             elif field_name == "email":
                 example_values[field_name] = "pepicek@gmail.com"
             elif field_name == "birth_number":
-                example_values[field_name] = "1234567890"
+                example_values[field_name] = "7303102961"
             elif "first_name" in field_name:
                 example_values[field_name] = "Pepa"
             elif "last_name" in field_name:
