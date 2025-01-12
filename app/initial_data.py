@@ -5,8 +5,9 @@ from app.core.database import db, get_db
 
 async def create_athlete_status(name: str):
     await db.connect()
-    db_ = get_db()
     try:
+        async with db.pool.acquire() as connection:
+            db_ = connection
         await db_.execute(
             "INSERT INTO athlete_status (id, name) VALUES (5f0e92e2-d123-11ef-9cd2-0242ac120002, $1)",
             name,
