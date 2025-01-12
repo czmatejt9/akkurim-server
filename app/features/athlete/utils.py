@@ -15,6 +15,12 @@ def validate_birth_number(birth_number: str) -> bool:
     return mod == int(control_number)
 
 
+def pydanyic_validate_birth_number(birth_number: str) -> str:
+    if not validate_birth_number(birth_number):
+        raise ValueError("Invalid birth number")
+    return birth_number
+
+
 def convert_birht_number_to_date(birth_number: str) -> str:
     """
     Convert a birth number to a date.
