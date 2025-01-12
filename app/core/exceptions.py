@@ -7,7 +7,7 @@ class CustomHTTPException(HTTPException):
             status_code=status_code,
             detail={
                 "table": table,
-                "id": id,
+                "id": str(id),
                 "message": message,
             },
         )
