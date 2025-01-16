@@ -158,4 +158,4 @@ async def read_all_guardians_updated_after(
         last_updated_at,
         db,
     )
-    return ORJSONResponse(guardians, content={}, status_code=status.HTTP_200_OK)
+    return ORJSONResponse(guardians, status_code=status.HTTP_200_OK)
