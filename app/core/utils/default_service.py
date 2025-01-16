@@ -35,8 +35,9 @@ class DefaultService:
         self.broadcast_endpoint = broadcast_endpoint
         self.read_model = read_model
 
-    async def notify_update(self, id: UUID1) -> None:
+    async def notify_update(self, tenant: str, id: UUID1) -> None:
         event = SSEEvent(
+            tenant=tenant,
             table_name=self.table,
             endpoint=self.broadcast_endpoint,
             id=id,
@@ -47,8 +48,9 @@ class DefaultService:
             message=orjson.dumps(event.model_dump()).decode("utf-8"),
         )
 
-    async def notify_delete(self, id: UUID1) -> None:
+    async def notify_delete(self, tenant: str, id: UUID1) -> None:
         event = SSEEvent(
+            tenant=tenant,
             table_name=self.table,
             endpoint=None,
             id=id,
@@ -110,7 +112,7 @@ class DefaultService:
         )
         try:
             result = await db.fetchrow(query, *values)
-            await self.notify_update(data["id"])
+            await self.notify_update(tenant_id, data["id"])
             return convert_uuid_to_str(dict(result))
         except UniqueViolationError:
             raise UniqueViolationErrorHTTP(self.table, data["id"], data["email"])
@@ -140,7 +142,7 @@ class DefaultService:
         )
         try:
             result = await db.fetchrow(query, *values)
-            await self.notify_update(data["id"])
+            await self.notify_update(tenant_id, data["id"])
             return convert_uuid_to_str(dict(result))
         # TODO return the information about the unique violation
         except UniqueViolationError:
@@ -162,7 +164,7 @@ class DefaultService:
             {"id": id},
         )
         await db.execute(query, *values)
-        await self.notify_delete(id)
+        await self.notify_delete(tenant_id)
         return None
 
     async def get_all_objects(
