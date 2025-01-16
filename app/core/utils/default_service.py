@@ -188,7 +188,7 @@ class DefaultService:
             self.read_model.model_fields.keys(),
             {
                 "updated_at": {
-                    "value": updated_at.isoformat(),
+                    "value": updated_at,
                     "operator": ">",
                 }
             },
