@@ -78,6 +78,6 @@ def read_root():
 # for testing purposes
 @app.post("/fake-sync-endpoint")
 async def fake_sync_endpoint():
-    # simulate fake data processing by sleeping for 0.5 seconds
+    # simulate fake data processing by sleeping for 2 seconds
     await asyncio.sleep(2)
     return {"message": "Synced"}

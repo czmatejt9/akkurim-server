@@ -12,6 +12,7 @@ class LocalActionEnum(Enum):
 
 
 class SSEEvent(BaseSchema):
+    tenant: str
     table_name: str
     endpoint: Optional[str] = None
     http_method: str = "GET"

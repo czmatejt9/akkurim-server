@@ -34,6 +34,7 @@ async def sse_endpoint():
 )
 async def broadcast_event():
     event = SSEEvent(
+        tenant="test",
         table_name="test",
         endpoint="test",
         id="test",
