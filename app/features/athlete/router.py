@@ -7,12 +7,16 @@ from pydantic import UUID1, AwareDatetime
 from supertokens_python.recipe.session.framework.fastapi import verify_session
 from supertokens_python.recipe.userroles import UserRoleClaim
 
-from app.core.auth.dependecies import is_trainer_and_tenant_info
+from app.core.auth.dependecies import (
+    is_admin_and_tenant_info,
+    is_trainer_and_tenant_info,
+)
 from app.core.auth.schemas import AuthData
 from app.core.database import get_db
 from app.features.athlete.schemas import (
     AthleteCreatePublic,
     AthleteReadPublic,
+    AthleteStatusCreatePublic,
     AthleteStatusReadPublic,
     AthleteUpdatePublic,
 )
@@ -38,6 +42,7 @@ router = APIRouter(
 )
 
 trainer_dep = Annotated[AuthData, Depends(is_trainer_and_tenant_info)]
+admin_dep = Annotated[AuthData, Depends(is_admin_and_tenant_info)]
 db_dep = Annotated[Connection, Depends(get_db)]
 service_dep = Annotated[AthleteService, Depends(AthleteService)]
 
@@ -162,6 +167,25 @@ async def get_all_statuses(
 ) -> list[AthleteStatusReadPublic]:
     statuses = await service.get_all_statuses(auth_data.tenant_id, db)
     return ORJSONResponse(statuses, status_code=status.HTTP_200_OK)
+
+
+@router.post(
+    "/status/",
+    response_model=AthleteStatusReadPublic,
+    responses={201: {"description": "Created"}},
+)
+async def create_status(
+    status_: AthleteStatusCreatePublic,
+    auth_data: admin_dep,
+    db: db_dep,
+    service: service_dep,
+) -> AthleteStatusReadPublic:
+    created_status = await service.create_status(
+        auth_data.tenant_id,
+        status_.model_dump(),
+        db,
+    )
+    return ORJSONResponse(created_status, status_code=status.HTTP_201_CREATED)
 
 
 @router.get(

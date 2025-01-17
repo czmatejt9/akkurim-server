@@ -42,3 +42,17 @@ async def is_trainer_and_tenant_info(
             "Wrong user config", [ClaimValidationError(UserRoleClaim.key, None)]
         )
     return auth_data
+
+
+async def is_admin_and_tenant_info(
+    auth_data: AuthData = (
+        Depends(verify_and_get_auth_data)
+        if not settings.DEBUG
+        else Depends(fake_auth_data)
+    ),
+) -> AuthData:
+    if "admin" not in auth_data.roles:
+        raise_invalid_claims_exception(
+            "Wrong user config", [ClaimValidationError(UserRoleClaim.key, None)]
+        )
+    return auth_data

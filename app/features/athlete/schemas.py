@@ -85,3 +85,17 @@ class AthleteStatusReadPublic(AthleteStatusRead):
             ],
         }
     }
+
+
+class AthleteStatusCreate(AthleteStatusBase):
+    pass
+
+
+class AthleteStatusCreatePublic(AthleteStatusCreate):
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                generate_example_values(AthleteStatusCreate),
+            ],
+        }
+    }

@@ -51,6 +51,7 @@ class UniqueViolationErrorHTTP(CustomHTTPException):
         value: str,
         detail: str = "Unique violation error.",
     ) -> None:
+        # TODO fix this to be more descriptive
         super().__init__(
             status_code=409, message=detail, table=table, id=f"{column}={value}"
         )
