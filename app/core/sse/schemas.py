@@ -3,7 +3,7 @@ from typing import Optional
 
 from pydantic import UUID1
 
-from app.core.base_schema import BaseSchema
+from app.core.shared.base_schema import BaseSchema
 
 
 class LocalActionEnum(Enum):

@@ -12,7 +12,7 @@ from app.core.auth.dependecies import (
     is_trainer_and_tenant_info,
 )
 from app.core.auth.schemas import AuthData
-from app.core.database import get_db
+from app.core.shared.database import get_db
 from app.features.athlete.schemas import (
     AthleteCreatePublic,
     AthleteReadPublic,

@@ -1,4 +1,4 @@
-from app.core.base_schema import BaseSchema
+from app.core.shared.base_schema import BaseSchema
 
 
 class AuthData(BaseSchema):

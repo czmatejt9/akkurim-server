@@ -5,8 +5,8 @@ import orjson
 from asyncpg import Connection, UniqueViolationError
 from pydantic import UUID1
 
-from app.core.base_schema import BaseSchema
-from app.core.exceptions import (
+from app.core.shared.base_schema import BaseSchema
+from app.core.shared.exceptions import (
     AlreadyExistsError,
     AlreadyUpdatedError,
     NotFoundError,

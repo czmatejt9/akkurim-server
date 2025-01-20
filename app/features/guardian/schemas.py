@@ -2,7 +2,7 @@ from typing import Optional
 
 from pydantic import UUID1, AwareDatetime, EmailStr
 
-from app.core.base_schema import BaseSchema, generate_example_values
+from app.core.shared.base_schema import BaseSchema, generate_example_values
 
 
 class GuardianBase(BaseSchema):

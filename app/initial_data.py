@@ -1,6 +1,6 @@
 from asyncio import get_event_loop
 
-from app.core.database import db, get_db
+from app.core.shared.database import db, get_db
 
 
 async def create_athlete_status(name: str):

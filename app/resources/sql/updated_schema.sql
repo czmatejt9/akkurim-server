@@ -2,6 +2,16 @@
 
 BEGIN;
 
+
+CREATE TABLE IF NOT EXISTS public.club (
+        id text NOT NULL,
+        name text NOT NULL,
+        description text NOT NULL,
+        created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (id)
+    );
+
 CREATE TABLE IF NOT EXISTS public.remote_config
 (
     id int NOT NULL,
@@ -10,6 +20,16 @@ CREATE TABLE IF NOT EXISTS public.remote_config
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
+);
+
+CREATE TABLE IF NOT EXISTS public.school_year
+(
+    id uuid NOT NULL,
+    name text NOT NULL,
+    PRIMARY KEY (id),
+
+    created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE Schema IF NOT EXISTS tenant_id;
@@ -90,16 +110,6 @@ CREATE TABLE IF NOT EXISTS tenant_id.athlete
 );
 
 
-CREATE TABLE IF NOT EXISTS tenant_id.club (
-        id text NOT NULL,
-        name text NOT NULL,
-        description text NOT NULL,
-        created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (id)
-    );
-
-
 CREATE TABLE IF NOT EXISTS tenant_id.athlete_guardian
 (
     athlete_id uuid NOT NULL,
@@ -127,31 +137,22 @@ CREATE TABLE IF NOT EXISTS tenant_id.trainer
     trainer_status_id uuid NOT NULL,
     qualification text NOT NULL,
     salary_per_hour smallint NOT NULL,
-    device_token text,
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     UNIQUE (athlete_id)
 );
 
-CREATE TABLE IF NOT EXISTS tenant_id.athlete_item
+/* CREATE TABLE IF NOT EXISTS tenant_id.athlete_item
 (
     athlete_id uuid NOT NULL,
     item_id uuid NOT NULL,
 
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
+); */
 
-CREATE TABLE IF NOT EXISTS tenant_id.school_year
-(
-    id uuid NOT NULL,
-    name text NOT NULL,
-    PRIMARY KEY (id),
 
-    created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP
-);
 
 CREATE TABLE IF NOT EXISTS tenant_id.web_post
 (
@@ -295,6 +296,8 @@ CREATE TABLE IF NOT EXISTS tenant_id.discipline_type
     id smallint NOT NULL,
     name text NOT NULL,
     description text,
+    name_en text,
+    description_en text,
     PRIMARY KEY (id),
 
     created_at timestamp with time zone NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -434,7 +437,7 @@ ALTER TABLE IF EXISTS tenant_id.web_post
 
 ALTER TABLE IF EXISTS tenant_id."group"
     ADD FOREIGN KEY (school_year_id)
-    REFERENCES tenant_id.school_year (id) MATCH SIMPLE
+    REFERENCES public.school_year (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
@@ -530,7 +533,7 @@ ALTER TABLE IF EXISTS tenant_id.sign_up_form
 
 ALTER TABLE IF EXISTS tenant_id.sign_up_form
     ADD FOREIGN KEY (school_year_id)
-    REFERENCES tenant_id.school_year (id) MATCH SIMPLE
+    REFERENCES public.school_year (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
