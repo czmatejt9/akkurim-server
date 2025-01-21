@@ -1,3 +1,5 @@
+from typing import Annotated
+
 from fastapi import Depends
 from supertokens_python.recipe.session import SessionContainer
 from supertokens_python.recipe.session.exceptions import (
@@ -25,7 +27,7 @@ async def verify_and_get_auth_data(
 
 
 def fake_auth_data():
-    user_role = "akkurim_trainer"
+    user_role = "akkurim_trainer_admin_guardian"
     tenant_id, *roles = user_role.split("_")
     return AuthData(tenant_id=tenant_id, roles=roles)
 
@@ -56,3 +58,23 @@ async def is_admin_and_tenant_info(
             "Wrong user config", [ClaimValidationError(UserRoleClaim.key, None)]
         )
     return auth_data
+
+
+async def is_guardian_and_tenant_info(
+    auth_data: AuthData = (
+        Depends(verify_and_get_auth_data)
+        if not settings.DEBUG
+        else Depends(fake_auth_data)
+    ),
+) -> AuthData:
+    if "guardian" not in auth_data.roles:
+        raise_invalid_claims_exception(
+            "Wrong user config", [ClaimValidationError(UserRoleClaim.key, None)]
+        )
+    return auth_data
+
+
+trainer_dep = Annotated[AuthData, Depends(is_trainer_and_tenant_info)]
+admin_dep = Annotated[AuthData, Depends(is_admin_and_tenant_info)]
+guardian_dep = Annotated[AuthData, Depends(is_guardian_and_tenant_info)]
+auth_data_dep = Annotated[AuthData, Depends(verify_and_get_auth_data)]

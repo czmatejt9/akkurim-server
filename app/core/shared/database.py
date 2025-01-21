@@ -1,5 +1,8 @@
+from typing import Annotated
+
 import asyncpg
 from asyncpg import Connection
+from fastapi import Depends
 
 from app.core.config import settings
 
@@ -29,3 +32,6 @@ async def get_db():
         finally:
             connection: Connection
             await connection.close()
+
+
+db_dep = Annotated[Connection, Depends(get_db)]

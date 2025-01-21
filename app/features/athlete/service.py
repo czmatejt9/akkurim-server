@@ -1,6 +1,8 @@
 from datetime import datetime
+from typing import Annotated
 
 from asyncpg import Connection
+from fastapi import Depends
 from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
@@ -130,3 +132,6 @@ class AthleteService(DefaultService):
         )
         ress = await db.fetch(query, *values)
         return [convert_uuid_to_str(dict(res)) for res in ress]
+
+
+service_dep = Annotated[AthleteService, Depends(AthleteService)]
