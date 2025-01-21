@@ -5,9 +5,12 @@ from fastapi import APIRouter, Depends, status
 from fastapi.responses import ORJSONResponse
 from pydantic import UUID1, AwareDatetime
 
-from app.core.auth.dependecies import admin_dep, trainer_dep
+from app.core.auth.dependecies import (
+    is_admin_and_tenant_info,
+    is_trainer_and_tenant_info,
+)
 from app.core.auth.schemas import AuthData
-from app.core.shared.database import db_dep
+from app.core.shared.database import get_db
 from app.features.athlete.schemas import (
     AthleteCreatePublic,
     AthleteReadPublic,
@@ -15,7 +18,7 @@ from app.features.athlete.schemas import (
     AthleteStatusReadPublic,
     AthleteUpdatePublic,
 )
-from app.features.athlete.service import service_dep
+from app.features.athlete.service import AthleteService
 from app.features.guardian.schemas import GuardianReadPublic
 
 router = APIRouter(
@@ -30,11 +33,16 @@ router = APIRouter(
         "409": {"description": "Conflict"},
     },
     dependencies=[
-        db_dep,
-        service_dep,
+        Depends(get_db),
+        Depends(AthleteService),
     ],
     default_response_class=ORJSONResponse,
 )
+
+trainer_dep = Annotated[AuthData, Depends(is_trainer_and_tenant_info)]
+admin_dep = Annotated[AuthData, Depends(is_admin_and_tenant_info)]
+db_dep = Annotated[Connection, Depends(get_db)]
+service_dep = Annotated[AthleteService, Depends(AthleteService)]
 
 
 @router.get(
