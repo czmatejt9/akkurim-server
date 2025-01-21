@@ -2,13 +2,14 @@ from datetime import datetime
 from typing import Optional
 
 import orjson
-from asyncpg import Connection, UniqueViolationError
+from asyncpg import Connection, ForeignKeyViolationError, UniqueViolationError
 from pydantic import UUID1
 
 from app.core.shared.base_schema import BaseSchema
 from app.core.shared.exceptions import (
     AlreadyExistsError,
     AlreadyUpdatedError,
+    ForeignKeyViolationErrorHTTP,
     NotFoundError,
     UniqueViolationErrorHTTP,
 )
@@ -116,6 +117,8 @@ class DefaultService:
             return convert_uuid_to_str(dict(result))
         except UniqueViolationError:
             raise UniqueViolationErrorHTTP(self.table, data["id"], data["email"])
+        except ForeignKeyViolationError:
+            raise ForeignKeyViolationErrorHTTP(self.table, data["id"])
 
     async def update_object(
         self,
@@ -147,6 +150,8 @@ class DefaultService:
         # TODO return the information about the unique violation
         except UniqueViolationError:
             raise UniqueViolationErrorHTTP(self.table, "email", data["email"])
+        except ForeignKeyViolationError:
+            raise ForeignKeyViolationErrorHTTP(self.table, "id", data["id"])
 
     async def delete_object(
         self,
