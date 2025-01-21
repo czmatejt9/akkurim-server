@@ -1,16 +1,13 @@
 import asyncio
-import time
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.responses import ORJSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from supertokens_python import get_all_cors_headers
 from supertokens_python.framework.fastapi import (
     get_middleware as supertokens_middleware,
 )
-from supertokens_python.recipe.session import SessionContainer
-from supertokens_python.recipe.session.framework.fastapi import verify_session
 
 from app.core.auth.auth_supertokens_config import supertokens_init
 from app.core.config import settings
@@ -19,6 +16,7 @@ from app.core.logging import router as log_router
 from app.core.observation_middleware import ObservationMiddleware
 from app.core.remote_config.router import router as remote_config_router
 from app.core.shared.database import db
+from app.core.shared.router import router as shared_router
 from app.core.sse.broadcast import broadcast
 from app.core.sse.router import router as sse_router
 from app.features.athlete.router import router as athlete_router
@@ -60,6 +58,7 @@ app.add_middleware(
 )
 
 app.include_router(log_router)
+app.include_router(shared_router, prefix=settings.API_V1_PREFIX)
 app.include_router(sse_router, prefix=settings.API_V1_PREFIX)
 app.include_router(athlete_router, prefix=settings.API_V1_PREFIX)
 app.include_router(guardian_router, prefix=settings.API_V1_PREFIX)

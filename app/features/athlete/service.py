@@ -1,10 +1,11 @@
 from datetime import datetime
-from typing import Annotated
 
+import orjson
 from asyncpg import Connection
-from fastapi import Depends
 from pydantic import UUID1
 
+from app.core.sse.broadcast import broadcast as global_broadcast
+from app.core.sse.schemas import LocalActionEnum, SSEEvent
 from app.core.utils.default_service import DefaultService
 from app.core.utils.sql_utils import (
     convert_uuid_to_str,
@@ -116,6 +117,19 @@ class AthleteService(DefaultService):
             AthleteStatusRead.model_fields.keys(),
         )
         res = db.fetchrow(query, *values)
+
+        event = SSEEvent(
+            tenant_id=tenant_id,
+            table_name="athlete_status",
+            endpoint="/athlete/status/",  # update all statuses since it we dont have a specific endpoint
+            local_action=LocalActionEnum.upsert,
+            id=res["id"],
+        )
+        await global_broadcast.publish(
+            channel="update",
+            message=orjson.dumps(event.model_dump()).decode("utf-8"),
+        )
+
         return convert_uuid_to_str(dict(res))
 
     async def get_guardians_for_athlete(

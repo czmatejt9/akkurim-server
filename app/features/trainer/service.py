@@ -1,6 +1,9 @@
+import orjson
 from asyncpg import Connection
 from pydantic import UUID1
 
+from app.core.sse.broadcast import broadcast as global_broadcast
+from app.core.sse.schemas import LocalActionEnum, SSEEvent
 from app.core.utils.default_service import DefaultService
 from app.core.utils.sql_utils import (
     convert_uuid_to_str,
@@ -107,4 +110,17 @@ class TrainerService(DefaultService):
             TrainerStatusRead.model_fields.keys(),
         )
         res = await db.fetchrow(query, *values)
+
+        event = SSEEvent(
+            tenant_id=tenant_id,
+            table_name="trainer_status",
+            endpoint="/trainer/status/",  # update all statuses since it we dont have a specific endpoint
+            local_action=LocalActionEnum.upsert,
+            id=res["id"],
+        )
+        await global_broadcast.publish(
+            channel="update",
+            message=orjson.dumps(event.model_dump()).decode("utf-8"),
+        )
+
         return convert_uuid_to_str(dict(res))

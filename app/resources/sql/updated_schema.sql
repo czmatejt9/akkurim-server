@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS public.remote_config
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS public.school_year
+CREATE TABLE IF NOT EXISTS tenant_id.school_year
 (
     id uuid NOT NULL,
     name text NOT NULL,
@@ -437,7 +437,7 @@ ALTER TABLE IF EXISTS tenant_id.web_post
 
 ALTER TABLE IF EXISTS tenant_id."group"
     ADD FOREIGN KEY (school_year_id)
-    REFERENCES public.school_year (id) MATCH SIMPLE
+    REFERENCES tenant_id.school_year (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
@@ -533,7 +533,7 @@ ALTER TABLE IF EXISTS tenant_id.sign_up_form
 
 ALTER TABLE IF EXISTS tenant_id.sign_up_form
     ADD FOREIGN KEY (school_year_id)
-    REFERENCES public.school_year (id) MATCH SIMPLE
+    REFERENCES tenant_id.school_year (id) MATCH SIMPLE
     ON UPDATE NO ACTION
     ON DELETE NO ACTION
     NOT VALID;
