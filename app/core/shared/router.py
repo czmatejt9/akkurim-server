@@ -16,7 +16,7 @@ from app.core.shared.schemas import SchoolYearCreate, SchoolYearRead
 from app.core.shared.service import SchoolYearService
 
 router = APIRouter(
-    prefix="/",
+    prefix="",
     tags=["shared"],
     responses={
         "200": {"description": "Success"},

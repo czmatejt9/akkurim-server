@@ -28,7 +28,7 @@ async def verify_and_get_auth_data(
 
 
 def fake_auth_data():
-    user_role = "akkurim_trainer_admin_guardian"
+    user_role = "akkurim_trainer_admin_guardian_athlete"
     tenant_id, *roles = user_role.split("_")
     roles = tuple(roles)
     return AuthData(tenant_id=tenant_id, roles=roles)
@@ -62,6 +62,20 @@ async def is_guardian_and_tenant_info(
     ),
 ) -> AuthData:
     if "guardian" not in auth_data.roles:
+        raise_invalid_claims_exception(
+            "Wrong user config", [ClaimValidationError(UserRoleClaim.key, None)]
+        )
+    return auth_data
+
+
+async def is_athlete_and_tenant_info(
+    auth_data: AuthData = (
+        Depends(verify_and_get_auth_data)
+        if not settings.DEBUG
+        else Depends(fake_auth_data)
+    ),
+) -> AuthData:
+    if "athlete" not in auth_data.roles:
         raise_invalid_claims_exception(
             "Wrong user config", [ClaimValidationError(UserRoleClaim.key, None)]
         )
