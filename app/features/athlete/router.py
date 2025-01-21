@@ -154,6 +154,7 @@ async def read_athletes_updated_after(
     return ORJSONResponse(athletes, status_code=status.HTTP_200_OK)
 
 
+# TODO move sync to a separate endpoint along with other sync endpoints
 @router.get(
     "/status/",
     response_model=list[AthleteStatusReadPublic],

@@ -11,7 +11,11 @@ from app.core.auth.dependecies import (
 )
 from app.core.auth.schemas import AuthData
 from app.core.shared.database import get_db
-from app.features.trainer.schemas import TrainerReadPublic
+from app.features.trainer.schemas import (
+    TrainerCreatePublic,
+    TrainerReadPublic,
+    TrainerUpdatePublic,
+)
 from app.features.trainer.service import TrainerService
 
 router = APIRouter(
@@ -54,3 +58,76 @@ async def read_trainer(
         db,
     )
     return trainer
+
+
+@router.post(
+    "/",
+    response_model=TrainerReadPublic,
+    status_code=status.HTTP_201_CREATED,
+)
+async def create_trainer(
+    trainer: TrainerCreatePublic,
+    auth_data: admin_dep,
+    db: db_dep,
+    service: service_dep,
+) -> TrainerReadPublic:
+    new_trainer = await service.create_trainer(
+        auth_data.tenant_id,
+        trainer,
+        db,
+    )
+    return new_trainer
+
+
+@router.put(
+    "/{trainer_id}",
+    response_model=TrainerReadPublic,
+)
+async def update_trainer(
+    trainer_id: UUID1,
+    trainer: TrainerUpdatePublic,
+    auth_data: admin_dep,
+    db: db_dep,
+    service: service_dep,
+) -> TrainerReadPublic:
+    updated_trainer = await service.update_trainer(
+        auth_data.tenant_id,
+        trainer_id,
+        trainer,
+        db,
+    )
+    return updated_trainer
+
+
+@router.delete(
+    "/{trainer_id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+)
+async def delete_trainer(
+    trainer_id: UUID1,
+    auth_data: admin_dep,
+    db: db_dep,
+    service: service_dep,
+) -> None:
+    await service.delete_trainer(
+        auth_data.tenant_id,
+        trainer_id,
+        db,
+    )
+    return None
+
+
+@router.get(
+    "/",
+    response_model=list[TrainerReadPublic],
+)
+async def read_trainers(
+    auth_data: trainer_dep,
+    db: db_dep,
+    service: service_dep,
+) -> list[TrainerReadPublic]:
+    trainers = await service.get_all_trainers(auth_data.tenant_id, db)
+    return trainers
+
+
+# TODO create the status endpoint
