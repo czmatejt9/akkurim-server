@@ -100,7 +100,7 @@ class AthleteService(DefaultService):
             "athlete_status",
             AthleteStatusRead.model_fields.keys(),
         )
-        res = db.fetch(query, *values)
+        res = await db.fetch(query, *values)
         return [convert_uuid_to_str(dict(r)) for r in res]
 
     async def create_status(
