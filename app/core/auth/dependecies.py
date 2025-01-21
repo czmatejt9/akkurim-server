@@ -12,8 +12,13 @@ from app.core.config import settings
 
 
 async def verify_and_get_auth_data(
-    session: SessionContainer = Depends(verify_session()),
+    session: SessionContainer = (
+        Depends(verify_session()) if not settings.DEBUG else None
+    ),
 ) -> AuthData:
+    if settings.DEBUG:
+        return fake_auth_data()
+
     user_roles = await session.get_claim_value(UserRoleClaim)
     if len(user_roles) != 1:
         raise_invalid_claims_exception(
@@ -27,15 +32,12 @@ async def verify_and_get_auth_data(
 def fake_auth_data():
     user_role = "akkurim_trainer_admin_guardian"
     tenant_id, *roles = user_role.split("_")
+    roles = tuple(roles)
     return AuthData(tenant_id=tenant_id, roles=roles)
 
 
 async def is_trainer_and_tenant_info(
-    auth_data: AuthData = (
-        Depends(verify_and_get_auth_data)
-        if not settings.DEBUG
-        else Depends(fake_auth_data)
-    ),
+    auth_data: AuthData = (Depends(verify_and_get_auth_data)),
 ) -> AuthData:
     if "trainer" not in auth_data.roles:
         raise_invalid_claims_exception(
