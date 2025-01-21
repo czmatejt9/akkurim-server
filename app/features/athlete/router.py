@@ -159,7 +159,7 @@ async def read_athletes_updated_after(
     "/status/",
     response_model=list[AthleteStatusReadPublic],
 )
-async def get_all_statuses(
+async def read_statues(
     auth_data: trainer_dep,
     db: db_dep,
     service: service_dep,

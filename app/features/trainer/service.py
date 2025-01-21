@@ -2,7 +2,17 @@ from asyncpg import Connection
 from pydantic import UUID1
 
 from app.core.utils.default_service import DefaultService
-from app.features.trainer.schemas import TrainerCreate, TrainerRead, TrainerUpdate
+from app.core.utils.sql_utils import (
+    convert_uuid_to_str,
+    generate_sql_insert_with_returning,
+    generate_sql_read,
+)
+from app.features.trainer.schemas import (
+    TrainerCreate,
+    TrainerRead,
+    TrainerStatusRead,
+    TrainerUpdate,
+)
 
 
 class TrainerService(DefaultService):
@@ -60,3 +70,41 @@ class TrainerService(DefaultService):
             trainer_id,
             db,
         )
+
+    async def get_all_trainers(
+        self,
+        tenant_id: str,
+        db: Connection,
+    ) -> list[TrainerRead]:
+        return await super().get_all_objects(
+            tenant_id,
+            db,
+        )
+
+    async def get_all_statuses(
+        self,
+        tenant_id: str,
+        db: Connection,
+    ) -> list[dict]:
+        query, values = generate_sql_read(
+            tenant_id,
+            "trainer_status",
+            self.read_model.model_fields.keys(),
+        )
+        res = await db.fetch(query, *values)
+        return [convert_uuid_to_str(dict(r)) for r in res]
+
+    async def create_status(
+        self,
+        tenant_id: str,
+        status: TrainerStatusRead,
+        db: Connection,
+    ) -> TrainerStatusRead:
+        query, values = generate_sql_insert_with_returning(
+            tenant_id,
+            "trainer_status",
+            status,
+            TrainerStatusRead.model_fields.keys(),
+        )
+        res = await db.fetchrow(query, *values)
+        return convert_uuid_to_str(dict(res))

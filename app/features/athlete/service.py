@@ -101,10 +101,13 @@ class AthleteService(DefaultService):
             AthleteStatusRead.model_fields.keys(),
         )
         res = db.fetch(query, *values)
-        return convert_uuid_to_str(dict(res))
+        return [convert_uuid_to_str(dict(r)) for r in res]
 
     async def create_status(
-        self, tenant_id: str, status: AthleteStatusRead, db: Connection
+        self,
+        tenant_id: str,
+        status: AthleteStatusRead,
+        db: Connection,
     ) -> AthleteStatusRead:
         query, values = generate_sql_insert_with_returning(
             tenant_id,
@@ -132,6 +135,3 @@ class AthleteService(DefaultService):
         )
         ress = await db.fetch(query, *values)
         return [convert_uuid_to_str(dict(res)) for res in ress]
-
-
-service_dep = Annotated[AthleteService, Depends(AthleteService)]
