@@ -85,11 +85,11 @@ class TrainerService(DefaultService):
         self,
         tenant_id: str,
         db: Connection,
-    ) -> list[dict]:
+    ) -> list[TrainerStatusRead]:
         query, values = generate_sql_read(
             tenant_id,
             "trainer_status",
-            self.read_model.model_fields.keys(),
+            TrainerStatusRead.model_fields.keys(),
         )
         res = await db.fetch(query, *values)
         return [convert_uuid_to_str(dict(r)) for r in res]
