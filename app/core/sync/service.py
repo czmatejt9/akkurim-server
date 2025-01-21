@@ -20,7 +20,11 @@ class SyncService:
         from_date: AwareDatetime,
         db: Connection,
     ) -> list[BaseSchema]:
-        schema: BaseSchema = TABLE_NAMES[table_name]
+        try:
+            schema: BaseSchema = TABLE_NAMES[table_name]
+        except KeyError:
+            raise ValueError(f"Table {table_name} not found in TABLE_NAMES")
+
         query, values = generate_sql_read(
             tenant_id=tenant_id,
             table=table_name,

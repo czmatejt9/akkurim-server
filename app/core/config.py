@@ -6,10 +6,11 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     ENVIROMENT: str = os.getenv("ENVIROMENT", "main")
     DEBUG: bool = ENVIROMENT == "dev"
-    PUBLIC_DOMAIN: str = f"https://{'dev' if DEBUG else ''}api.czmatejt.me"
+    PUBLIC_DOMAIN: str = f"https://{'dev' if DEBUG else ''}api.akkurim.cz"
     APP_NAME: str = f"akkurim-server-{ENVIROMENT}"
-    APP_VERSION: str = "0.1.0"
+    APP_VERSION: str = "0.2.0"
     API_V1_PREFIX: str = "/v1"
+    API_V2_PREFIX: str = "/v2"
 
     SUPERTOKENS_CONNECTION_URI: str = "http://supertokens:3567"
     API_DOMAIN: str = "http://localhost:8002"  # TODO setup reverse proxy with traefik
