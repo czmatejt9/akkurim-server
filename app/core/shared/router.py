@@ -3,7 +3,7 @@ from typing import Annotated
 from asyncpg import Connection
 from fastapi import APIRouter, Depends, status
 from fastapi.responses import ORJSONResponse
-from pydantic import UUID1, AwareDatetime
+from pydantic import UUID1
 
 from app.core.auth.dependecies import (
     is_admin_and_tenant_info,
@@ -58,14 +58,14 @@ async def create_school_year(
 
 @router.get(
     "/school_year/{school_year_id}",
-    response_model=SchoolYearRead,
+    response_model=SchoolYearReadPublic,
 )
 async def read_school_year(
     school_year_id: UUID1,
     auth_data: auth_data_dep,
     db: db_dep,
     service: service_dep,
-) -> SchoolYearRead:
+) -> SchoolYearReadPublic:
     return await service.get_school_year_by_id(
         auth_data.tenant_id,
         school_year_id,
@@ -75,13 +75,13 @@ async def read_school_year(
 
 @router.get(
     "/school_year/",
-    response_model=list[SchoolYearRead],
+    response_model=list[SchoolYearReadPublic],
 )
 async def read_all_school_years(
     auth_data: auth_data_dep,
     db: db_dep,
     service: service_dep,
-) -> list[SchoolYearRead]:
+) -> list[SchoolYearReadPublic]:
     return await service.get_all_school_years(
         auth_data.tenant_id,
         db,
