@@ -51,7 +51,7 @@ async def create_school_year(
 ) -> SchoolYearReadPublic:
     return await service.create_school_year(
         auth_data.tenant_id,
-        school_year,
+        school_year.model_dump(),
         db,
     )
 
