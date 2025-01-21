@@ -1,4 +1,5 @@
 from app.features.athlete.schemas import AthleteReadPublic, AthleteStatusReadPublic
+from app.features.guardian.schemas import GuardianReadPublic
 from app.features.trainer.schemas import TrainerReadPublic, TrainerStatusReadPublic
 
 TABLE_NAMES = {
@@ -6,5 +7,6 @@ TABLE_NAMES = {
     "athlete_status": AthleteStatusReadPublic,
     "trainer": TrainerReadPublic,
     "trainer_status": TrainerStatusReadPublic,
+    "guardian": GuardianReadPublic,
 }
 # TODO
