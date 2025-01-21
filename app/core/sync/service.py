@@ -23,7 +23,7 @@ class SyncService:
         schema: BaseSchema = TABLE_NAMES[table_name]
         query, values = generate_sql_read(
             tenant_id=tenant_id,
-            table_name=table_name,
+            table=table_name,
             columns=schema.model_fields.keys(),
             conditions={
                 "updated_at": {
