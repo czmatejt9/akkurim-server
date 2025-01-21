@@ -12,7 +12,7 @@ from app.core.auth.dependecies import (
 )
 from app.core.auth.schemas import AuthData
 from app.core.shared.database import get_db
-from app.core.shared.schemas import SchoolYearCreate, SchoolYearRead
+from app.core.shared.schemas import SchoolYearCreatePublic, SchoolYearReadPublic
 from app.core.shared.service import SchoolYearService
 
 router = APIRouter(
@@ -41,14 +41,14 @@ auth_data_dep = Annotated[AuthData, Depends(verify_and_get_auth_data)]
 
 @router.post(
     "/school_year",
-    response_model=SchoolYearRead,
+    response_model=SchoolYearReadPublic,
 )
 async def create_school_year(
-    school_year: SchoolYearCreate,
+    school_year: SchoolYearCreatePublic,
     auth_data: admin_dep,
     db: db_dep,
     service: service_dep,
-) -> SchoolYearRead:
+) -> SchoolYearReadPublic:
     return await service.create_school_year(
         auth_data.tenant_id,
         school_year,
