@@ -73,7 +73,7 @@ async def create_trainer(
 ) -> TrainerReadPublic:
     new_trainer = await service.create_trainer(
         auth_data.tenant_id,
-        trainer,
+        trainer.model_dump(),
         db,
     )
     return new_trainer
@@ -93,7 +93,7 @@ async def update_trainer(
     updated_trainer = await service.update_trainer(
         auth_data.tenant_id,
         trainer_id,
-        trainer,
+        trainer.model_dump(),
         db,
     )
     return updated_trainer
