@@ -31,3 +31,26 @@ router = APIRouter(
     ],
     default_response_class=ORJSONResponse,
 )
+
+trainer_dep = Annotated[AuthData, Depends(is_trainer_and_tenant_info)]
+admin_dep = Annotated[AuthData, Depends(is_admin_and_tenant_info)]
+db_dep = Annotated[Connection, Depends(get_db)]
+service_dep = Annotated[TrainerService, Depends(TrainerService)]
+
+
+@router.get(
+    "/{trainer_id}",
+    response_model=TrainerReadPublic,
+)
+async def read_trainer(
+    trainer_id: UUID1,
+    auth_data: trainer_dep,
+    db: db_dep,
+    service: service_dep,
+) -> TrainerReadPublic:
+    trainer = await service.get_trainer_by_id(
+        auth_data.tenant_id,
+        trainer_id,
+        db,
+    )
+    return trainer

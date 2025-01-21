@@ -12,9 +12,7 @@ from app.core.config import settings
 
 
 async def verify_and_get_auth_data(
-    session: SessionContainer = (
-        Depends(verify_session()) if not settings.DEBUG else None
-    ),
+    session=(Depends(verify_session()) if not settings.DEBUG else None),
 ) -> AuthData:
     if settings.DEBUG:
         return fake_auth_data()
@@ -47,11 +45,7 @@ async def is_trainer_and_tenant_info(
 
 
 async def is_admin_and_tenant_info(
-    auth_data: AuthData = (
-        Depends(verify_and_get_auth_data)
-        if not settings.DEBUG
-        else Depends(fake_auth_data)
-    ),
+    auth_data: AuthData = Depends(verify_and_get_auth_data),
 ) -> AuthData:
     if "admin" not in auth_data.roles:
         raise_invalid_claims_exception(
